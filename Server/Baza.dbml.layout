@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="Baza">
+  <DataContextMoniker Name="/BazaDataContext" />
+  <nestedChildShapes>
+    <classShape Id="7509f9d3-754f-4606-b7df-82767b3b1a71" absoluteBounds="0.75, 3.625, 2, 1.9631982421875005">
+      <DataClassMoniker Name="/BazaDataContext/uzytkownicy" />
+      <nestedChildShapes>
+        <elementListCompartment Id="26b39c2b-13de-4afa-bba4-c2bec9708bb9" absoluteBounds="0.765, 4.085, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="57f5a5c8-da79-457d-8826-8841c00ea5ac" absoluteBounds="6.25, 3.75, 2, 1.7708968098958327">
+      <DataClassMoniker Name="/BazaDataContext/plansze" />
+      <nestedChildShapes>
+        <elementListCompartment Id="3b411f3a-2bb7-4db5-9e34-657c360e9396" absoluteBounds="6.265, 4.21, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="0f91bdc3-7129-49c2-9648-f7a02142eb22" absoluteBounds="3.5, 3.625, 2, 1.9631982421875005">
+      <DataClassMoniker Name="/BazaDataContext/rozgrywki" />
+      <nestedChildShapes>
+        <elementListCompartment Id="c24d2a11-853e-4a6c-bc81-f067f4daecb1" absoluteBounds="3.515, 4.085, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="c1c46c43-d3fb-4615-a1dd-e6c8dbcdfd64" absoluteBounds="6.25, 0.75, 2, 1.7708968098958331">
+      <DataClassMoniker Name="/BazaDataContext/ruchy_graczy" />
+      <nestedChildShapes>
+        <elementListCompartment Id="b999f208-1273-4a62-ad66-5645e411f053" absoluteBounds="6.265, 1.21, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(5.5 : 4.63544840494792); (6.25 : 4.63544840494792)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/BazaDataContext/rozgrywki/rozgrywki_plansze" />
+      <nodes>
+        <classShapeMoniker Id="0f91bdc3-7129-49c2-9648-f7a02142eb22" />
+        <classShapeMoniker Id="57f5a5c8-da79-457d-8826-8841c00ea5ac" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(2.75 : 4.60659912109375); (3.5 : 4.60659912109375)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/BazaDataContext/uzytkownicy/uzytkownicy_rozgrywki" />
+      <nodes>
+        <classShapeMoniker Id="7509f9d3-754f-4606-b7df-82767b3b1a71" />
+        <classShapeMoniker Id="0f91bdc3-7129-49c2-9648-f7a02142eb22" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(2.75 : 4.05329956054688); (3.5 : 4.05329956054688)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/BazaDataContext/uzytkownicy/uzytkownicy_rozgrywki1" />
+      <nodes>
+        <classShapeMoniker Id="7509f9d3-754f-4606-b7df-82767b3b1a71" />
+        <classShapeMoniker Id="0f91bdc3-7129-49c2-9648-f7a02142eb22" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(1.75 : 3.625); (1.75 : 1.63544840494792); (6.25 : 1.63544840494792)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/BazaDataContext/uzytkownicy/uzytkownicy_ruchy_graczy" />
+      <nodes>
+        <classShapeMoniker Id="7509f9d3-754f-4606-b7df-82767b3b1a71" />
+        <classShapeMoniker Id="c1c46c43-d3fb-4615-a1dd-e6c8dbcdfd64" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(4.5 : 3.625); (4.5 : 2.10942510742187); (6.25 : 2.10942510742187)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/BazaDataContext/rozgrywki/rozgrywki_ruchy_graczy" />
+      <nodes>
+        <classShapeMoniker Id="0f91bdc3-7129-49c2-9648-f7a02142eb22" />
+        <classShapeMoniker Id="c1c46c43-d3fb-4615-a1dd-e6c8dbcdfd64" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>
