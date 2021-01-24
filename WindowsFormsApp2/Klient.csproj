@@ -79,6 +79,7 @@
     <Compile Include="UC_rejestracja.Designer.cs">
       <DependentUpon>UC_rejestracja.cs</DependentUpon>
     </Compile>
+    <Compile Include="uzytkownik.cs" />
     <EmbeddedResource Include="Klient.resx">
       <DependentUpon>Klient.cs</DependentUpon>
     </EmbeddedResource>

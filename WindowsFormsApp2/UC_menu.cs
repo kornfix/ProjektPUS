@@ -17,6 +17,9 @@ namespace WindowsFormsApp2
         {
             menu = form as Menu;
             InitializeComponent();
+            l_imie.Text = uzytkownik.Imie;
+            l_nazwisko.Text = uzytkownik.Nazwisko;
+            l_login.Text = uzytkownik.Login;
         }
 
         private void button_wyloguj_Click(object sender, EventArgs e)
@@ -25,10 +28,9 @@ namespace WindowsFormsApp2
             // odpiecie od serwera też 
             menu.tryb_logowanie();
         }
-        private AsynchronousClient klient;
         private void button1_Click(object sender, EventArgs e)
         {
-            AsynchronousClient.StartClient();
+            //AsynchronousClient.StartClient();
         }
     }
 }

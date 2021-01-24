@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -45,7 +46,7 @@ namespace Server
 
                     // Start an asynchronous socket to listen for connections.  
                     //Console.WriteLine("Waiting for a connection...");
-                    MessageBox.Show("Czekam na połączenie..");
+                    //MessageBox.Show("Czekam na połączenie..");
                     listener.BeginAccept(
                         new AsyncCallback(AcceptCallback),
                         listener);
@@ -62,7 +63,7 @@ namespace Server
             }
 
             //Console.WriteLine("\nPress ENTER to continue...");
-            MessageBox.Show("Przyciśnij any key");
+            //MessageBox.Show("Przyciśnij any key");
             //Console.Read();
 
         }
@@ -82,7 +83,6 @@ namespace Server
             handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
                 new AsyncCallback(ReadCallback), state);
         }
-
         public static void ReadCallback(IAsyncResult ar)
         {
             String content = String.Empty;
@@ -109,12 +109,85 @@ namespace Server
                     // All the data has been read from the
                     // client. Display it on the console.  
                     //Console.WriteLine("Read {0} bytes from socket. \n Data : {1}",content.Length, content);
-                    MessageBox.Show("Wczytano " + content.Length + " bitów z socketu. Data: "+ content);
+                    //MessageBox.Show("Wczytano " + content.Length + " bitów z socketu. Data: "+ content);
                     // Echo the data back to the client.  
-                    Send(handler, content);
+                    string[] slowa = content.Split(' ');
+                    string odpowiedz = "error";
+                    // Kod który wczytuje wysłaną wiadomośc i odpowiada.
+                    if (slowa.Length > 2)
+                    {
+                        
+                        switch (slowa[0])
+                        {
+                            case "sprawdz_email:":
+                                var q_e = from uzytkownik in SingletonBaza.Instance.BazaDC.uzytkownicy
+                                            where uzytkownik.email == slowa[1]
+                                            select uzytkownik;
+                                if (q_e.Any())
+                                {
+                                    odpowiedz = "true";
+
+                                }
+                                else
+                                {
+                                    odpowiedz = "false";
+                                }
+                                break;
+                            case "sprawdz_login:":
+                                var q_l = from uzytkownik in SingletonBaza.Instance.BazaDC.uzytkownicy
+                                            where uzytkownik.login == slowa[1]
+                                            select uzytkownik;
+                                if (q_l.Any())
+                                {
+                                    odpowiedz = "true";
+
+                                }
+                                else
+                                {
+                                    odpowiedz = "false";
+                                }
+                                break;
+                            case "zarejestruj_uzytkownika:":
+                                uzytkownicy u = new uzytkownicy();
+
+                                foreach (string s in slowa)
+                                {
+                                    string[] parametry = s.Split(':');
+
+                                    if (parametry.Length != 2)
+                                    {
+                                        continue;
+                                    }
+                                    //MessageBox.Show(String.Join(" ", parametry),s);
+                                    if (parametry[0] == "haslo")
+                                    {
+                                        u.haslo = hashowanie.GetHashString(parametry[1]);
+                                    }
+                                    else
+                                    {
+                                        PropertyInfo prop = u.GetType().GetProperty(parametry[0]);
+                                        if (prop != null)
+                                        {
+                                            prop.SetValue(u, parametry[1], null);
+                                        }
+                                        else
+                                        {
+                                            continue;
+                                        }
+                                    }
+                                }
+                                    
+                                SingletonBaza.Instance.BazaDC.uzytkownicy.InsertOnSubmit(u);
+                                SingletonBaza.Instance.BazaDC.SubmitChanges();
+                                odpowiedz = "true";
+                                break;
+                        }
+                    }
+                    Send(handler, odpowiedz);
                 }
                 else
                 {
+                    
                     // Not all data received. Get more.  
                     handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
                     new AsyncCallback(ReadCallback), state);
@@ -142,7 +215,7 @@ namespace Server
                 // Complete sending the data to the remote device.  
                 int bytesSent = handler.EndSend(ar);
                 //Console.WriteLine("Sent {0} bytes to client.", bytesSent);
-                MessageBox.Show("Wysłano " + bytesSent + " bitow do klienta");
+                //MessageBox.Show("Wysłano " + bytesSent + " bitow do klienta");
                 handler.Shutdown(SocketShutdown.Both);
                 handler.Close();
 

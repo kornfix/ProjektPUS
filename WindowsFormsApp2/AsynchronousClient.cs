@@ -16,19 +16,28 @@ namespace WindowsFormsApp2
         private const int port = 11000;
 
         // ManualResetEvent instances signal completion.  
-        private static ManualResetEvent connectDone =
+        private  ManualResetEvent connectDone =
             new ManualResetEvent(false);
-        private static ManualResetEvent sendDone =
+        private  ManualResetEvent sendDone =
             new ManualResetEvent(false);
-        private static ManualResetEvent receiveDone =
+        private  ManualResetEvent receiveDone =
             new ManualResetEvent(false);
 
         // The response from the remote device.  
-        private static String response = String.Empty;
+        private String response = String.Empty;
+        public  String Odpowiedz
+        {
+           get
+            {
+                return response;
+            }
+        }
+        public void reset()
+        {
+            response = String.Empty;
+        }
 
-
-
-        public static void StartClient()
+    public  void StartClient(string pytanie)
         {
             // Connect to a remote device.  
             try
@@ -51,7 +60,7 @@ namespace WindowsFormsApp2
                 connectDone.WaitOne();
 
                 // Send test data to the remote device.  
-                Send(client, "This is a test<EOF>");
+                Send(client, pytanie);
                 sendDone.WaitOne();
 
                 // Receive the response from the remote device.  
@@ -61,7 +70,7 @@ namespace WindowsFormsApp2
                 // Write the response to the console.  
 
                 //Console.WriteLine("Response received : {0}", response);
-                MessageBox.Show("Otrzymano odpowiedź " + response);
+                //MessageBox.Show("Otrzymano odpowiedź " + response);
                 // Release the socket.  
                 client.Shutdown(SocketShutdown.Both);
                 client.Close();
@@ -74,7 +83,7 @@ namespace WindowsFormsApp2
             }
         }
 
-        private static void ConnectCallback(IAsyncResult ar)
+        private  void ConnectCallback(IAsyncResult ar)
         {
             try
             {
@@ -86,7 +95,7 @@ namespace WindowsFormsApp2
 
                 // Console.WriteLine("Socket connected to {0}",
                 //     client.RemoteEndPoint.ToString());
-                MessageBox.Show("Socket podpięty do " + client.RemoteEndPoint.ToString());
+                //MessageBox.Show("Socket podpięty do " + client.RemoteEndPoint.ToString());
                 // Signal that the connection has been made.  
                 connectDone.Set();
             }
@@ -97,7 +106,7 @@ namespace WindowsFormsApp2
             }
         }
 
-        private static void Receive(Socket client)
+        private  void Receive(Socket client)
         {
             try
             {
@@ -116,7 +125,7 @@ namespace WindowsFormsApp2
             }
         }
 
-        private static void ReceiveCallback(IAsyncResult ar)
+        private  void ReceiveCallback(IAsyncResult ar)
         {
             try
             {
@@ -155,7 +164,7 @@ namespace WindowsFormsApp2
             }
         }
 
-        private static void Send(Socket client, String data)
+        private  void Send(Socket client, String data)
         {
             // Convert the string data to byte data using ASCII encoding.  
             byte[] byteData = Encoding.ASCII.GetBytes(data);
@@ -165,7 +174,7 @@ namespace WindowsFormsApp2
                 new AsyncCallback(SendCallback), client);
         }
 
-        private static void SendCallback(IAsyncResult ar)
+        private  void SendCallback(IAsyncResult ar)
         {
             try
             {
@@ -175,7 +184,7 @@ namespace WindowsFormsApp2
                 // Complete sending the data to the remote device.  
                 int bytesSent = client.EndSend(ar);
                 //Console.WriteLine("Sent {0} bytes to server.", bytesSent);
-                MessageBox.Show("Wysłano " + bytesSent + " bitów do serwera.");
+                //MessageBox.Show("Wysłano " + bytesSent + " bitów do serwera.");
                 // Signal that all bytes have been sent.  
                 sendDone.Set();
             }
@@ -185,5 +194,6 @@ namespace WindowsFormsApp2
                 MessageBox.Show(e.ToString());
             }
         }
+
     }
 }

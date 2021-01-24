@@ -78,6 +78,11 @@ namespace WindowsFormsApp2
             zmiana_trybu(wybrany_tryb.menu);
         }
 
+        internal void reset_rejestacji()
+        {
+            kontrolki.Remove(wybrany_tryb.rejestracja);
+        }
+
         private void Menu_Load(object sender, EventArgs e)
         {
             tryb_logowanie();
