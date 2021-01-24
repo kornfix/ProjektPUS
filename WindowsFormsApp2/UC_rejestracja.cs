@@ -19,18 +19,23 @@ namespace WindowsFormsApp2
             menu = form as Menu;
             InitializeComponent();
         }
-
+        private async void button_anuluj_Click(object sender, EventArgs e)
+        {
+            menu.tryb_logowanie();
+        }
         private async void button_rejestracja_Click(object sender, EventArgs e)
         {
             // Kod walidacyjny
-            Boolean walidacjaEmail = await WalidacjaEmail();
-            Boolean walidacjaHaslo1 = await WalidacjaHaslo1();
-            Boolean walidacjaHaslo2 = await WalidacjaHaslo2();
-            Boolean walidacjaLoginu = await  WalidacjaLoginu();
-            Boolean walidacjaImienia = await WalidacjaImienia();
-            Boolean walidacjaNazwiska = await WalidacjaNazwiska();
-            if(!walidacjaEmail || !walidacjaHaslo1 || !walidacjaHaslo2 || 
-                !walidacjaLoginu || !walidacjaImienia || !walidacjaNazwiska)
+            var walidacjaEmail =  WalidacjaEmail();
+            var walidacjaHaslo1 =  WalidacjaHaslo1();
+            var walidacjaHaslo2 =  WalidacjaHaslo2();
+            var walidacjaLoginu =   WalidacjaLoginu();
+            var walidacjaImienia =  WalidacjaImienia();
+            var walidacjaNazwiska =  WalidacjaNazwiska(); 
+            Task[] zadania = new Task[] { walidacjaEmail, walidacjaHaslo1, walidacjaHaslo2, walidacjaLoginu, walidacjaImienia, walidacjaNazwiska };
+            await Task.WhenAll(zadania);
+            if(!walidacjaEmail.Result || !walidacjaHaslo1.Result || !walidacjaHaslo2.Result || 
+                !walidacjaLoginu.Result || !walidacjaImienia.Result || !walidacjaNazwiska.Result)
             {
                 return;
             }
@@ -63,10 +68,7 @@ namespace WindowsFormsApp2
 
         }
 
-        private void button_anuluj_Click(object sender, EventArgs e)
-        {
-            menu.tryb_logowanie();
-        }
+        
         bool czyPrawidlowyEmail(String email)
         {
             try
@@ -82,6 +84,8 @@ namespace WindowsFormsApp2
         async Task<Boolean> WalidacjaEmail()
         {
             errorProvider1.Clear();
+            // Await sprawdza czy na serio te funkcje sie wykonuja jednoczenie gdyz delay powoduje ze ta funckja czeka 5 sec
+            //await Task.Delay(5000);
             String email = txt_email.Text;
             
             if (email == "")
