@@ -1,40 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace WindowsFormsApp2
 {
-    public partial class Klient : Form
+    public class AsynchronousClient
     {
-        public void wypisz2(string s)
-        {
-            listBox2.Invoke(new Action(delegate ()
-            {
-                listBox2.Items.Add(s);
-            }));
-            //listBox1.Items.Add(s);
-        }
-        
-        public class StateObject
-        {
-            // Client socket.  
-            public Socket workSocket = null;
-            // Size of receive buffer.  
-            public const int BufferSize = 256;
-            // Receive buffer.  
-            public byte[] buffer = new byte[BufferSize];
-            // Received data string.  
-            public StringBuilder sb = new StringBuilder();
-        }
         // The port number for the remote device.  
         private const int port = 11000;
 
@@ -47,13 +24,16 @@ namespace WindowsFormsApp2
             new ManualResetEvent(false);
 
         // The response from the remote device.  
-        private  String response = String.Empty;
+        private static String response = String.Empty;
 
-        private  void StartClient()
+
+
+        public static void StartClient()
         {
             // Connect to a remote device.  
             try
             {
+
                 // Establish the remote endpoint for the socket.  
                 // The name of the
                 // remote device is "host.contoso.com".  
@@ -64,7 +44,7 @@ namespace WindowsFormsApp2
                 // Create a TCP/IP socket.  
                 Socket client = new Socket(ipAddress.AddressFamily,
                     SocketType.Stream, ProtocolType.Tcp);
-                wypisz2("Próbuje się połaczyć");
+
                 // Connect to the remote endpoint.  
                 client.BeginConnect(remoteEP,
                     new AsyncCallback(ConnectCallback), client);
@@ -72,7 +52,6 @@ namespace WindowsFormsApp2
 
                 // Send test data to the remote device.  
                 Send(client, "This is a test<EOF>");
-                wypisz2("Próbuje się połaczyć");
                 sendDone.WaitOne();
 
                 // Receive the response from the remote device.  
@@ -80,9 +59,9 @@ namespace WindowsFormsApp2
                 receiveDone.WaitOne();
 
                 // Write the response to the console.  
-                wypisz2("Odtrzymano odpowiedz " + response);
-                //Console.WriteLine("Response received : {0}", response);
 
+                //Console.WriteLine("Response received : {0}", response);
+                MessageBox.Show("Otrzymano odpowiedź " + response);
                 // Release the socket.  
                 client.Shutdown(SocketShutdown.Both);
                 client.Close();
@@ -90,12 +69,12 @@ namespace WindowsFormsApp2
             }
             catch (Exception e)
             {
-                wypisz2(e.ToString());
                 //Console.WriteLine(e.ToString());
+                MessageBox.Show(e.ToString());
             }
         }
 
-        private  void ConnectCallback(IAsyncResult ar)
+        private static void ConnectCallback(IAsyncResult ar)
         {
             try
             {
@@ -104,21 +83,21 @@ namespace WindowsFormsApp2
 
                 // Complete the connection.  
                 client.EndConnect(ar);
-                wypisz2("Socket podlaczony do " + client.RemoteEndPoint.ToString());
-                //Console.WriteLine("Socket connected to {0}",
-                  //  client.RemoteEndPoint.ToString());
 
+                // Console.WriteLine("Socket connected to {0}",
+                //     client.RemoteEndPoint.ToString());
+                MessageBox.Show("Socket podpięty do " + client.RemoteEndPoint.ToString());
                 // Signal that the connection has been made.  
                 connectDone.Set();
             }
             catch (Exception e)
             {
-                wypisz2(e.ToString());
-                Console.WriteLine(e.ToString());
+                //Console.WriteLine(e.ToString());
+                MessageBox.Show(e.ToString());
             }
         }
 
-        private  void Receive(Socket client)
+        private static void Receive(Socket client)
         {
             try
             {
@@ -132,12 +111,12 @@ namespace WindowsFormsApp2
             }
             catch (Exception e)
             {
-                wypisz2(e.ToString());
-                //Console.WriteLine(e.ToString());
+                // Console.WriteLine(e.ToString());
+                MessageBox.Show(e.ToString());
             }
         }
 
-        private  void ReceiveCallback(IAsyncResult ar)
+        private static void ReceiveCallback(IAsyncResult ar)
         {
             try
             {
@@ -171,12 +150,12 @@ namespace WindowsFormsApp2
             }
             catch (Exception e)
             {
-                wypisz2(e.ToString());
                 //Console.WriteLine(e.ToString());
+                MessageBox.Show(e.ToString());
             }
         }
 
-        private  void Send(Socket client, String data)
+        private static void Send(Socket client, String data)
         {
             // Convert the string data to byte data using ASCII encoding.  
             byte[] byteData = Encoding.ASCII.GetBytes(data);
@@ -186,7 +165,7 @@ namespace WindowsFormsApp2
                 new AsyncCallback(SendCallback), client);
         }
 
-        private  void SendCallback(IAsyncResult ar)
+        private static void SendCallback(IAsyncResult ar)
         {
             try
             {
@@ -195,27 +174,16 @@ namespace WindowsFormsApp2
 
                 // Complete sending the data to the remote device.  
                 int bytesSent = client.EndSend(ar);
-                wypisz2("Wysłano " + bytesSent + " bitów do serwera");
                 //Console.WriteLine("Sent {0} bytes to server.", bytesSent);
-
+                MessageBox.Show("Wysłano " + bytesSent + " bitów do serwera.");
                 // Signal that all bytes have been sent.  
                 sendDone.Set();
             }
             catch (Exception e)
             {
-                wypisz2(e.ToString());
                 //Console.WriteLine(e.ToString());
+                MessageBox.Show(e.ToString());
             }
-        }
-        public Klient()
-        {
-            InitializeComponent();
-            
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            AsynchronousClient.StartClient();
         }
     }
 }

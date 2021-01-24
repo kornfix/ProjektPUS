@@ -30,12 +30,14 @@
         {
             this.groupBoxLogin = new System.Windows.Forms.GroupBox();
             this.button_wyloguj = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.groupBoxLogin.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBoxLogin
             // 
             this.groupBoxLogin.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.groupBoxLogin.Controls.Add(this.button1);
             this.groupBoxLogin.Controls.Add(this.button_wyloguj);
             this.groupBoxLogin.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.groupBoxLogin.Location = new System.Drawing.Point(0, 0);
@@ -58,6 +60,17 @@
             this.button_wyloguj.UseVisualStyleBackColor = true;
             this.button_wyloguj.Click += new System.EventHandler(this.button_wyloguj_Click);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(21, 207);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(205, 23);
+            this.button1.TabIndex = 7;
+            this.button1.Text = "Test połączenia";
+            this.button1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // UC_menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -74,5 +87,6 @@
 
         private System.Windows.Forms.GroupBox groupBoxLogin;
         private System.Windows.Forms.Button button_wyloguj;
+        private System.Windows.Forms.Button button1;
     }
 }

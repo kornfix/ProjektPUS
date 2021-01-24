@@ -25,5 +25,10 @@ namespace WindowsFormsApp2
             // odpiecie od serwera też 
             menu.tryb_logowanie();
         }
+        private AsynchronousClient klient;
+        private void button1_Click(object sender, EventArgs e)
+        {
+            AsynchronousClient.StartClient();
+        }
     }
 }

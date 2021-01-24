@@ -186,7 +186,7 @@ namespace Server
 
         private void button1_Click(object sender, EventArgs e)
         {
-            StartListening();
+            AsynchronousSocketListener.StartListening();
         }
         // Logowanie 
         private void sprawdz_login_haslo(string login, string haslo)
