@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.labelLogin1 = new System.Windows.Forms.Label();
             this.textBoxLogin1 = new System.Windows.Forms.TextBox();
             this.labelHaslo1 = new System.Windows.Forms.Label();
@@ -36,7 +37,9 @@
             this.buttonZaloguj = new System.Windows.Forms.Button();
             this.groupBoxLogin = new System.Windows.Forms.GroupBox();
             this.button_rejestracja = new System.Windows.Forms.Button();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.groupBoxLogin.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // labelLogin1
@@ -140,6 +143,10 @@
             this.button_rejestracja.UseVisualStyleBackColor = true;
             this.button_rejestracja.Click += new System.EventHandler(this.button_rejestracja_Click);
             // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
+            // 
             // UC_logowanie
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -149,6 +156,7 @@
             this.Size = new System.Drawing.Size(254, 205);
             this.groupBoxLogin.ResumeLayout(false);
             this.groupBoxLogin.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -163,5 +171,6 @@
         private System.Windows.Forms.Button buttonZaloguj;
         private System.Windows.Forms.GroupBox groupBoxLogin;
         private System.Windows.Forms.Button button_rejestracja;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
     }
 }

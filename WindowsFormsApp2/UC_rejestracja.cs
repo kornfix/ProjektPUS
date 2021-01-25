@@ -59,6 +59,7 @@ namespace WindowsFormsApp2
                 uzytkownik.Imie = txt_imie.Text;
                 uzytkownik.Nazwisko = txt_nazwisko.Text;
                 uzytkownik.Login = txt_login.Text;
+                uzytkownik.Email = txt_email.Text;
                 menu.tryb_menu();
                 menu.reset_rejestacji();
             }
@@ -83,11 +84,10 @@ namespace WindowsFormsApp2
         }
         async Task<Boolean> WalidacjaEmail()
         {
-            errorProvider1.Clear();
             // Await sprawdza czy na serio te funkcje sie wykonuja jednoczenie gdyz delay powoduje ze ta funckja czeka 5 sec
             //await Task.Delay(5000);
             String email = txt_email.Text;
-            
+            errorProvider1.SetError(txt_email, "");
             if (email == "")
             {
                 errorProvider1.SetError(txt_email, "Email jest wymagany!");
@@ -159,8 +159,7 @@ namespace WindowsFormsApp2
         async Task<Boolean> WalidacjaLoginu()
         {
             String login = txt_login.Text;
-            errorProvider1.SetError(txt_login, "");
-            
+            errorProvider1.SetError(txt_login, "");         
             if (login.Length ==0)
             {
                 errorProvider1.SetError(txt_login,"Nazwa użytkownika jest wymagana!");

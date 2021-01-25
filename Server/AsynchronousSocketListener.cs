@@ -181,6 +181,23 @@ namespace Server
                                 SingletonBaza.Instance.BazaDC.SubmitChanges();
                                 odpowiedz = "true";
                                 break;
+                            case "zaloguj:":
+                                var q_z = from uzytkownik in SingletonBaza.Instance.BazaDC.uzytkownicy
+                                          where uzytkownik.login == slowa[1]
+                                          && uzytkownik.haslo ==
+                                          hashowanie.GetHashString(slowa[2])
+                                          select uzytkownik;
+                                if (q_z.Any())
+                                {
+                                    uzytkownicy zalogowany = q_z.FirstOrDefault();
+                                    odpowiedz = zalogowany.imie + " " + zalogowany.nazwisko
+                                        + " " + zalogowany.login + " " + zalogowany.email;
+                                }
+                                else
+                                {
+                                    odpowiedz = "bledneDane";
+                                }
+                                break;
                         }
                     }
                     Send(handler, odpowiedz);
