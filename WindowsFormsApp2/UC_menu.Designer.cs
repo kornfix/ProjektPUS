@@ -29,14 +29,14 @@
         private void InitializeComponent()
         {
             this.groupBoxLogin = new System.Windows.Forms.GroupBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button_wyloguj = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
-            this.labelHaslo1 = new System.Windows.Forms.Label();
-            this.labelLogin1 = new System.Windows.Forms.Label();
             this.l_login = new System.Windows.Forms.Label();
             this.l_nazwisko = new System.Windows.Forms.Label();
             this.l_imie = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.labelHaslo1 = new System.Windows.Forms.Label();
+            this.labelLogin1 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button_wyloguj = new System.Windows.Forms.Button();
             this.groupBoxLogin.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -59,65 +59,6 @@
             this.groupBoxLogin.Size = new System.Drawing.Size(250, 306);
             this.groupBoxLogin.TabIndex = 18;
             this.groupBoxLogin.TabStop = false;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(21, 207);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(205, 23);
-            this.button1.TabIndex = 7;
-            this.button1.Text = "Test połączenia";
-            this.button1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // button_wyloguj
-            // 
-            this.button_wyloguj.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.button_wyloguj.Location = new System.Drawing.Point(21, 254);
-            this.button_wyloguj.Margin = new System.Windows.Forms.Padding(2);
-            this.button_wyloguj.Name = "button_wyloguj";
-            this.button_wyloguj.Size = new System.Drawing.Size(205, 28);
-            this.button_wyloguj.TabIndex = 6;
-            this.button_wyloguj.Text = "Wyloguj";
-            this.button_wyloguj.UseVisualStyleBackColor = true;
-            this.button_wyloguj.Click += new System.EventHandler(this.button_wyloguj_Click);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Georgia", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label2.ForeColor = System.Drawing.SystemColors.Control;
-            this.label2.Location = new System.Drawing.Point(27, 97);
-            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(58, 23);
-            this.label2.TabIndex = 12;
-            this.label2.Text = "Login";
-            // 
-            // labelHaslo1
-            // 
-            this.labelHaslo1.AutoSize = true;
-            this.labelHaslo1.Font = new System.Drawing.Font("Georgia", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelHaslo1.ForeColor = System.Drawing.SystemColors.Control;
-            this.labelHaslo1.Location = new System.Drawing.Point(27, 62);
-            this.labelHaslo1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.labelHaslo1.Name = "labelHaslo1";
-            this.labelHaslo1.Size = new System.Drawing.Size(91, 23);
-            this.labelHaslo1.TabIndex = 11;
-            this.labelHaslo1.Text = "Nazwisko";
-            // 
-            // labelLogin1
-            // 
-            this.labelLogin1.AutoSize = true;
-            this.labelLogin1.Font = new System.Drawing.Font("Georgia", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelLogin1.ForeColor = System.Drawing.SystemColors.Control;
-            this.labelLogin1.Location = new System.Drawing.Point(27, 28);
-            this.labelLogin1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.labelLogin1.Name = "labelLogin1";
-            this.labelLogin1.Size = new System.Drawing.Size(49, 23);
-            this.labelLogin1.TabIndex = 10;
-            this.labelLogin1.Text = "Imię";
             // 
             // l_login
             // 
@@ -155,6 +96,65 @@
             this.l_imie.TabIndex = 13;
             this.l_imie.Text = "Imię";
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Georgia", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label2.ForeColor = System.Drawing.SystemColors.Control;
+            this.label2.Location = new System.Drawing.Point(27, 97);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(58, 23);
+            this.label2.TabIndex = 12;
+            this.label2.Text = "Login";
+            // 
+            // labelHaslo1
+            // 
+            this.labelHaslo1.AutoSize = true;
+            this.labelHaslo1.Font = new System.Drawing.Font("Georgia", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.labelHaslo1.ForeColor = System.Drawing.SystemColors.Control;
+            this.labelHaslo1.Location = new System.Drawing.Point(27, 62);
+            this.labelHaslo1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelHaslo1.Name = "labelHaslo1";
+            this.labelHaslo1.Size = new System.Drawing.Size(91, 23);
+            this.labelHaslo1.TabIndex = 11;
+            this.labelHaslo1.Text = "Nazwisko";
+            // 
+            // labelLogin1
+            // 
+            this.labelLogin1.AutoSize = true;
+            this.labelLogin1.Font = new System.Drawing.Font("Georgia", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.labelLogin1.ForeColor = System.Drawing.SystemColors.Control;
+            this.labelLogin1.Location = new System.Drawing.Point(27, 28);
+            this.labelLogin1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelLogin1.Name = "labelLogin1";
+            this.labelLogin1.Size = new System.Drawing.Size(49, 23);
+            this.labelLogin1.TabIndex = 10;
+            this.labelLogin1.Text = "Imię";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(21, 207);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(205, 23);
+            this.button1.TabIndex = 7;
+            this.button1.Text = "Test połączenia";
+            this.button1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // button_wyloguj
+            // 
+            this.button_wyloguj.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.button_wyloguj.Location = new System.Drawing.Point(21, 254);
+            this.button_wyloguj.Margin = new System.Windows.Forms.Padding(2);
+            this.button_wyloguj.Name = "button_wyloguj";
+            this.button_wyloguj.Size = new System.Drawing.Size(205, 28);
+            this.button_wyloguj.TabIndex = 6;
+            this.button_wyloguj.Text = "Wyloguj";
+            this.button_wyloguj.UseVisualStyleBackColor = true;
+            this.button_wyloguj.Click += new System.EventHandler(this.button_wyloguj_Click);
+            // 
             // UC_menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -162,6 +162,7 @@
             this.Controls.Add(this.groupBoxLogin);
             this.Name = "UC_menu";
             this.Size = new System.Drawing.Size(252, 308);
+            this.VisibleChanged += new System.EventHandler(this.UC_menu_VisibleChanged);
             this.groupBoxLogin.ResumeLayout(false);
             this.groupBoxLogin.PerformLayout();
             this.ResumeLayout(false);

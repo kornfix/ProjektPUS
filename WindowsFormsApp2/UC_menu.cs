@@ -17,10 +17,16 @@ namespace WindowsFormsApp2
         {
             menu = form as Menu;
             InitializeComponent();
+            wczytaj_dane();
+            
+        }
+        public void wczytaj_dane()
+        {
             l_imie.Text = uzytkownik.Imie;
             l_nazwisko.Text = uzytkownik.Nazwisko;
             l_login.Text = uzytkownik.Login;
         }
+
 
         private void button_wyloguj_Click(object sender, EventArgs e)
         {
@@ -31,6 +37,11 @@ namespace WindowsFormsApp2
         private void button1_Click(object sender, EventArgs e)
         {
             //AsynchronousClient.StartClient();
+        }
+
+        private void UC_menu_VisibleChanged(object sender, EventArgs e)
+        {
+            wczytaj_dane();
         }
     }
 }

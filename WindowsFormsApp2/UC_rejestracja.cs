@@ -26,15 +26,15 @@ namespace WindowsFormsApp2
         private async void button_rejestracja_Click(object sender, EventArgs e)
         {
             // Kod walidacyjny
-            var walidacjaEmail =  WalidacjaEmail();
-            var walidacjaHaslo1 =  WalidacjaHaslo1();
-            var walidacjaHaslo2 =  WalidacjaHaslo2();
-            var walidacjaLoginu =   WalidacjaLoginu();
-            var walidacjaImienia =  WalidacjaImienia();
-            var walidacjaNazwiska =  WalidacjaNazwiska(); 
+            var walidacjaEmail = WalidacjaEmail();
+            var walidacjaHaslo1 = WalidacjaHaslo1();
+            var walidacjaHaslo2 = WalidacjaHaslo2();
+            var walidacjaLoginu = WalidacjaLoginu();
+            var walidacjaImienia = WalidacjaImienia();
+            var walidacjaNazwiska = WalidacjaNazwiska();
             Task[] zadania = new Task[] { walidacjaEmail, walidacjaHaslo1, walidacjaHaslo2, walidacjaLoginu, walidacjaImienia, walidacjaNazwiska };
             await Task.WhenAll(zadania);
-            if(!walidacjaEmail.Result || !walidacjaHaslo1.Result || !walidacjaHaslo2.Result || 
+            if (!walidacjaEmail.Result || !walidacjaHaslo1.Result || !walidacjaHaslo2.Result ||
                 !walidacjaLoginu.Result || !walidacjaImienia.Result || !walidacjaNazwiska.Result)
             {
                 return;
@@ -48,13 +48,10 @@ namespace WindowsFormsApp2
             string zapytanie = "zarejestruj_uzytkownika: " + email + haslo + login
                 + imie + nazwisko + " <EOF>";
             AsynchronousClient asynchronousClient = new AsynchronousClient();
-            asynchronousClient.StartClient(zapytanie);
+            String odp = await asynchronousClient.StartClient(zapytanie);
             // oczekiwanie prośby
-            while (asynchronousClient.Odpowiedz== "")
-            {
-            }
             // prosba udana 
-            if(asynchronousClient.Odpowiedz == "true")
+            if (odp == "true")
             {
                 uzytkownik.Imie = txt_imie.Text;
                 uzytkownik.Nazwisko = txt_nazwisko.Text;
@@ -68,8 +65,6 @@ namespace WindowsFormsApp2
             // prośba nie udana wyświetlenie inf
 
         }
-
-        
         bool czyPrawidlowyEmail(String email)
         {
             try
@@ -93,12 +88,13 @@ namespace WindowsFormsApp2
                 errorProvider1.SetError(txt_email, "Email jest wymagany!");
                 return false;
             }
-            else if (!czyPrawidlowyEmail(email))
+            if (!czyPrawidlowyEmail(email))
             {
                 errorProvider1.SetError(txt_email, "Podany emial jest nieprawidłowy!");
                 return false;
             }
-            else if (SprawdzenieCzyMailIstnieje(email))
+            Boolean wynik_sprawdzania = await SprawdzenieCzyMailIstnieje(email);
+            if (wynik_sprawdzania) 
             {
                 errorProvider1.SetError(txt_email, "Podany email już istnieje!");
                 return false;
@@ -106,20 +102,17 @@ namespace WindowsFormsApp2
 
             return true;
         }
-        bool SprawdzenieCzyMailIstnieje(String email)
+        async Task<Boolean> SprawdzenieCzyMailIstnieje(String email)
         {
             AsynchronousClient asynchronousClient = new AsynchronousClient();
-            asynchronousClient.StartClient("sprawdz_email: " + email + " <EOF>");
-            while (asynchronousClient.Odpowiedz == "")
-            {
-            }
-            if (asynchronousClient.Odpowiedz == "false")
+            String odp = await asynchronousClient.StartClient("sprawdz_email: " + email + " <EOF>");
+            if (odp == "false")
             {
                 return false;
             }
-            else
+            else 
             {
-
+                MessageBox.Show(odp);
                 return true;
             }
         }
@@ -165,21 +158,19 @@ namespace WindowsFormsApp2
                 errorProvider1.SetError(txt_login,"Nazwa użytkownika jest wymagana!");
                 return false;
             }
-            else if (SprawdzenieCzyLoginIstnieje(login))
+            Boolean wynik_sprawdzenia = await SprawdzenieCzyLoginIstnieje(login);
+            if(wynik_sprawdzenia)
             {
                 errorProvider1.SetError(txt_login, "Podany login już istnieje!");
                 return false;
             }
             return true;
         }
-        bool SprawdzenieCzyLoginIstnieje(String login)
+        async Task<Boolean> SprawdzenieCzyLoginIstnieje(String login)
         {
             AsynchronousClient asynchronousClient = new AsynchronousClient();
-            asynchronousClient.StartClient("sprawdz_login: " + login + " <EOF>");
-            while (asynchronousClient.Odpowiedz == "")
-            {
-            }
-            if (asynchronousClient.Odpowiedz == "false")
+            String odp = await asynchronousClient.StartClient("sprawdz_login: " + login + " <EOF>");
+            if (odp == "false")
             {
                 return false;
             }

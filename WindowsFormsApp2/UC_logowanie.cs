@@ -32,14 +32,13 @@ namespace WindowsFormsApp2
             // Zapytanie do serwera z tym stringiem
             string zapytanie = "zaloguj: "+ textBoxLogin1.Text + " " + textBoxHaslo1.Text+" <EOF>";
             AsynchronousClient asynchronousClient = new AsynchronousClient();
-            asynchronousClient.StartClient(zapytanie);
+            String odp = await asynchronousClient.StartClient(zapytanie);
             // oczekiwanie prośby
-            while (asynchronousClient.Odpowiedz == "")
+            while (odp == "")
             {
             }
             // prosba udana 
-            
-            String[] slowa =  asynchronousClient.Odpowiedz.Split(' ');
+            String[] slowa = odp.Split(' ');
             if (slowa.Length == 4)
             {
                 uzytkownik.Imie = slowa[0];

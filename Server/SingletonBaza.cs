@@ -29,6 +29,7 @@ namespace Server
                 if (_instance == null)
                 {
                     _instance = new SingletonBaza();
+                    
                 }
                 return _instance;
             }

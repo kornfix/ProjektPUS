@@ -109,7 +109,7 @@ namespace Server
                     // All the data has been read from the
                     // client. Display it on the console.  
                     //Console.WriteLine("Read {0} bytes from socket. \n Data : {1}",content.Length, content);
-                    //MessageBox.Show("Wczytano " + content.Length + " bitów z socketu. Data: "+ content);
+                    MessageBox.Show("Wczytano " + content.Length + " bitów z socketu. Data: "+ content);
                     // Echo the data back to the client.  
                     string[] slowa = content.Split(' ');
                     string odpowiedz = "error";
@@ -120,6 +120,7 @@ namespace Server
                         switch (slowa[0])
                         {
                             case "sprawdz_email:":
+                                System.Threading.Thread.Sleep(5000);
                                 var q_e = from uzytkownik in SingletonBaza.Instance.BazaDC.uzytkownicy
                                             where uzytkownik.email == slowa[1]
                                             select uzytkownik;

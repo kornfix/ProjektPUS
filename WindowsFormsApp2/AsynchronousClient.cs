@@ -8,19 +8,19 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
 namespace WindowsFormsApp2
 {
     public class AsynchronousClient
     {
         // The port number for the remote device.  
         private const int port = 11000;
-
         // ManualResetEvent instances signal completion.  
-        private  ManualResetEvent connectDone =
+        private ManualResetEvent connectDone =
             new ManualResetEvent(false);
-        private  ManualResetEvent sendDone =
+        private ManualResetEvent sendDone =
             new ManualResetEvent(false);
-        private  ManualResetEvent receiveDone =
+        private ManualResetEvent receiveDone =
             new ManualResetEvent(false);
 
         // The response from the remote device.  
@@ -36,8 +36,8 @@ namespace WindowsFormsApp2
         {
             response = String.Empty;
         }
-
-    public  void StartClient(string pytanie)
+        
+        public async Task<String> StartClient(string pytanie)
         {
             // Connect to a remote device.  
             try
@@ -61,12 +61,11 @@ namespace WindowsFormsApp2
 
                 // Send test data to the remote device.  
                 Send(client, pytanie);
+                //sendDone.WaitOne();
                 sendDone.WaitOne();
-
                 // Receive the response from the remote device.  
                 Receive(client);
                 receiveDone.WaitOne();
-
                 // Write the response to the console.  
 
                 //Console.WriteLine("Response received : {0}", response);
@@ -74,16 +73,17 @@ namespace WindowsFormsApp2
                 // Release the socket.  
                 client.Shutdown(SocketShutdown.Both);
                 client.Close();
-
             }
             catch (Exception e)
             {
                 //Console.WriteLine(e.ToString());
                 MessageBox.Show(e.ToString());
+                response = "error";
             }
+            return response;
         }
 
-        private  void ConnectCallback(IAsyncResult ar)
+        private void ConnectCallback(IAsyncResult ar)
         {
             try
             {
@@ -106,7 +106,7 @@ namespace WindowsFormsApp2
             }
         }
 
-        private  void Receive(Socket client)
+        private void Receive(Socket client)
         {
             try
             {
@@ -125,7 +125,7 @@ namespace WindowsFormsApp2
             }
         }
 
-        private  void ReceiveCallback(IAsyncResult ar)
+        private void ReceiveCallback(IAsyncResult ar)
         {
             try
             {
@@ -164,7 +164,7 @@ namespace WindowsFormsApp2
             }
         }
 
-        private  void Send(Socket client, String data)
+        private void Send(Socket client, String data)
         {
             // Convert the string data to byte data using ASCII encoding.  
             byte[] byteData = Encoding.ASCII.GetBytes(data);
@@ -174,7 +174,7 @@ namespace WindowsFormsApp2
                 new AsyncCallback(SendCallback), client);
         }
 
-        private  void SendCallback(IAsyncResult ar)
+        private void SendCallback(IAsyncResult ar)
         {
             try
             {
