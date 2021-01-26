@@ -333,7 +333,7 @@ namespace Server
                 //MessageBox.Show("Wysłano " + bytesSent + " bitow do klienta");
                 handler.Shutdown(SocketShutdown.Both);
                 handler.Close();
-
+                
             }
             catch (Exception e)
             {

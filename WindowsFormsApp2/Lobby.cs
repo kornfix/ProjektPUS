@@ -22,7 +22,7 @@ namespace WindowsFormsApp2
             // zapytanie do serwera  ile mam lobby;
             AsynchronousClient asynchronousClient = new AsynchronousClient();
             String odp = await asynchronousClient.StartClient("wielkosc_lobby: <EOF>");
-            string[] slowa = odp.Split(':');
+            string[] slowa = odp.Split(':'); 
             int ile = Int32.Parse(slowa[1]);
             for (int i=1; i<=ile; i++)
             {
