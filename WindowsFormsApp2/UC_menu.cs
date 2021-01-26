@@ -36,7 +36,8 @@ namespace WindowsFormsApp2
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            //AsynchronousClient.StartClient();
+            Lobby lobby = new Lobby();
+            lobby.Show();
         }
 
         private void UC_menu_VisibleChanged(object sender, EventArgs e)

@@ -23,8 +23,9 @@ namespace WindowsFormsApp2
         {
             menu.tryb_logowanie();
         }
-        private async void button_rejestracja_Click(object sender, EventArgs e)
+        async Task rejestracja()
         {
+            
             // Kod walidacyjny
             var walidacjaEmail = WalidacjaEmail();
             var walidacjaHaslo1 = WalidacjaHaslo1();
@@ -63,7 +64,11 @@ namespace WindowsFormsApp2
             // logowanie do menu
             //menu.tryb_menu();
             // prośba nie udana wyświetlenie inf
+        }
 
+        private async void button_rejestracja_Click(object sender, EventArgs e)
+        {
+            var r = rejestracja(); 
         }
         bool czyPrawidlowyEmail(String email)
         {

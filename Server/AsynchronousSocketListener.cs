@@ -13,15 +13,28 @@ namespace Server
 {
     public class AsynchronousSocketListener
     {
+        private static int liczba_lobby = 5;
+        private static Dictionary<string, Lobby> slownik_lobby;
+        private static List<string> gracze = new List<string>();
         // Thread signal.  
         public static ManualResetEvent allDone = new ManualResetEvent(false);
 
         public AsynchronousSocketListener()
         {
+            
         }
-
+        static void wczytaj_lobby()
+        {
+            slownik_lobby = new Dictionary<string, Lobby>();
+            for (int i = 1; i <= liczba_lobby; i++)
+            {
+                slownik_lobby.Add(i.ToString(), new Lobby(i));
+            }
+        }
         public static void StartListening()
         {
+            wczytaj_lobby();
+            //gracze = new List<string>();
             // Establish the local endpoint for the socket.  
             // The DNS name of the computer  
             // running the listener is "host.contoso.com".  
@@ -114,7 +127,7 @@ namespace Server
                     string[] slowa = content.Split(' ');
                     string odpowiedz = "error";
                     // Kod który wczytuje wysłaną wiadomośc i odpowiada.
-                    if (slowa.Length > 2)
+                    if (slowa.Length >= 2)
                     {
                         
                         switch (slowa[0])
@@ -197,6 +210,90 @@ namespace Server
                                 else
                                 {
                                     odpowiedz = "bledneDane";
+                                }
+                                break;
+                            case "wielkosc_lobby:":
+                                odpowiedz = "ll:" + liczba_lobby;
+                                break;
+                            case "dodaj_gracza_do_lobby:":
+                                if (!gracze.Contains(slowa[2]))
+                                {
+                                    gracze.Add(slowa[2]);
+
+                                    Boolean wynik_sprawdzania = true;
+                                    foreach (Lobby w in slownik_lobby.Values)
+                                    {
+                                        if (w.czy_jestem_w_lobby(slowa[2]))
+                                        {
+                                            wynik_sprawdzania = false;
+                                            break;
+                                        }
+                                    }
+                                    if (wynik_sprawdzania && slownik_lobby.ContainsKey(slowa[1]))
+                                    {
+                                        odpowiedz = slownik_lobby[slowa[1]].dodaj(slowa[2]).ToString();
+                                    }
+                                    else
+                                    {
+                                        odpowiedz = "False";
+                                    }
+                                    gracze.Remove(slowa[2]);
+                                }else
+                                {
+                                    odpowiedz = "False";
+                                }
+                                    break;
+                            case "usun_gracz_z_lobby:":
+                                if (slownik_lobby.ContainsKey(slowa[1]))
+                                {
+                                    odpowiedz = slownik_lobby[slowa[1]].usun(slowa[2]).ToString();
+                                }else
+                                {
+                                    odpowiedz = "False";
+                                }
+                                break;
+                            case "gracze_z_lobby:":
+                                if (slownik_lobby.ContainsKey(slowa[1]))
+                                {
+                                    odpowiedz = slownik_lobby[slowa[1]].gracze();
+                                }else
+                                {
+                                    odpowiedz = "g1: g2:";
+                                }
+                                break;
+                            case "czy_pelne_lobby:":
+                                // Sprawdzić użycie w kliencie
+                                if (slownik_lobby.ContainsKey(slowa[1]))
+                                {
+                                    odpowiedz = slownik_lobby[slowa[1]].czy_pelne_lobby().ToString();
+                                }else
+                                {
+                                    odpowiedz = "False";
+                                }
+                                break;
+                            case "jestem_gotowy:":
+                                if (!gracze.Contains(slowa[2]))
+                                {
+                                    gracze.Add(slowa[2]);
+                                    if (slownik_lobby.ContainsKey(slowa[1]))
+                                    {
+                                        odpowiedz = slownik_lobby[slowa[1]].gotowy(slowa[2]).ToString();
+                                    }
+                                    else
+                                    {
+                                        odpowiedz = "False";
+                                    }
+                                     gracze.Remove(slowa[2]);
+                                }
+                                break;
+                            case "niejestem_gotowy:":
+                                if (slownik_lobby.ContainsKey(slowa[1]))
+                                {
+                                    odpowiedz = slownik_lobby[slowa[1]].niegotowy(slowa[2]).ToString();
+                                }
+                                else
+                                {
+                                    odpowiedz = "False";
                                 }
                                 break;
                         }

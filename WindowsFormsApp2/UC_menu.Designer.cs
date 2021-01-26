@@ -35,7 +35,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.labelHaslo1 = new System.Windows.Forms.Label();
             this.labelLogin1 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btn_lobby = new System.Windows.Forms.Button();
             this.button_wyloguj = new System.Windows.Forms.Button();
             this.groupBoxLogin.SuspendLayout();
             this.SuspendLayout();
@@ -49,7 +49,7 @@
             this.groupBoxLogin.Controls.Add(this.label2);
             this.groupBoxLogin.Controls.Add(this.labelHaslo1);
             this.groupBoxLogin.Controls.Add(this.labelLogin1);
-            this.groupBoxLogin.Controls.Add(this.button1);
+            this.groupBoxLogin.Controls.Add(this.btn_lobby);
             this.groupBoxLogin.Controls.Add(this.button_wyloguj);
             this.groupBoxLogin.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.groupBoxLogin.Location = new System.Drawing.Point(0, 0);
@@ -132,16 +132,16 @@
             this.labelLogin1.TabIndex = 10;
             this.labelLogin1.Text = "Imię";
             // 
-            // button1
+            // btn_lobby
             // 
-            this.button1.Location = new System.Drawing.Point(21, 207);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(205, 23);
-            this.button1.TabIndex = 7;
-            this.button1.Text = "Test połączenia";
-            this.button1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btn_lobby.Location = new System.Drawing.Point(21, 207);
+            this.btn_lobby.Name = "btn_lobby";
+            this.btn_lobby.Size = new System.Drawing.Size(205, 23);
+            this.btn_lobby.TabIndex = 7;
+            this.btn_lobby.Text = "Wyszukaj grę";
+            this.btn_lobby.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_lobby.UseVisualStyleBackColor = true;
+            this.btn_lobby.Click += new System.EventHandler(this.button1_Click);
             // 
             // button_wyloguj
             // 
@@ -173,7 +173,7 @@
 
         private System.Windows.Forms.GroupBox groupBoxLogin;
         private System.Windows.Forms.Button button_wyloguj;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btn_lobby;
         private System.Windows.Forms.Label l_login;
         private System.Windows.Forms.Label l_nazwisko;
         private System.Windows.Forms.Label l_imie;
