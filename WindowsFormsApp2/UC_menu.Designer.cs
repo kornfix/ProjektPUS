@@ -37,12 +37,14 @@
             this.labelLogin1 = new System.Windows.Forms.Label();
             this.btn_lobby = new System.Windows.Forms.Button();
             this.button_wyloguj = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.groupBoxLogin.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBoxLogin
             // 
             this.groupBoxLogin.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.groupBoxLogin.Controls.Add(this.button1);
             this.groupBoxLogin.Controls.Add(this.l_login);
             this.groupBoxLogin.Controls.Add(this.l_nazwisko);
             this.groupBoxLogin.Controls.Add(this.l_imie);
@@ -155,6 +157,16 @@
             this.button_wyloguj.UseVisualStyleBackColor = true;
             this.button_wyloguj.Click += new System.EventHandler(this.button_wyloguj_Click);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(42, 173);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 16;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            // 
             // UC_menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -180,5 +192,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label labelHaslo1;
         private System.Windows.Forms.Label labelLogin1;
+        private System.Windows.Forms.Button button1;
     }
 }
