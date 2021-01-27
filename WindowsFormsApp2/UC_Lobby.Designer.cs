@@ -29,12 +29,14 @@ namespace WindowsFormsApp2
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.btn_dolacz = new System.Windows.Forms.Button();
             this.l_numer = new System.Windows.Forms.Label();
             this.l_gracz1 = new System.Windows.Forms.Label();
             this.l_gracz2 = new System.Windows.Forms.Label();
             this.btn_start = new System.Windows.Forms.Button();
             this.l_inf = new System.Windows.Forms.Label();
+            this.timer_aktywnosc = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // btn_dolacz
@@ -98,6 +100,11 @@ namespace WindowsFormsApp2
             this.l_inf.TabIndex = 5;
             this.l_inf.Text = "Oczekiwanie na graczy";
             // 
+            // timer_aktywnosc
+            // 
+            this.timer_aktywnosc.Interval = 5000;
+            this.timer_aktywnosc.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // UC_Lobby
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -110,6 +117,7 @@ namespace WindowsFormsApp2
             this.Controls.Add(this.btn_dolacz);
             this.Name = "UC_Lobby";
             this.Size = new System.Drawing.Size(308, 120);
+            this.Load += new System.EventHandler(this.UC_Lobby_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -123,5 +131,6 @@ namespace WindowsFormsApp2
         private System.Windows.Forms.Label l_gracz2;
         private System.Windows.Forms.Button btn_start;
         private System.Windows.Forms.Label l_inf;
+        private System.Windows.Forms.Timer timer_aktywnosc;
     }
 }

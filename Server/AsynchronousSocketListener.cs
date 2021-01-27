@@ -122,7 +122,7 @@ namespace Server
                     // All the data has been read from the
                     // client. Display it on the console.  
                     //Console.WriteLine("Read {0} bytes from socket. \n Data : {1}",content.Length, content);
-                    MessageBox.Show("Wczytano " + content.Length + " bitów z socketu. Data: "+ content);
+                    //MessageBox.Show("Wczytano " + content.Length + " bitów z socketu. Data: "+ content);
                     // Echo the data back to the client.  
                     string[] slowa = content.Split(' ');
                     string odpowiedz = "error";
@@ -235,7 +235,7 @@ namespace Server
                                     }
                                     else
                                     {
-                                        odpowiedz = "False";
+                                        odpowiedz = "jestesJuzWLobby";
                                     }
                                     gracze.Remove(slowa[2]);
                                 }else
