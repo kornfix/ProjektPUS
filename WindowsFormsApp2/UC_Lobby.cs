@@ -26,8 +26,7 @@ namespace WindowsFormsApp2
         {
             
             // zapytanie do bazy o graczy lobby: 1;
-            AsynchronousClient asynchronousClient = new AsynchronousClient();
-            String odp = await asynchronousClient.StartClient("gracze_z_lobby: " + l_numer.Text + " <EOF>");
+            String odp = await AsynchronousClient.zapytaj("gracze_z_lobby: " + l_numer.Text);
             string[] slowa = odp.Split(' ');
             if(!odp.Contains("g1:"))
             {
@@ -112,8 +111,7 @@ namespace WindowsFormsApp2
             {
                 // zapytanie do bazy danych czy lobby o numer ma wolne miejsce;
                 // odp gracz w dodaj_lobby: numer
-                AsynchronousClient asynchronousClient = new AsynchronousClient();
-                String odp = await asynchronousClient.StartClient("dodaj_gracza_do_lobby: " + l_numer.Text +" "+ uzytkownik.Login+ " <EOF>");
+                String odp = await AsynchronousClient.zapytaj("dodaj_gracza_do_lobby: " + l_numer.Text +" "+ uzytkownik.Login);
 
                     jestem_lobby = Boolean.Parse(odp);
                 // jeśli jestem w loby tick co 5 sec pytaj server kto jest w lobby
@@ -122,8 +120,7 @@ namespace WindowsFormsApp2
                 uzytkownik.Nr_lobby = l_numer.Text;
             }else
             {
-                AsynchronousClient asynchronousClient = new AsynchronousClient();
-                String odp = await asynchronousClient.StartClient("usun_gracz_z_lobby: " + l_numer.Text + " " + uzytkownik.Login + " <EOF>");
+                String odp = await AsynchronousClient.zapytaj("usun_gracz_z_lobby: " + l_numer.Text + " " + uzytkownik.Login);
                 jestem_lobby = Boolean.Parse(odp);
                 jestem_gotowy = false;
                 uzytkownik.Nr_lobby = "";
@@ -152,8 +149,7 @@ namespace WindowsFormsApp2
         {
             if(jestem_lobby)
             {
-                AsynchronousClient asynchronousClient = new AsynchronousClient();
-                asynchronousClient.StartClient("usun_gracz_z_lobby: " + l_numer.Text + " " + uzytkownik.Login + " <EOF>");
+                AsynchronousClient.zapytaj("usun_gracz_z_lobby: " + l_numer.Text + " " + uzytkownik.Login);
             }
         }
        
@@ -164,13 +160,12 @@ namespace WindowsFormsApp2
             if (!jestem_gotowy)
             {
                 AsynchronousClient asynchronousClient = new AsynchronousClient();
-                String odp = await asynchronousClient.StartClient("jestem_gotowy: " + l_numer.Text + " " + uzytkownik.Login + " <EOF>");
+                String odp = await AsynchronousClient.zapytaj("jestem_gotowy: " + l_numer.Text + " " + uzytkownik.Login);
                 jestem_gotowy = Boolean.Parse(odp);
             }
             else
             {
-                AsynchronousClient asynchronousClient = new AsynchronousClient();
-                String odp = await asynchronousClient.StartClient("niejestem_gotowy: " + l_numer.Text + " " + uzytkownik.Login + " <EOF>");
+                String odp = await AsynchronousClient.zapytaj("niejestem_gotowy: " + l_numer.Text + " " + uzytkownik.Login);
                 jestem_gotowy = Boolean.Parse(odp);
             }
             wczytaj_dane();

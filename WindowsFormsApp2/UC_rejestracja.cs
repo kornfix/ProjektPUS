@@ -46,11 +46,9 @@ namespace WindowsFormsApp2
             string imie = " imie:" + txt_imie.Text;
             string nazwisko = " nazwisko:" + txt_nazwisko.Text;
             // Kod wyslania prośby do serwera
-            string zapytanie = "zarejestruj_uzytkownika: " + email + haslo + login
-                + imie + nazwisko + " <EOF>";
-            AsynchronousClient asynchronousClient = new AsynchronousClient();
-            String odp = await asynchronousClient.StartClient(zapytanie);
             // oczekiwanie prośby
+            String odp = await AsynchronousClient.zapytaj("zarejestruj_uzytkownika: " + email + haslo + login
+                + imie + nazwisko);
             // prosba udana 
             if (odp == "true")
             {
@@ -109,8 +107,7 @@ namespace WindowsFormsApp2
         }
         async Task<Boolean> SprawdzenieCzyMailIstnieje(String email)
         {
-            AsynchronousClient asynchronousClient = new AsynchronousClient();
-            String odp = await asynchronousClient.StartClient("sprawdz_email: " + email + " <EOF>");
+            String odp = await AsynchronousClient.zapytaj("sprawdz_email: " + email);
             if (odp == "false")
             {
                 return false;
@@ -173,8 +170,7 @@ namespace WindowsFormsApp2
         }
         async Task<Boolean> SprawdzenieCzyLoginIstnieje(String login)
         {
-            AsynchronousClient asynchronousClient = new AsynchronousClient();
-            String odp = await asynchronousClient.StartClient("sprawdz_login: " + login + " <EOF>");
+            String odp = await AsynchronousClient.zapytaj("sprawdz_login: " + login);
             if (odp == "false")
             {
                 return false;

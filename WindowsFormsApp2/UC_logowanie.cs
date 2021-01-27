@@ -30,15 +30,10 @@ namespace WindowsFormsApp2
                 return;
             }
             // Zapytanie do serwera z tym stringiem
-            string zapytanie = "zaloguj: "+ textBoxLogin1.Text + " " + textBoxHaslo1.Text+" <EOF>";
-            AsynchronousClient asynchronousClient = new AsynchronousClient();
-            String odp = await asynchronousClient.StartClient(zapytanie);
-            // oczekiwanie prośby
-            while (odp == "")
-            {
-            }
-            // prosba udana 
+            string zapytanie = "zaloguj: "+ textBoxLogin1.Text + " " + textBoxHaslo1.Text;
+            String odp = await AsynchronousClient.zapytaj(zapytanie);
             String[] slowa = odp.Split(' ');
+            // prosba udana 
             if (slowa.Length == 4)
             {
                 uzytkownik.Imie = slowa[0];
@@ -48,6 +43,7 @@ namespace WindowsFormsApp2
                 menu.tryb_menu();
                 menu.reset_rejestacji();
             }
+            // prosba nieudana
             else if(slowa.Length == 1 && slowa[0] == "bledneDane")
             {
                 errorProvider1.SetError(linkLabelZapomnialem, "Błędne dane");

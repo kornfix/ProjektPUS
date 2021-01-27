@@ -36,7 +36,15 @@ namespace WindowsFormsApp2
         {
             response = String.Empty;
         }
-        
+        // Funkcja tworząca pojedyńcze zapytania
+        public async static Task<String> zapytaj(string zapytanie)
+        {
+            AsynchronousClient asynchronousClient = new AsynchronousClient();
+            String odp = await asynchronousClient.StartClient(zapytanie +" <EOF>");
+            return odp;
+        }
+
+
         public async Task<String> StartClient(string pytanie)
         {
             // Connect to a remote device.  

@@ -50,11 +50,5 @@ namespace WindowsFormsApp2
                 pierszy_sprawdzany = !pierszy_sprawdzany;
             }
         }
-
-        private async void button1_Click(object sender, EventArgs e)
-        {
-            AsynchronousClient asynchronousClient = new AsynchronousClient();
-            await asynchronousClient.StartClient("Test<EOF>");
-        }
     }
 }
