@@ -295,6 +295,54 @@ namespace Server
                                     odpowiedz = "False";
                                 }
                                 break;
+                            case "uzyt_wartosc_parametru:":
+                                var q_u_p = from uzytkownik in SingletonBaza.Instance.BazaDC.uzytkownicy
+                                          where uzytkownik.login == slowa[1]
+                                          select uzytkownik;
+                                if (q_u_p.Any())
+                                {
+                                    uzytkownicy edytowany = q_u_p.FirstOrDefault();
+                                    var odp= edytowany.GetType().GetProperty(slowa[2]).GetValue(edytowany, null);
+                                    if(odp!=null)
+                                    {
+                                        odpowiedz = odp.ToString();
+                                    }
+                                }
+                                else
+                                {
+                                    odpowiedz = "bledneDane";
+                                }
+                                break;
+                            case "uzyt_zm_par:":
+                                var q_u_zp = from uzytkownik in SingletonBaza.Instance.BazaDC.uzytkownicy
+                                             where uzytkownik.login == slowa[1]
+                                             select uzytkownik;
+                                if (q_u_zp.Any())
+                                {
+                                    uzytkownicy edytowany = q_u_zp.FirstOrDefault();
+                                    if (slowa[2] == "haslo")
+                                    {
+                                        edytowany.haslo = hashowanie.GetHashString(slowa[3]);
+                                        SingletonBaza.Instance.BazaDC.SubmitChanges();
+                                        odpowiedz = "True";
+                                    }
+                                    else
+                                    {
+                                        PropertyInfo prop = edytowany.GetType().GetProperty(slowa[2]);
+                                        if (prop != null)
+                                        {
+                                            prop.SetValue(edytowany, slowa[3], null);
+                                            SingletonBaza.Instance.BazaDC.SubmitChanges();
+                                            odpowiedz = "True";
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    MessageBox.Show(slowa[1], slowa[2] + " "+ slowa[3]);
+                                    odpowiedz = "bledneDane";
+                                }
+                                break;
                         }
                     }
                     Send(handler, odpowiedz);

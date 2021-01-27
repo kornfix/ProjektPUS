@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.groupBoxLogin = new System.Windows.Forms.GroupBox();
+            this.btn_edycja_profilu = new System.Windows.Forms.Button();
             this.l_login = new System.Windows.Forms.Label();
             this.l_nazwisko = new System.Windows.Forms.Label();
             this.l_imie = new System.Windows.Forms.Label();
@@ -37,14 +38,13 @@
             this.labelLogin1 = new System.Windows.Forms.Label();
             this.btn_lobby = new System.Windows.Forms.Button();
             this.button_wyloguj = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.groupBoxLogin.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBoxLogin
             // 
             this.groupBoxLogin.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            this.groupBoxLogin.Controls.Add(this.button1);
+            this.groupBoxLogin.Controls.Add(this.btn_edycja_profilu);
             this.groupBoxLogin.Controls.Add(this.l_login);
             this.groupBoxLogin.Controls.Add(this.l_nazwisko);
             this.groupBoxLogin.Controls.Add(this.l_imie);
@@ -61,6 +61,16 @@
             this.groupBoxLogin.Size = new System.Drawing.Size(250, 306);
             this.groupBoxLogin.TabIndex = 18;
             this.groupBoxLogin.TabStop = false;
+            // 
+            // btn_edycja_profilu
+            // 
+            this.btn_edycja_profilu.Location = new System.Drawing.Point(21, 178);
+            this.btn_edycja_profilu.Name = "btn_edycja_profilu";
+            this.btn_edycja_profilu.Size = new System.Drawing.Size(205, 23);
+            this.btn_edycja_profilu.TabIndex = 16;
+            this.btn_edycja_profilu.Text = "Edycja profilu";
+            this.btn_edycja_profilu.UseVisualStyleBackColor = true;
+            this.btn_edycja_profilu.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // l_login
             // 
@@ -157,16 +167,6 @@
             this.button_wyloguj.UseVisualStyleBackColor = true;
             this.button_wyloguj.Click += new System.EventHandler(this.button_wyloguj_Click);
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(42, 173);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 16;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click_1);
-            // 
             // UC_menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -192,6 +192,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label labelHaslo1;
         private System.Windows.Forms.Label labelLogin1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btn_edycja_profilu;
     }
 }

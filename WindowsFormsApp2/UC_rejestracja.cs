@@ -27,12 +27,12 @@ namespace WindowsFormsApp2
         {
             
             // Kod walidacyjny
-            var walidacjaEmail = WalidacjaEmail();
-            var walidacjaHaslo1 = WalidacjaHaslo1();
-            var walidacjaHaslo2 = WalidacjaHaslo2();
-            var walidacjaLoginu = WalidacjaLoginu();
-            var walidacjaImienia = WalidacjaImienia();
-            var walidacjaNazwiska = WalidacjaNazwiska();
+            var walidacjaEmail = Walidacja.WalidacjaEmail(txt_email, errorProvider1);
+            var walidacjaHaslo1 = Walidacja.WalidacjaHaslo1(txt_haslo1,errorProvider1);
+            var walidacjaHaslo2 = Walidacja.WalidacjaHaslo2(txt_haslo1.Text, txt_haslo2, errorProvider1);
+            var walidacjaLoginu = Walidacja.WalidacjaLoginu(txt_login,errorProvider1);
+            var walidacjaImienia = Walidacja.WalidacjaImienia(txt_imie , errorProvider1);
+            var walidacjaNazwiska = Walidacja.WalidacjaNazwiska(txt_nazwisko , errorProvider1);
             Task[] zadania = new Task[] { walidacjaEmail, walidacjaHaslo1, walidacjaHaslo2, walidacjaLoginu, walidacjaImienia, walidacjaNazwiska };
             await Task.WhenAll(zadania);
             if (!walidacjaEmail.Result || !walidacjaHaslo1.Result || !walidacjaHaslo2.Result ||
@@ -67,7 +67,7 @@ namespace WindowsFormsApp2
         private async void button_rejestracja_Click(object sender, EventArgs e)
         {
             var r = rejestracja(); 
-        }
+        }      
         bool czyPrawidlowyEmail(String email)
         {
             try

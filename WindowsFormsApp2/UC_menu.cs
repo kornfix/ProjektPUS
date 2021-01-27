@@ -47,8 +47,8 @@ namespace WindowsFormsApp2
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            Menu menu = new Menu();
-            menu.Show();
+            EdycjaUzytkownika edycja = new EdycjaUzytkownika(this);
+            edycja.Show();
         }
     }
 }
