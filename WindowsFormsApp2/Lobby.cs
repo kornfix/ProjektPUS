@@ -48,5 +48,13 @@ namespace WindowsFormsApp2
                 }
             }
         }
+
+        private void Lobby_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if(uzytkownik.Nr_lobby!="")
+            {
+                wyswietlane_lobby[uzytkownik.Nr_lobby].Zamykanie();
+            }
+        }
     }
 }

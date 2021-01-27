@@ -102,7 +102,7 @@ namespace WindowsFormsApp2
             // 
             // timer_aktywnosc
             // 
-            this.timer_aktywnosc.Interval = 5000;
+            this.timer_aktywnosc.Interval = 1000;
             this.timer_aktywnosc.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // UC_Lobby

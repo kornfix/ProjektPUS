@@ -24,6 +24,7 @@ namespace WindowsFormsApp2
         }
         public async Task wczytaj_dane()
         {
+            
             // zapytanie do bazy o graczy lobby: 1;
             AsynchronousClient asynchronousClient = new AsynchronousClient();
             String odp = await asynchronousClient.StartClient("gracze_z_lobby: " + l_numer.Text + " <EOF>");
@@ -59,40 +60,48 @@ namespace WindowsFormsApp2
                 // 5 sec sprawdza kto jest w lobby oraz status gry wiec nie musi sprawdac czy drugi gracz jest gotowy
 
             }
-            Boolean wynik_pelny_server = slowa[0].Length > 3 && slowa[1].Length > 3;
-            if (!jestem_lobby  && wynik_pelny_server 
-                || (uzytkownik.Nr_lobby.Length !=0 
-                && uzytkownik.Nr_lobby != l_numer.Text))
+            Boolean wynik_pelny_server = l_gracz1.Text.Length !=0 && l_gracz2.Text.Length != 0;
+            l_inf.Text = l_inf.Text + " " + wynik_pelny_server.ToString();
+            if (uzytkownik.Nr_lobby != "")
             {
-                btn_dolacz.Visible = false;
-                btn_start.Visible = false;
-            }else if (!jestem_lobby && !wynik_pelny_server)
-            {
-                btn_dolacz.Visible = true;
-                btn_dolacz.Text = "Dołącz";
-                btn_start.Visible = false;      
-            }else if(jestem_lobby)
-            {
-                btn_dolacz.Visible = true;
-                btn_dolacz.Text = "Wyjdź";
-                if(wynik_pelny_server)
+                if(uzytkownik.Nr_lobby == l_numer.Text)
                 {
-                    btn_start.Visible = true;
-                    if (jestem_gotowy)
+                    btn_dolacz.Visible = true;
+                    btn_dolacz.Text = "Wyjdź";
+                    if (wynik_pelny_server)
                     {
-                        btn_start.Text = "Anuluj";
+                        btn_start.Visible = true;
+                        if (jestem_gotowy)
+                        {
+                            btn_start.Text = "Anuluj";
+                        }
+                        else
+                        {
+                            btn_start.Text = "Start";
+                        }
                     }
                     else
                     {
-                        btn_start.Text = "Start";
+                        btn_start.Visible = false;
                     }
-                }
-                else
+                }else
                 {
+                    btn_dolacz.Visible = false;
+                    btn_start.Visible = false;
+                }
+            }else
+            {
+                if(wynik_pelny_server)
+                {
+                    btn_dolacz.Visible = false;
+                    btn_start.Visible = false;
+                }else
+                {
+                    btn_dolacz.Visible = true;
+                    btn_dolacz.Text = "Dołącz";
                     btn_start.Visible = false;
                 }
             }
-
         }
         private async void btn_dolacz_Click(object sender, EventArgs e)
         {
@@ -137,6 +146,16 @@ namespace WindowsFormsApp2
             wczytaj_dane();
             timer_aktywnosc.Start();
         }
+        public async Task Zamykanie()
+        {
+            if(jestem_lobby)
+            {
+                AsynchronousClient asynchronousClient = new AsynchronousClient();
+                asynchronousClient.StartClient("usun_gracz_z_lobby: " + l_numer.Text + " " + uzytkownik.Login + " <EOF>");
+            }
+        }
+       
+
         private async void btn_start_Click(object sender, EventArgs e)
         {
             timer_aktywnosc.Stop();

@@ -90,6 +90,7 @@ namespace WindowsFormsApp2
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "Lobby";
             this.Text = "Lobby";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Lobby_FormClosing);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.panel1.ResumeLayout(false);

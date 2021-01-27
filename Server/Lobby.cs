@@ -56,6 +56,7 @@ namespace Server
                 i++;
                 odp += "g" + i + ":" + item.Key+" ";
             }
+            
             odp += "status:" + status;
             return odp;
         }
