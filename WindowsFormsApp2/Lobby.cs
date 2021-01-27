@@ -12,6 +12,7 @@ namespace WindowsFormsApp2
 {
     public partial class Lobby : Form
     {
+        Dictionary<string, UC_Lobby> wyswietlane_lobby = new Dictionary<string, UC_Lobby>();
         public Lobby()
         {
             InitializeComponent();
@@ -26,8 +27,9 @@ namespace WindowsFormsApp2
             int ile = Int32.Parse(slowa[1]);
             for (int i=1; i<=ile; i++)
             {
-                UC_Lobby uC_Lobby = new UC_Lobby(i.ToString());
+                UC_Lobby uC_Lobby = new UC_Lobby(this,i.ToString());
                 uC_Lobby.wczytaj_dane();
+                wyswietlane_lobby.Add(i.ToString(), uC_Lobby);
                 flp_lobby.Controls.Add(uC_Lobby);
             }
         }
@@ -35,6 +37,16 @@ namespace WindowsFormsApp2
         {
             flp_lobby.Controls.Clear();
             wczytaj_lobby();
+        }
+        public async Task odswierzReszte(string wywolal)
+        {
+            foreach(var item in wyswietlane_lobby)
+            {
+                if(item.Key != wywolal)
+                {
+                    item.Value.wywołajOdswierzenie();
+                }
+            }
         }
     }
 }

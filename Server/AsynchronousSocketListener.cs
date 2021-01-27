@@ -235,7 +235,7 @@ namespace Server
                                     }
                                     else
                                     {
-                                        odpowiedz = "jestesJuzWLobby";
+                                        odpowiedz = "false";
                                     }
                                     gracze.Remove(slowa[2]);
                                 }else

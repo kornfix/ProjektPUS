@@ -12,13 +12,15 @@ namespace WindowsFormsApp2
 {
     public partial class UC_Lobby : UserControl
     {
-        Task czekam;
+
+        Lobby lobby;
         String status_gry;
         private Boolean jestem_lobby = false, jestem_gotowy=false;
-        public UC_Lobby(string numer)
+        public UC_Lobby(Form form,string numer)
         {
             InitializeComponent();
             l_numer.Text = numer;
+            lobby = form as Lobby;
         }
         public async Task wczytaj_dane()
         {
@@ -58,7 +60,9 @@ namespace WindowsFormsApp2
 
             }
             Boolean wynik_pelny_server = slowa[0].Length > 3 && slowa[1].Length > 3;
-            if (!jestem_lobby  && wynik_pelny_server)
+            if (!jestem_lobby  && wynik_pelny_server 
+                || (uzytkownik.Nr_lobby.Length !=0 
+                && uzytkownik.Nr_lobby != l_numer.Text))
             {
                 btn_dolacz.Visible = false;
                 btn_start.Visible = false;
@@ -99,24 +103,22 @@ namespace WindowsFormsApp2
                 // odp gracz w dodaj_lobby: numer
                 AsynchronousClient asynchronousClient = new AsynchronousClient();
                 String odp = await asynchronousClient.StartClient("dodaj_gracza_do_lobby: " + l_numer.Text +" "+ uzytkownik.Login+ " <EOF>");
-                if (odp != "jestesJuzWLobby")
-                {
+
                     jestem_lobby = Boolean.Parse(odp);
-                    // jeśli jestem w loby tick co 5 sec pytaj server kto jest w lobby
-                    // tick async wczytaj_Dane()
-                    //czekam = CzekamGracza2();
-                }else
-                {
-                    MessageBox.Show("Jesteś już w lobby!");
-                }
+                // jeśli jestem w loby tick co 5 sec pytaj server kto jest w lobby
+                // tick async wczytaj_Dane()
+                //czekam = CzekamGracza2();
+                uzytkownik.Nr_lobby = l_numer.Text;
             }else
             {
                 AsynchronousClient asynchronousClient = new AsynchronousClient();
                 String odp = await asynchronousClient.StartClient("usun_gracz_z_lobby: " + l_numer.Text + " " + uzytkownik.Login + " <EOF>");
                 jestem_lobby = Boolean.Parse(odp);
                 jestem_gotowy = false;
+                uzytkownik.Nr_lobby = "";
             }
             wczytaj_dane();
+            lobby.odswierzReszte(l_numer.Text);
             timer_aktywnosc.Start();
         }
 
@@ -129,7 +131,12 @@ namespace WindowsFormsApp2
         {
             timer_aktywnosc.Start();
         }
-
+        public void wywołajOdswierzenie()
+        {
+            timer_aktywnosc.Stop();
+            wczytaj_dane();
+            timer_aktywnosc.Start();
+        }
         private async void btn_start_Click(object sender, EventArgs e)
         {
             timer_aktywnosc.Stop();
