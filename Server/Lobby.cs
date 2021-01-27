@@ -11,7 +11,7 @@ namespace Server
         int numer;
         // gracz1 i gracz2 to loginy
         Dictionary<string, bool> loginy;
-        String status="oczekiwanie na graczy";
+        String status="oczekiwanie";
         public Lobby(int i)
         {
             this.numer = i;
@@ -56,7 +56,7 @@ namespace Server
                 i++;
                 odp += "g" + i + ":" + item.Key+" ";
             }
-            
+            sprawdz_status_gry();
             odp += "status:" + status;
             return odp;
         }
@@ -83,9 +83,9 @@ namespace Server
         }
         public void sprawdz_status_gry()
         {
-            if(!loginy.ContainsValue(false))
+            if( loginy.Count ==2 && !loginy.ContainsValue(false))
             {
-                status = "rozpoczynam gre";
+                status = "rozpoczynam";
             }
         }
     }

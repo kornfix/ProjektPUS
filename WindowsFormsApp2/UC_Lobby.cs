@@ -54,9 +54,11 @@ namespace WindowsFormsApp2
                 }
             }
             l_inf.Text = status_gry;
-            if(status_gry == "rozpoczynam gre" && jestem_lobby)
+            if(status_gry == "rozpoczynam" && jestem_lobby)
             {
                 // Start gry;
+                MessageBox.Show("Zaczynasz grę :P");
+                timer_aktywnosc.Stop();
                 // 5 sec sprawdza kto jest w lobby oraz status gry wiec nie musi sprawdac czy drugi gracz jest gotowy
 
             }
