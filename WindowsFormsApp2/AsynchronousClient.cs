@@ -25,9 +25,9 @@ namespace WindowsFormsApp2
 
         // The response from the remote device.  
         private String response = String.Empty;
-        public  String Odpowiedz
+        public String Odpowiedz
         {
-           get
+            get
             {
                 return response;
             }
@@ -36,7 +36,7 @@ namespace WindowsFormsApp2
         {
             response = String.Empty;
         }
-        
+
         public async Task<String> StartClient(string pytanie)
         {
             // Connect to a remote device.  

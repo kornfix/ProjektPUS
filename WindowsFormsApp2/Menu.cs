@@ -24,7 +24,7 @@ namespace WindowsFormsApp2
         {
             foreach (var item in kontrolki)
             {
-                if(item.Key == wk)
+                if (item.Key == wk)
                 {
                     item.Value.Visible = true;
                 }
@@ -44,7 +44,7 @@ namespace WindowsFormsApp2
         public void tryb_logowanie()
         {
 
-            if(!kontrolki.ContainsKey(wybrany_tryb.logowanie))
+            if (!kontrolki.ContainsKey(wybrany_tryb.logowanie))
             {
                 UC_logowanie uC_Logowanie = new UC_logowanie(this);
                 kontrolki.Add(wybrany_tryb.logowanie, uC_Logowanie);

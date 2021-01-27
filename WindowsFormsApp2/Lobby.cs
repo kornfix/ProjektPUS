@@ -23,11 +23,11 @@ namespace WindowsFormsApp2
             // zapytanie do serwera  ile mam lobby;
             AsynchronousClient asynchronousClient = new AsynchronousClient();
             String odp = await asynchronousClient.StartClient("wielkosc_lobby: <EOF>");
-            string[] slowa = odp.Split(':'); 
+            string[] slowa = odp.Split(':');
             int ile = Int32.Parse(slowa[1]);
-            for (int i=1; i<=ile; i++)
+            for (int i = 1; i <= ile; i++)
             {
-                UC_Lobby uC_Lobby = new UC_Lobby(this,i.ToString());
+                UC_Lobby uC_Lobby = new UC_Lobby(this, i.ToString());
                 uC_Lobby.wczytaj_dane();
                 wyswietlane_lobby.Add(i.ToString(), uC_Lobby);
                 flp_lobby.Controls.Add(uC_Lobby);
@@ -40,9 +40,9 @@ namespace WindowsFormsApp2
         }
         public async Task odswierzReszte(string wywolal)
         {
-            foreach(var item in wyswietlane_lobby)
+            foreach (var item in wyswietlane_lobby)
             {
-                if(item.Key != wywolal)
+                if (item.Key != wywolal)
                 {
                     item.Value.wywołajOdswierzenie();
                 }
@@ -51,7 +51,7 @@ namespace WindowsFormsApp2
 
         private void Lobby_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if(uzytkownik.Nr_lobby!="")
+            if (uzytkownik.Nr_lobby != "")
             {
                 wyswietlane_lobby[uzytkownik.Nr_lobby].Zamykanie();
             }

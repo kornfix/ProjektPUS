@@ -16,12 +16,13 @@ namespace Server
         private static int liczba_lobby = 5;
         private static Dictionary<string, Lobby> slownik_lobby;
         private static List<string> gracze = new List<string>();
+        private static string WylosowanaPlansza = null;
         // Thread signal.  
         public static ManualResetEvent allDone = new ManualResetEvent(false);
 
         public AsynchronousSocketListener()
         {
-            
+
         }
         static void wczytaj_lobby()
         {
@@ -126,17 +127,17 @@ namespace Server
                     // Echo the data back to the client.  
                     string[] slowa = content.Split(' ');
                     string odpowiedz = "error";
-                    // Kod który wczytuje wysłaną wiadomośc i odpowiada.
+                    // Kod który wczytuje wysłaną wiadomośc i odpowiada
                     if (slowa.Length >= 2)
                     {
-                        
+
                         switch (slowa[0])
                         {
                             case "sprawdz_email:":
                                 System.Threading.Thread.Sleep(5000);
                                 var q_e = from uzytkownik in SingletonBaza.Instance.BazaDC.uzytkownicy
-                                            where uzytkownik.email == slowa[1]
-                                            select uzytkownik;
+                                          where uzytkownik.email == slowa[1]
+                                          select uzytkownik;
                                 if (q_e.Any())
                                 {
                                     odpowiedz = "true";
@@ -149,8 +150,8 @@ namespace Server
                                 break;
                             case "sprawdz_login:":
                                 var q_l = from uzytkownik in SingletonBaza.Instance.BazaDC.uzytkownicy
-                                            where uzytkownik.login == slowa[1]
-                                            select uzytkownik;
+                                          where uzytkownik.login == slowa[1]
+                                          select uzytkownik;
                                 if (q_l.Any())
                                 {
                                     odpowiedz = "true";
@@ -190,7 +191,7 @@ namespace Server
                                         }
                                     }
                                 }
-                                    
+
                                 SingletonBaza.Instance.BazaDC.uzytkownicy.InsertOnSubmit(u);
                                 SingletonBaza.Instance.BazaDC.SubmitChanges();
                                 odpowiedz = "true";
@@ -238,16 +239,18 @@ namespace Server
                                         odpowiedz = "false";
                                     }
                                     gracze.Remove(slowa[2]);
-                                }else
+                                }
+                                else
                                 {
                                     odpowiedz = "False";
                                 }
-                                    break;
+                                break;
                             case "usun_gracz_z_lobby:":
                                 if (slownik_lobby.ContainsKey(slowa[1]))
                                 {
                                     odpowiedz = slownik_lobby[slowa[1]].usun(slowa[2]).ToString();
-                                }else
+                                }
+                                else
                                 {
                                     odpowiedz = "False";
                                 }
@@ -256,7 +259,8 @@ namespace Server
                                 if (slownik_lobby.ContainsKey(slowa[1]))
                                 {
                                     odpowiedz = slownik_lobby[slowa[1]].gracze();
-                                }else
+                                }
+                                else
                                 {
                                     odpowiedz = "g1: g2:";
                                 }
@@ -266,12 +270,18 @@ namespace Server
                                 if (slownik_lobby.ContainsKey(slowa[1]))
                                 {
                                     odpowiedz = slownik_lobby[slowa[1]].czy_pelne_lobby().ToString();
-                                }else
+                                }
+                                else
                                 {
                                     odpowiedz = "False";
                                 }
                                 break;
                             case "jestem_gotowy:":
+                                if (WylosowanaPlansza == null)
+                                {
+                                    Gra gra = new Gra();
+                                    WylosowanaPlansza = gra.WylosowaniePlanszy();
+                                }
                                 if (!gracze.Contains(slowa[2]))
                                 {
                                     gracze.Add(slowa[2]);
@@ -283,7 +293,7 @@ namespace Server
                                     {
                                         odpowiedz = "False";
                                     }
-                                     gracze.Remove(slowa[2]);
+                                    gracze.Remove(slowa[2]);
                                 }
                                 break;
                             case "niejestem_gotowy:":
@@ -296,13 +306,16 @@ namespace Server
                                     odpowiedz = "False";
                                 }
                                 break;
+                            case "pobierz_plansze:":
+                                odpowiedz = WylosowanaPlansza;
+                                break;
                         }
                     }
                     Send(handler, odpowiedz);
                 }
                 else
                 {
-                    
+
                     // Not all data received. Get more.  
                     handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
                     new AsyncCallback(ReadCallback), state);
@@ -333,7 +346,7 @@ namespace Server
                 //MessageBox.Show("Wysłano " + bytesSent + " bitow do klienta");
                 handler.Shutdown(SocketShutdown.Both);
                 handler.Close();
-                
+
             }
             catch (Exception e)
             {

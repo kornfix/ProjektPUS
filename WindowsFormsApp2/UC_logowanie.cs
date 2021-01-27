@@ -30,7 +30,7 @@ namespace WindowsFormsApp2
                 return;
             }
             // Zapytanie do serwera z tym stringiem
-            string zapytanie = "zaloguj: "+ textBoxLogin1.Text + " " + textBoxHaslo1.Text+" <EOF>";
+            string zapytanie = "zaloguj: " + textBoxLogin1.Text + " " + textBoxHaslo1.Text + " <EOF>";
             AsynchronousClient asynchronousClient = new AsynchronousClient();
             String odp = await asynchronousClient.StartClient(zapytanie);
             // oczekiwanie prośby
@@ -48,11 +48,11 @@ namespace WindowsFormsApp2
                 menu.tryb_menu();
                 menu.reset_rejestacji();
             }
-            else if(slowa.Length == 1 && slowa[0] == "bledneDane")
+            else if (slowa.Length == 1 && slowa[0] == "bledneDane")
             {
                 errorProvider1.SetError(linkLabelZapomnialem, "Błędne dane");
             }
-            
+
             // Kod odpwoiedzi
             // jesli odpowiedż ma true w tab[0] to zalogowano poprawnie a reszta 
             // tab ma inf o koncie 
@@ -64,7 +64,7 @@ namespace WindowsFormsApp2
 
         private void button_rejestracja_Click(object sender, EventArgs e)
         {
-            
+
             menu.tryb_rejestracja();
         }
 
