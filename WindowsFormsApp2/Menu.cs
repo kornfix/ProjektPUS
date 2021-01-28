@@ -49,7 +49,7 @@ namespace WindowsFormsApp2
                 UC_logowanie uC_Logowanie = new UC_logowanie(this);
                 kontrolki.Add(wybrany_tryb.logowanie, uC_Logowanie);
                 TLP_MENU.Controls.Add(uC_Logowanie);
-                //uC_Logowanie.Dock = DockStyle.Fill;
+                uC_Logowanie.Anchor = AnchorStyles.None;
             }
             zmiana_trybu(wybrany_tryb.logowanie);
         }
@@ -61,7 +61,7 @@ namespace WindowsFormsApp2
                 UC_rejestracja uC_Rejestracja = new UC_rejestracja(this);
                 kontrolki.Add(wybrany_tryb.rejestracja, uC_Rejestracja);
                 TLP_MENU.Controls.Add(uC_Rejestracja);
-                //uC_Rejestracja.Dock = DockStyle.Fill;
+                uC_Rejestracja.Anchor = AnchorStyles.None;
             }
             zmiana_trybu(wybrany_tryb.rejestracja);
         }
@@ -73,7 +73,7 @@ namespace WindowsFormsApp2
                 UC_menu uC_Menu = new UC_menu(this);
                 kontrolki.Add(wybrany_tryb.menu, uC_Menu);
                 TLP_MENU.Controls.Add(uC_Menu);
-                //uC_Menu.Dock = DockStyle.Fill;
+                uC_Menu.Anchor = AnchorStyles.None;
             }
             zmiana_trybu(wybrany_tryb.menu);
         }

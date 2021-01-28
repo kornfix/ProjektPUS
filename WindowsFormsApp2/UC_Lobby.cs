@@ -62,7 +62,6 @@ namespace WindowsFormsApp2
 
             }
             Boolean wynik_pelny_server = l_gracz1.Text.Length !=0 && l_gracz2.Text.Length != 0;
-            l_inf.Text = l_inf.Text + " " + wynik_pelny_server.ToString();
             if (uzytkownik.Nr_lobby != "")
             {
                 if(uzytkownik.Nr_lobby == l_numer.Text)

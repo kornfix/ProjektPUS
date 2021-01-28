@@ -50,7 +50,7 @@ namespace WindowsFormsApp2
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.461394F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 94.5386F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(314, 531);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(340, 531);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // flp_lobby
@@ -61,8 +61,9 @@ namespace WindowsFormsApp2
             this.flp_lobby.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flp_lobby.Location = new System.Drawing.Point(3, 32);
             this.flp_lobby.Name = "flp_lobby";
-            this.flp_lobby.Size = new System.Drawing.Size(308, 496);
+            this.flp_lobby.Size = new System.Drawing.Size(334, 496);
             this.flp_lobby.TabIndex = 0;
+            this.flp_lobby.WrapContents = false;
             // 
             // panel1
             // 
@@ -70,7 +71,7 @@ namespace WindowsFormsApp2
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(308, 23);
+            this.panel1.Size = new System.Drawing.Size(334, 23);
             this.panel1.TabIndex = 1;
             // 
             // label1
@@ -86,7 +87,7 @@ namespace WindowsFormsApp2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(314, 531);
+            this.ClientSize = new System.Drawing.Size(340, 531);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "Lobby";
             this.Text = "Lobby";

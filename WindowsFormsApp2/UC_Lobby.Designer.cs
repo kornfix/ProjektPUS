@@ -41,7 +41,7 @@ namespace WindowsFormsApp2
             // 
             // btn_dolacz
             // 
-            this.btn_dolacz.Location = new System.Drawing.Point(196, 80);
+            this.btn_dolacz.Location = new System.Drawing.Point(205, 61);
             this.btn_dolacz.Name = "btn_dolacz";
             this.btn_dolacz.Size = new System.Drawing.Size(91, 24);
             this.btn_dolacz.TabIndex = 0;
@@ -53,7 +53,7 @@ namespace WindowsFormsApp2
             // 
             this.l_numer.AutoSize = true;
             this.l_numer.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.l_numer.Location = new System.Drawing.Point(15, 16);
+            this.l_numer.Location = new System.Drawing.Point(19, 10);
             this.l_numer.Name = "l_numer";
             this.l_numer.Size = new System.Drawing.Size(18, 20);
             this.l_numer.TabIndex = 1;
@@ -61,29 +61,27 @@ namespace WindowsFormsApp2
             // 
             // l_gracz1
             // 
-            this.l_gracz1.AutoSize = true;
             this.l_gracz1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.l_gracz1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.l_gracz1.Location = new System.Drawing.Point(39, 45);
+            this.l_gracz1.Location = new System.Drawing.Point(19, 36);
             this.l_gracz1.Name = "l_gracz1";
-            this.l_gracz1.Size = new System.Drawing.Size(63, 22);
+            this.l_gracz1.Size = new System.Drawing.Size(130, 22);
             this.l_gracz1.TabIndex = 2;
             this.l_gracz1.Text = "Gracz2";
             // 
             // l_gracz2
             // 
-            this.l_gracz2.AutoSize = true;
             this.l_gracz2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.l_gracz2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.l_gracz2.Location = new System.Drawing.Point(182, 45);
+            this.l_gracz2.Location = new System.Drawing.Point(166, 36);
             this.l_gracz2.Name = "l_gracz2";
-            this.l_gracz2.Size = new System.Drawing.Size(63, 22);
+            this.l_gracz2.Size = new System.Drawing.Size(130, 22);
             this.l_gracz2.TabIndex = 3;
             this.l_gracz2.Text = "Gracz1";
             // 
             // btn_start
             // 
-            this.btn_start.Location = new System.Drawing.Point(39, 80);
+            this.btn_start.Location = new System.Drawing.Point(124, 62);
             this.btn_start.Name = "btn_start";
             this.btn_start.Size = new System.Drawing.Size(75, 23);
             this.btn_start.TabIndex = 4;
@@ -94,7 +92,7 @@ namespace WindowsFormsApp2
             // l_inf
             // 
             this.l_inf.AutoSize = true;
-            this.l_inf.Location = new System.Drawing.Point(61, 16);
+            this.l_inf.Location = new System.Drawing.Point(82, 15);
             this.l_inf.Name = "l_inf";
             this.l_inf.Size = new System.Drawing.Size(117, 13);
             this.l_inf.TabIndex = 5;
@@ -116,7 +114,7 @@ namespace WindowsFormsApp2
             this.Controls.Add(this.l_numer);
             this.Controls.Add(this.btn_dolacz);
             this.Name = "UC_Lobby";
-            this.Size = new System.Drawing.Size(308, 120);
+            this.Size = new System.Drawing.Size(308, 94);
             this.Load += new System.EventHandler(this.UC_Lobby_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

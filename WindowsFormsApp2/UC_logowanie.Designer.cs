@@ -113,6 +113,7 @@
             // 
             // groupBoxLogin
             // 
+            this.groupBoxLogin.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.groupBoxLogin.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.groupBoxLogin.Controls.Add(this.button_rejestracja);
             this.groupBoxLogin.Controls.Add(this.buttonZaloguj);
@@ -121,7 +122,6 @@
             this.groupBoxLogin.Controls.Add(this.labelHaslo1);
             this.groupBoxLogin.Controls.Add(this.textBoxLogin1);
             this.groupBoxLogin.Controls.Add(this.labelLogin1);
-            this.groupBoxLogin.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBoxLogin.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.groupBoxLogin.Location = new System.Drawing.Point(0, 0);
             this.groupBoxLogin.Margin = new System.Windows.Forms.Padding(2);
