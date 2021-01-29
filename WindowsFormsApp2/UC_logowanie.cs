@@ -24,9 +24,12 @@ namespace WindowsFormsApp2
             var walidacjaLoginu = WalidacjaLoginu();
             var walidacjaHasla = WalidacjaHasla();
             Task[] zadania = new Task[] { walidacjaLoginu, walidacjaHasla };
+            menu.tryb_czekanie();
             await Task.WhenAll(zadania);
+            aplikacja.wait(1000);
             if (!walidacjaLoginu.Result || !walidacjaHasla.Result)
             {
+                menu.tryb_logowanie();
                 return;
             }
             // Zapytanie do serwera z tym stringiem
