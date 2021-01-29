@@ -98,6 +98,7 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "Gra";
             this.Text = "Gra";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Gra_FormClosed);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();

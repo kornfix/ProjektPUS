@@ -6,7 +6,6 @@ using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Server
@@ -15,7 +14,9 @@ namespace Server
     {
         private static int liczba_lobby = 5;
         private static Dictionary<string, Lobby> slownik_lobby;
-        private static List<string> gracze = new List<string>();
+        private static Dictionary<string, uzytkownicy> gracze = new Dictionary<string, uzytkownicy>();
+        private static Dictionary<string, string> aktywne_sesje = new Dictionary<string, string>();
+        private static List<string> zapytania = new List<string>();
         private static Dictionary<string, Gra> aktywne_gry = new Dictionary<string, Gra>();
         // Thread signal.  
         public static ManualResetEvent allDone = new ManualResetEvent(false);
@@ -204,21 +205,55 @@ namespace Server
                                 if (q_z.Any())
                                 {
                                     uzytkownicy zalogowany = q_z.FirstOrDefault();
-                                    odpowiedz = zalogowany.imie + " " + zalogowany.nazwisko
-                                        + " " + zalogowany.login + " " + zalogowany.email;
+                                    if (gracze.ContainsKey(zalogowany.login))
+                                    {
+                                        odpowiedz = "uzytkownik_jest_juz_zalogowany";
+                                    }
+                                    else
+                                    {
+                                        gracze.Add(zalogowany.login, zalogowany);
+                                        odpowiedz = zalogowany.imie + " " + zalogowany.nazwisko
+                                            + " " + zalogowany.login + " " + zalogowany.email;
+                                        string sesja = hashowanie.GetSession();
+                                        aktywne_sesje.Add(zalogowany.login, sesja);
+                                        odpowiedz +=" "+ sesja;
+                                    }
                                 }
                                 else
                                 {
                                     odpowiedz = "bledneDane";
                                 }
                                 break;
+                            case "wyloguj:":
+                                foreach (var item in slownik_lobby)
+                                {
+                                    if (item.Value.czy_jestem_w_lobby(slowa[1]))
+                                    {
+                                        item.Value.usun(slowa[1]);
+                                    }
+                                }
+                                if(aktywne_sesje.ContainsKey(slowa[1]))
+                                {
+                                    hashowanie.ZwolnijSesje(aktywne_sesje[slowa[1]]);
+                                    aktywne_sesje.Remove(slowa[1]);
+                                }
+                                if (gracze.ContainsKey(slowa[1]))
+                                {
+
+                                    gracze.Remove(slowa[1]);
+                                    odpowiedz = "True";
+                                }else
+                                {
+                                    odpowiedz = "False";
+                                }
+                                break;
                             case "wielkosc_lobby:":
                                 odpowiedz = "ll:" + liczba_lobby;
                                 break;
                             case "dodaj_gracza_do_lobby:":
-                                if (!gracze.Contains(slowa[2]))
+                                if (!zapytania.Contains(slowa[2]))
                                 {
-                                    gracze.Add(slowa[2]);
+                                    zapytania.Add(slowa[2]);
 
                                     Boolean wynik_sprawdzania = true;
                                     foreach (Lobby w in slownik_lobby.Values)
@@ -237,7 +272,7 @@ namespace Server
                                     {
                                         odpowiedz = "false";
                                     }
-                                    gracze.Remove(slowa[2]);
+                                    zapytania.Remove(slowa[2]);
                                 }else
                                 {
                                     odpowiedz = "False";
@@ -272,9 +307,9 @@ namespace Server
                                 }
                                 break;
                             case "jestem_gotowy:":
-                                if (!gracze.Contains(slowa[2]))
+                                if (!zapytania.Contains(slowa[2]))
                                 {
-                                    gracze.Add(slowa[2]);
+                                    zapytania.Add(slowa[2]);
                                     if (slownik_lobby.ContainsKey(slowa[1]))
                                     {
                                         odpowiedz = slownik_lobby[slowa[1]].gotowy(slowa[2]).ToString();
@@ -283,7 +318,7 @@ namespace Server
                                     {
                                         odpowiedz = "False";
                                     }
-                                     gracze.Remove(slowa[2]);
+                                     zapytania.Remove(slowa[2]);
                                 }
                                 break;
                             case "niejestem_gotowy:":
@@ -323,12 +358,9 @@ namespace Server
                                 }
                                 break; ;
                             case "uzyt_wartosc_parametru:":
-                                var q_u_p = from uzytkownik in SingletonBaza.Instance.BazaDC.uzytkownicy
-                                          where uzytkownik.login == slowa[1]
-                                          select uzytkownik;
-                                if (q_u_p.Any())
+                                if (gracze.ContainsKey(slowa[1]))
                                 {
-                                    uzytkownicy edytowany = q_u_p.FirstOrDefault();
+                                    uzytkownicy edytowany = gracze[slowa[1]];
                                     var odp= edytowany.GetType().GetProperty(slowa[2]).GetValue(edytowany, null);
                                     if(odp!=null)
                                     {
@@ -341,12 +373,9 @@ namespace Server
                                 }
                                 break;
                             case "uzyt_zm_par:":
-                                var q_u_zp = from uzytkownik in SingletonBaza.Instance.BazaDC.uzytkownicy
-                                             where uzytkownik.login == slowa[1]
-                                             select uzytkownik;
-                                if (q_u_zp.Any())
+                                if (gracze.ContainsKey(slowa[1]))
                                 {
-                                    uzytkownicy edytowany = q_u_zp.FirstOrDefault();
+                                    uzytkownicy edytowany = gracze[slowa[1]];
                                     if (slowa[2] == "haslo")
                                     {
                                         edytowany.haslo = hashowanie.GetHashString(slowa[3]);
@@ -368,6 +397,12 @@ namespace Server
                                 {
                                     MessageBox.Show(slowa[1], slowa[2] + " "+ slowa[3]);
                                     odpowiedz = "bledneDane";
+                                }
+                                break;
+                            case "sesja:":
+                                if(aktywne_sesje.ContainsKey(slowa[1]))
+                                {
+                                    odpowiedz = aktywne_sesje[slowa[1]];
                                 }
                                 break;
                         }

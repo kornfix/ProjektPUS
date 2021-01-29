@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.groupBoxLogin = new System.Windows.Forms.GroupBox();
             this.btn_edycja_profilu = new System.Windows.Forms.Button();
             this.l_login = new System.Windows.Forms.Label();
@@ -38,6 +39,7 @@
             this.labelLogin1 = new System.Windows.Forms.Label();
             this.btn_lobby = new System.Windows.Forms.Button();
             this.button_wyloguj = new System.Windows.Forms.Button();
+            this.timer_zalogowany = new System.Windows.Forms.Timer(this.components);
             this.groupBoxLogin.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -167,6 +169,11 @@
             this.button_wyloguj.UseVisualStyleBackColor = true;
             this.button_wyloguj.Click += new System.EventHandler(this.button_wyloguj_Click);
             // 
+            // timer_zalogowany
+            // 
+            this.timer_zalogowany.Interval = 1000;
+            this.timer_zalogowany.Tick += new System.EventHandler(this.timer_zalogowany_Tick);
+            // 
             // UC_menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -193,5 +200,6 @@
         private System.Windows.Forms.Label labelHaslo1;
         private System.Windows.Forms.Label labelLogin1;
         private System.Windows.Forms.Button btn_edycja_profilu;
+        private System.Windows.Forms.Timer timer_zalogowany;
     }
 }

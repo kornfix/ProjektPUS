@@ -32,30 +32,37 @@ namespace WindowsFormsApp2
             // Zapytanie do serwera z tym stringiem
             string zapytanie = "zaloguj: "+ textBoxLogin1.Text + " " + textBoxHaslo1.Text;
             String odp = await AsynchronousClient.zapytaj(zapytanie);
+            zalogowanieUzytkownika(odp);
+        }
+        async void zalogowanieUzytkownika(string odp)
+        {
             String[] slowa = odp.Split(' ');
             // prosba udana 
-            if (slowa.Length == 4)
+            if (slowa.Length == 5)
             {
                 aplikacja.Imie = slowa[0];
                 aplikacja.Nazwisko = slowa[1];
                 aplikacja.Login = slowa[2];
                 aplikacja.Email = slowa[3];
+                aplikacja.Sesja = slowa[4];
                 menu.tryb_menu();
                 menu.reset_rejestacji();
             }
             // prosba nieudana
-            else if(slowa.Length == 1 && slowa[0] == "bledneDane")
+            else if (slowa.Length == 1 && slowa[0] == "bledneDane")
             {
                 errorProvider1.SetError(linkLabelZapomnialem, "Błędne dane");
             }
-            
-            // Kod odpwoiedzi
-            // jesli odpowiedż ma true w tab[0] to zalogowano poprawnie a reszta 
-            // tab ma inf o koncie 
-            // co zapisujemy w jakieś klasie najlepiej statycznej zalogowany gracz
-            // dodajemy uc_menu do panelu 
-            // a to ustaiwamy na false ;
-            // jesli false to wyswietlenie inf ze blad logowania
+            else if (slowa.Length == 1 && slowa[0] == "uzytkownik_jest_juz_zalogowany")
+            {
+                DialogResult dialogResult = MessageBox.Show("Powyższy użytkownik jest już zalogowany! Czy chcesz wymusić jego wylogowanie?", "Logowanie", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    String wyl = await AsynchronousClient.zapytaj("wyloguj: " + textBoxLogin1.Text);
+                    String zaloguj = await AsynchronousClient.zapytaj("zaloguj: " + textBoxLogin1.Text + " " + textBoxHaslo1.Text);
+                    zalogowanieUzytkownika(zaloguj);
+                }
+            }
         }
 
         private void button_rejestracja_Click(object sender, EventArgs e)

@@ -66,7 +66,7 @@ namespace WindowsFormsApp2
                 {
                     aplikacja.Przeciwnik = l_gracz1.Text;
                 }
-                Gra gra = new Gra();
+                Gra gra = new Gra(this);
                 gra.Show();
                 gra.WczytajDane();
                 // 5 sec sprawdza kto jest w lobby oraz status gry wiec nie musi sprawdac czy drugi gracz jest gotowy

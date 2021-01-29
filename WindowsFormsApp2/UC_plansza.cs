@@ -163,6 +163,9 @@ namespace WindowsFormsApp2
                     if (s == "")
                     {
                         continue;
+                    }else if(s == "koniec")
+                    {
+                        gra.Close();
                     }
                     int indeks = Int32.Parse(s);
                     if (tableLayoutPanel1.Controls[indeks] is Przycisk)

@@ -88,6 +88,9 @@ namespace WindowsFormsApp2
             tryb_logowanie();
         }
 
-
+        private async void Menu_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            String wyl = await AsynchronousClient.zapytaj("wyloguj: " + aplikacja.Login);
+        }
     }
 }

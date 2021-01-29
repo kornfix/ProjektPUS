@@ -8,6 +8,7 @@ namespace Server
     {
         private string aktualnie_wybierajacy;
         private int rozmiar;
+        private Lobby lobby;
         private int i = 0;
         private Dictionary<int, string> ruchy = new Dictionary<int, string>();
         List<string> icons = new List<string>();
@@ -22,6 +23,7 @@ namespace Server
         Random rnd = new Random();
         public Gra(Lobby lobby)
         {
+            this.lobby = lobby;
             gracz1 = lobby.Gracz1();
             gracz2 = lobby.Gracz2();
             rozmiar = 4; // zawsze musibyć  rozmiar*rozmiar % 2 == 0
@@ -62,6 +64,10 @@ namespace Server
                 {
                     odp += item.Value + " ";
                 }
+            }
+            if(!lobby.czy_pelne_lobby())
+            {
+                odp += "koniec";
             }
             return odp;
         }

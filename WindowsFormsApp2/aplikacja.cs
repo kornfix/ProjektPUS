@@ -9,6 +9,7 @@ namespace WindowsFormsApp2
 {
     public class aplikacja
     {
+        private static string sesja;
         private static string imie;
         private static string nazwisko;
         private static string login;
@@ -21,7 +22,7 @@ namespace WindowsFormsApp2
         public static string Email { get => email; set => email = value; }
         public static string Nr_lobby { get => nr_lobby; set => nr_lobby = value; }
         public static string Przeciwnik { get => przeciwnik; set => przeciwnik = value; }
-
+        public static string Sesja { get => sesja; set => sesja = value; }
 
         public static void wait(int milliseconds)
         {
@@ -44,6 +45,16 @@ namespace WindowsFormsApp2
             {
                 Application.DoEvents();
             }
+        }
+        public static void clear()
+        {
+            imie = "";
+            nazwisko = "";
+            login = "";
+            email = "";
+            nr_lobby = "";
+            przeciwnik = "";
+            sesja = "";
         }
     }
 }

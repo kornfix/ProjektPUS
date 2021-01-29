@@ -9,6 +9,7 @@ namespace Server
 {
     class hashowanie
     {
+        private static List<string> aktualne_sesje = new List<string>(); 
         public static byte[] GetHash(string inputString)
         {
             HashAlgorithm algorithm = SHA256.Create();
@@ -23,7 +24,10 @@ namespace Server
 
             return sb.ToString();
         }
-
+        public static void ZwolnijSesje(string sesja)
+        {
+            aktualne_sesje.Remove(sesja);
+        }
         public static string GetSession()
         {
             var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -36,7 +40,13 @@ namespace Server
             }
 
             var finalString = new String(stringChars);
-            return GetHashString(finalString);
+            var sesja = GetHashString(finalString);
+            if(aktualne_sesje.Contains(sesja))
+            {
+                GetSession();
+            }
+            aktualne_sesje.Add(sesja);
+            return sesja;
         }
 
     }
