@@ -17,7 +17,8 @@ namespace WindowsFormsApp2
         {
             logowanie = 0,
             rejestracja = 1,
-            menu = 2
+            menu = 2,
+            czekanie = 3
         }
 
         private void zmiana_trybu(wybrany_tryb wk)
@@ -55,7 +56,6 @@ namespace WindowsFormsApp2
         }
         public void tryb_rejestracja()
         {
-
             if (!kontrolki.ContainsKey(wybrany_tryb.rejestracja))
             {
                 UC_rejestracja uC_Rejestracja = new UC_rejestracja(this);
@@ -64,6 +64,18 @@ namespace WindowsFormsApp2
                 uC_Rejestracja.Anchor = AnchorStyles.None;
             }
             zmiana_trybu(wybrany_tryb.rejestracja);
+        }
+        public void tryb_czekanie()
+        {
+
+            if (!kontrolki.ContainsKey(wybrany_tryb.czekanie))
+            {
+                UC_czekanie uC_Czekanie = new UC_czekanie();
+                kontrolki.Add(wybrany_tryb.czekanie, uC_Czekanie);
+                TLP_MENU.Controls.Add(uC_Czekanie);
+                uC_Czekanie.Anchor = AnchorStyles.None;
+            }
+            zmiana_trybu(wybrany_tryb.czekanie);
         }
         public void tryb_menu()
         {

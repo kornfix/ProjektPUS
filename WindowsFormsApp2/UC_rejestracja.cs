@@ -34,7 +34,9 @@ namespace WindowsFormsApp2
             var walidacjaImienia = Walidacja.WalidacjaImienia(txt_imie , errorProvider1);
             var walidacjaNazwiska = Walidacja.WalidacjaNazwiska(txt_nazwisko , errorProvider1);
             Task[] zadania = new Task[] { walidacjaEmail, walidacjaHaslo1, walidacjaHaslo2, walidacjaLoginu, walidacjaImienia, walidacjaNazwiska };
+            menu.tryb_czekanie();
             await Task.WhenAll(zadania);
+            menu.tryb_rejestracja();
             if (!walidacjaEmail.Result || !walidacjaHaslo1.Result || !walidacjaHaslo2.Result ||
                 !walidacjaLoginu.Result || !walidacjaImienia.Result || !walidacjaNazwiska.Result)
             {

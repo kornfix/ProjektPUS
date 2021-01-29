@@ -134,7 +134,6 @@ namespace Server
                         switch (slowa[0])
                         {
                             case "sprawdz_email:":
-                                //System.Threading.Thread.Sleep(5000);
                                 var q_e = from uzytkownik in SingletonBaza.Instance.BazaDC.uzytkownicy
                                             where uzytkownik.email == slowa[1]
                                             select uzytkownik;
