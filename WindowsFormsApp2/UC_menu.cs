@@ -32,7 +32,7 @@ namespace WindowsFormsApp2
         {
             // wyczysczenie obiektu klasy statycznej gdzie mamy gracza 
             // odpiecie od serwera też 
-            String wyl = await AsynchronousClient.zapytaj("wyloguj: " + aplikacja.Login);
+            String wyl = await AsynchronicznyKlient.zapytaj("wyloguj: " + aplikacja.Login);
             if(wyl == "True")
             {
                 aplikacja.clear();
@@ -71,7 +71,7 @@ namespace WindowsFormsApp2
         async void SprawdzCzyZalogowany()
         {
             timer_zalogowany.Stop();
-            String odp = await AsynchronousClient.zapytaj("sesja:" + aplikacja.Login);
+            String odp = await AsynchronicznyKlient.zapytaj("sesja:" + aplikacja.Login);
             if(odp != aplikacja.Sesja)
             {
                 aplikacja.clear();

@@ -5,20 +5,17 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server
+namespace WindowsFormsApp2
 {
-    public class StateObject
+    public class StanObiektu
     {
+        // Client socket.  
+        public Socket socket = null;
         // Size of receive buffer.  
-        public const int BufferSize = 1024;
-
+        public const int rozmiarBuffera = 256;
         // Receive buffer.  
-        public byte[] buffer = new byte[BufferSize];
-
-        // Received data string.
+        public byte[] buffer = new byte[rozmiarBuffera];
+        // Received data string.  
         public StringBuilder sb = new StringBuilder();
-
-        // Client socket.
-        public Socket workSocket = null;
     }
 }

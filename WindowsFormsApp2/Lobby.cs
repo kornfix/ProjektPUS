@@ -21,7 +21,7 @@ namespace WindowsFormsApp2
         private async void wczytaj_lobby()
         {
             // zapytanie do serwera  ile mam lobby;
-            String odp = await AsynchronousClient.zapytaj("wielkosc_lobby:");
+            String odp = await AsynchronicznyKlient.zapytaj("wielkosc_lobby:");
             string[] slowa = odp.Split(':'); 
             int ile = Int32.Parse(slowa[1]);
             for (int i=1; i<=ile; i++)

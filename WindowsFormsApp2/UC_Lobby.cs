@@ -26,7 +26,7 @@ namespace WindowsFormsApp2
         {
             
             // zapytanie do bazy o graczy lobby: 1;
-            String odp = await AsynchronousClient.zapytaj("gracze_z_lobby: " + l_numer.Text);
+            String odp = await AsynchronicznyKlient.zapytaj("gracze_z_lobby: " + l_numer.Text);
             string[] slowa = odp.Split(' ');
             if(!odp.Contains("g1:"))
             {
@@ -121,7 +121,7 @@ namespace WindowsFormsApp2
             {
                 // zapytanie do bazy danych czy lobby o numer ma wolne miejsce;
                 // odp gracz w dodaj_lobby: numer
-                String odp = await AsynchronousClient.zapytaj("dodaj_gracza_do_lobby: " + l_numer.Text +" "+ aplikacja.Login);
+                String odp = await AsynchronicznyKlient.zapytaj("dodaj_gracza_do_lobby: " + l_numer.Text +" "+ aplikacja.Login);
 
                     jestem_lobby = Boolean.Parse(odp);
                 // jeśli jestem w loby tick co 5 sec pytaj server kto jest w lobby
@@ -130,7 +130,7 @@ namespace WindowsFormsApp2
                 aplikacja.Nr_lobby = l_numer.Text;
             }else
             {
-                String odp = await AsynchronousClient.zapytaj("usun_gracz_z_lobby: " + l_numer.Text + " " + aplikacja.Login);
+                String odp = await AsynchronicznyKlient.zapytaj("usun_gracz_z_lobby: " + l_numer.Text + " " + aplikacja.Login);
                 jestem_lobby = Boolean.Parse(odp);
                 jestem_gotowy = false;
                 aplikacja.Nr_lobby = "";
@@ -159,7 +159,7 @@ namespace WindowsFormsApp2
         {
             if(jestem_lobby)
             {
-                AsynchronousClient.zapytaj("usun_gracz_z_lobby: " + l_numer.Text + " " + aplikacja.Login);
+                AsynchronicznyKlient.zapytaj("usun_gracz_z_lobby: " + l_numer.Text + " " + aplikacja.Login);
             }
         }
        
@@ -169,13 +169,13 @@ namespace WindowsFormsApp2
             timer_aktywnosc.Stop();
             if (!jestem_gotowy)
             {
-                AsynchronousClient asynchronousClient = new AsynchronousClient();
-                String odp = await AsynchronousClient.zapytaj("jestem_gotowy: " + l_numer.Text + " " + aplikacja.Login);
+                AsynchronicznyKlient asynchronousClient = new AsynchronicznyKlient();
+                String odp = await AsynchronicznyKlient.zapytaj("jestem_gotowy: " + l_numer.Text + " " + aplikacja.Login);
                 jestem_gotowy = Boolean.Parse(odp);
             }
             else
             {
-                String odp = await AsynchronousClient.zapytaj("niejestem_gotowy: " + l_numer.Text + " " + aplikacja.Login);
+                String odp = await AsynchronicznyKlient.zapytaj("niejestem_gotowy: " + l_numer.Text + " " + aplikacja.Login);
                 jestem_gotowy = Boolean.Parse(odp);
             }
             wczytaj_dane();

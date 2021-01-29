@@ -102,7 +102,7 @@ namespace WindowsFormsApp2
 
         private async void Menu_FormClosed(object sender, FormClosedEventArgs e)
         {
-            String wyl = await AsynchronousClient.zapytaj("wyloguj: " + aplikacja.Login);
+            String wyl = await AsynchronicznyKlient.zapytaj("wyloguj: " + aplikacja.Login);
         }
     }
 }

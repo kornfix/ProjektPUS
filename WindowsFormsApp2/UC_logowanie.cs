@@ -34,7 +34,7 @@ namespace WindowsFormsApp2
             }
             // Zapytanie do serwera z tym stringiem
             string zapytanie = "zaloguj: "+ textBoxLogin1.Text + " " + textBoxHaslo1.Text;
-            String odp = await AsynchronousClient.zapytaj(zapytanie);
+            String odp = await AsynchronicznyKlient.zapytaj(zapytanie);
             zalogowanieUzytkownika(odp);
         }
         async void zalogowanieUzytkownika(string odp)
@@ -61,8 +61,8 @@ namespace WindowsFormsApp2
                 DialogResult dialogResult = MessageBox.Show("Powyższy użytkownik jest już zalogowany! Czy chcesz wymusić jego wylogowanie?", "Logowanie", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes)
                 {
-                    String wyl = await AsynchronousClient.zapytaj("wyloguj: " + textBoxLogin1.Text);
-                    String zaloguj = await AsynchronousClient.zapytaj("zaloguj: " + textBoxLogin1.Text + " " + textBoxHaslo1.Text);
+                    String wyl = await AsynchronicznyKlient.zapytaj("wyloguj: " + textBoxLogin1.Text);
+                    String zaloguj = await AsynchronicznyKlient.zapytaj("zaloguj: " + textBoxLogin1.Text + " " + textBoxHaslo1.Text);
                     zalogowanieUzytkownika(zaloguj);
                 }
             }

@@ -36,7 +36,7 @@ namespace WindowsFormsApp2
 
         public async void WczytajPlansze()
         {
-            String odp = await AsynchronousClient.zapytaj("pobierz_plansze: " + aplikacja.Nr_lobby );
+            String odp = await AsynchronicznyKlient.zapytaj("pobierz_plansze: " + aplikacja.Nr_lobby );
             if (odp == "error")
             {
                 return;
@@ -95,7 +95,7 @@ namespace WindowsFormsApp2
                 return;
             if (czyZaczynam)
             {
-                String odp = await AsynchronousClient.zapytaj("zapisz_ruch: " + aplikacja.Nr_lobby + " " + clickLabel.getIndeks());
+                String odp = await AsynchronicznyKlient.zapytaj("zapisz_ruch: " + aplikacja.Nr_lobby + " " + clickLabel.getIndeks());
                 if (odp == "False")
                 {
                     return;
@@ -154,7 +154,7 @@ namespace WindowsFormsApp2
         }
         async void tick()
         {
-            string odp = await AsynchronousClient.zapytaj("wczytaj_ruchy: " + aplikacja.Nr_lobby + " " + liczba_ruchow );
+            string odp = await AsynchronicznyKlient.zapytaj("wczytaj_ruchy: " + aplikacja.Nr_lobby + " " + liczba_ruchow );
             if (odp != "error" && odp != "")
             {
                 string[] indeksy = odp.Split(' ');

@@ -46,7 +46,7 @@ namespace WindowsFormsApp2
         }
         async static Task<Boolean> SprawdzenieCzyMailIstnieje(String email)
         {
-            String odp = await AsynchronousClient.zapytaj("sprawdz_email: " + email);
+            String odp = await AsynchronicznyKlient.zapytaj("sprawdz_email: " + email);
             if (odp == "false")
             {
                 return false;
@@ -107,7 +107,7 @@ namespace WindowsFormsApp2
         }
         async static Task<Boolean> SprawdzenieCzyLoginIstnieje(String login)
         {
-            String odp = await AsynchronousClient.zapytaj("sprawdz_login: " + login);
+            String odp = await AsynchronicznyKlient.zapytaj("sprawdz_login: " + login);
             if (odp == "false")
             {
                 return false;

@@ -50,7 +50,7 @@ namespace WindowsFormsApp2
             string nazwisko = " nazwisko:" + txt_nazwisko.Text;
             // Kod wyslania prośby do serwera
             // oczekiwanie prośby
-            String odp = await AsynchronousClient.zapytaj("zarejestruj_uzytkownika: " + email + haslo + login
+            String odp = await AsynchronicznyKlient.zapytaj("zarejestruj_uzytkownika: " + email + haslo + login
                 + imie + nazwisko);
             // prosba udana 
             if (odp == "true")
@@ -110,7 +110,7 @@ namespace WindowsFormsApp2
         }
         async Task<Boolean> SprawdzenieCzyMailIstnieje(String email)
         {
-            String odp = await AsynchronousClient.zapytaj("sprawdz_email: " + email);
+            String odp = await AsynchronicznyKlient.zapytaj("sprawdz_email: " + email);
             if (odp == "false")
             {
                 return false;
@@ -172,7 +172,7 @@ namespace WindowsFormsApp2
         }
         async Task<Boolean> SprawdzenieCzyLoginIstnieje(String login)
         {
-            String odp = await AsynchronousClient.zapytaj("sprawdz_login: " + login);
+            String odp = await AsynchronicznyKlient.zapytaj("sprawdz_login: " + login);
             if (odp == "false")
             {
                 return false;

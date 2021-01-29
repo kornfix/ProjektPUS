@@ -59,7 +59,7 @@ namespace WindowsFormsApp2
         {
             if (tryb != wyk_tryb.haslo)
             {
-                stara_wartosc = await AsynchronousClient.zapytaj("uzyt_wartosc_parametru: " + aplikacja.Login + " " + nazwa_parametru);
+                stara_wartosc = await AsynchronicznyKlient.zapytaj("uzyt_wartosc_parametru: " + aplikacja.Login + " " + nazwa_parametru);
                 txt_edytowany.Text = stara_wartosc;
             }
         }
@@ -132,7 +132,7 @@ namespace WindowsFormsApp2
             Boolean wynik_edycji = true;
             if (wynik_walidacji)
             {
-                String odp = await AsynchronousClient.zapytaj("uzyt_zm_par: " + aplikacja.Login + " " + nazwa_parametru + " " + txt_edytowany.Text);
+                String odp = await AsynchronicznyKlient.zapytaj("uzyt_zm_par: " + aplikacja.Login + " " + nazwa_parametru + " " + txt_edytowany.Text);
                 MessageBox.Show(odp, nazwa_parametru);
                 if (odp == "True")
                 {
