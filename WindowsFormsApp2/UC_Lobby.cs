@@ -58,13 +58,13 @@ namespace WindowsFormsApp2
                 // Start gry;
                 timer_aktywnosc.Stop();
                 //timer_aktywnosc.Stop();
-                if (l_gracz1.Text == uzytkownik.Login)
+                if (l_gracz1.Text == aplikacja.Login)
                 {
-                    uzytkownik.Przeciwnik = l_gracz2.Text;
+                    aplikacja.Przeciwnik = l_gracz2.Text;
                 }
                 else
                 {
-                    uzytkownik.Przeciwnik = l_gracz1.Text;
+                    aplikacja.Przeciwnik = l_gracz1.Text;
                 }
                 Gra gra = new Gra();
                 gra.Show();
@@ -73,9 +73,9 @@ namespace WindowsFormsApp2
 
             }
             Boolean wynik_pelny_server = l_gracz1.Text.Length !=0 && l_gracz2.Text.Length != 0;
-            if (uzytkownik.Nr_lobby != "")
+            if (aplikacja.Nr_lobby != "")
             {
-                if(uzytkownik.Nr_lobby == l_numer.Text)
+                if(aplikacja.Nr_lobby == l_numer.Text)
                 {
                     btn_dolacz.Visible = true;
                     btn_dolacz.Text = "Wyjdź";
@@ -121,19 +121,19 @@ namespace WindowsFormsApp2
             {
                 // zapytanie do bazy danych czy lobby o numer ma wolne miejsce;
                 // odp gracz w dodaj_lobby: numer
-                String odp = await AsynchronousClient.zapytaj("dodaj_gracza_do_lobby: " + l_numer.Text +" "+ uzytkownik.Login);
+                String odp = await AsynchronousClient.zapytaj("dodaj_gracza_do_lobby: " + l_numer.Text +" "+ aplikacja.Login);
 
                     jestem_lobby = Boolean.Parse(odp);
                 // jeśli jestem w loby tick co 5 sec pytaj server kto jest w lobby
                 // tick async wczytaj_Dane()
                 //czekam = CzekamGracza2();
-                uzytkownik.Nr_lobby = l_numer.Text;
+                aplikacja.Nr_lobby = l_numer.Text;
             }else
             {
-                String odp = await AsynchronousClient.zapytaj("usun_gracz_z_lobby: " + l_numer.Text + " " + uzytkownik.Login);
+                String odp = await AsynchronousClient.zapytaj("usun_gracz_z_lobby: " + l_numer.Text + " " + aplikacja.Login);
                 jestem_lobby = Boolean.Parse(odp);
                 jestem_gotowy = false;
-                uzytkownik.Nr_lobby = "";
+                aplikacja.Nr_lobby = "";
             }
             wczytaj_dane();
             lobby.odswierzReszte(l_numer.Text);
@@ -159,7 +159,7 @@ namespace WindowsFormsApp2
         {
             if(jestem_lobby)
             {
-                AsynchronousClient.zapytaj("usun_gracz_z_lobby: " + l_numer.Text + " " + uzytkownik.Login);
+                AsynchronousClient.zapytaj("usun_gracz_z_lobby: " + l_numer.Text + " " + aplikacja.Login);
             }
         }
        
@@ -170,12 +170,12 @@ namespace WindowsFormsApp2
             if (!jestem_gotowy)
             {
                 AsynchronousClient asynchronousClient = new AsynchronousClient();
-                String odp = await AsynchronousClient.zapytaj("jestem_gotowy: " + l_numer.Text + " " + uzytkownik.Login);
+                String odp = await AsynchronousClient.zapytaj("jestem_gotowy: " + l_numer.Text + " " + aplikacja.Login);
                 jestem_gotowy = Boolean.Parse(odp);
             }
             else
             {
-                String odp = await AsynchronousClient.zapytaj("niejestem_gotowy: " + l_numer.Text + " " + uzytkownik.Login);
+                String odp = await AsynchronousClient.zapytaj("niejestem_gotowy: " + l_numer.Text + " " + aplikacja.Login);
                 jestem_gotowy = Boolean.Parse(odp);
             }
             wczytaj_dane();

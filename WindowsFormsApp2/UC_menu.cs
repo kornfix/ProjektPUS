@@ -22,9 +22,9 @@ namespace WindowsFormsApp2
         }
         public void wczytaj_dane()
         {
-            l_imie.Text = uzytkownik.Imie;
-            l_nazwisko.Text = uzytkownik.Nazwisko;
-            l_login.Text = uzytkownik.Login;
+            l_imie.Text = aplikacja.Imie;
+            l_nazwisko.Text = aplikacja.Nazwisko;
+            l_login.Text = aplikacja.Login;
         }
 
 

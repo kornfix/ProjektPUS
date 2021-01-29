@@ -35,7 +35,7 @@ namespace WindowsFormsApp2
             public int X { get => x; set => x = value; }
             public int Y { get => y; set => y = value; }
         }
-        string zapytanie = "ruch_gracza login:"+ uzytkownik.Login;
+        string zapytanie = "ruch_gracza login:"+ aplikacja.Login;
         int ruch = 1;
         bool pierszy_sprawdzany = true;
         private void label_Click(object sender, EventArgs e)

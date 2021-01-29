@@ -316,7 +316,7 @@ namespace Server
                                 }
                                 break;
                             case "wczytaj_ruchy:":
-                                MessageBox.Show(slowa[1] + " " + slowa[2]);
+                                //MessageBox.Show(slowa[1] + " " + slowa[2]);
                                 if (aktywne_gry.ContainsKey(slowa[1]))
                                 {
                                     odpowiedz = aktywne_gry[slowa[1]].WczytajRuchy(slowa[2]);

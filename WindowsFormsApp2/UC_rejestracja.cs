@@ -52,10 +52,10 @@ namespace WindowsFormsApp2
             // prosba udana 
             if (odp == "true")
             {
-                uzytkownik.Imie = txt_imie.Text;
-                uzytkownik.Nazwisko = txt_nazwisko.Text;
-                uzytkownik.Login = txt_login.Text;
-                uzytkownik.Email = txt_email.Text;
+                aplikacja.Imie = txt_imie.Text;
+                aplikacja.Nazwisko = txt_nazwisko.Text;
+                aplikacja.Login = txt_login.Text;
+                aplikacja.Email = txt_email.Text;
                 menu.tryb_menu();
                 menu.reset_rejestacji();
             }

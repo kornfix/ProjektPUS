@@ -161,7 +161,7 @@
     <Compile Include="UC_rejestracja.Designer.cs">
       <DependentUpon>UC_rejestracja.cs</DependentUpon>
     </Compile>
-    <Compile Include="uzytkownik.cs" />
+    <Compile Include="aplikacja.cs" />
     <Compile Include="Walidacja.cs" />
     <EmbeddedResource Include="EdycjaUzytkownika.resx">
       <DependentUpon>EdycjaUzytkownika.cs</DependentUpon>

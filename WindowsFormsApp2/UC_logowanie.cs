@@ -36,10 +36,10 @@ namespace WindowsFormsApp2
             // prosba udana 
             if (slowa.Length == 4)
             {
-                uzytkownik.Imie = slowa[0];
-                uzytkownik.Nazwisko = slowa[1];
-                uzytkownik.Login = slowa[2];
-                uzytkownik.Email = slowa[3];
+                aplikacja.Imie = slowa[0];
+                aplikacja.Nazwisko = slowa[1];
+                aplikacja.Login = slowa[2];
+                aplikacja.Email = slowa[3];
                 menu.tryb_menu();
                 menu.reset_rejestacji();
             }

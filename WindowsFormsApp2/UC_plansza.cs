@@ -36,7 +36,7 @@ namespace WindowsFormsApp2
 
         public async void WczytajPlansze()
         {
-            String odp = await AsynchronousClient.zapytaj("pobierz_plansze: " + uzytkownik.Nr_lobby );
+            String odp = await AsynchronousClient.zapytaj("pobierz_plansze: " + aplikacja.Nr_lobby );
             if (odp == "error")
             {
                 return;
@@ -44,16 +44,16 @@ namespace WindowsFormsApp2
             string[] odpowiedz = odp.Split(' ');
             int rozmiar = Int32.Parse(odpowiedz[0]);
             wygeneruj_labele(rozmiar);
-            gracz1.Text = uzytkownik.Login;
-            gracz2.Text = uzytkownik.Przeciwnik;
-            if (odpowiedz[1] == uzytkownik.Login)
+            gracz1.Text = aplikacja.Login;
+            gracz2.Text = aplikacja.Przeciwnik;
+            if (odpowiedz[1] == aplikacja.Login)
             {
-                aktualnyGracz.Text = uzytkownik.Login;
+                aktualnyGracz.Text = aplikacja.Login;
                 czyZaczynam = true;
             }
             else
             {
-                aktualnyGracz.Text = uzytkownik.Przeciwnik;
+                aktualnyGracz.Text = aplikacja.Przeciwnik;
                 czyZaczynam = false;
             }
             int koniec = odpowiedz.Length;
@@ -95,7 +95,7 @@ namespace WindowsFormsApp2
                 return;
             if (czyZaczynam)
             {
-                String odp = await AsynchronousClient.zapytaj("zapisz_ruch: " + uzytkownik.Nr_lobby + " " + clickLabel.getIndeks());
+                String odp = await AsynchronousClient.zapytaj("zapisz_ruch: " + aplikacja.Nr_lobby + " " + clickLabel.getIndeks());
                 if (odp == "False")
                 {
                     return;
@@ -133,16 +133,17 @@ namespace WindowsFormsApp2
             {
                 // wyślij inf na server oraz to że zaczyna drugi gracz // nie aktualne ??
                 // żle kliknął
+                aplikacja.wait(2000);
                 firstClicked.ForeColor = firstClicked.BackColor;
                 secondClick.ForeColor = firstClicked.BackColor;
                 if (czyZaczynam)
                 {
-                    aktualnyGracz.Text = uzytkownik.Przeciwnik;
+                    aktualnyGracz.Text = aplikacja.Przeciwnik;
                     timer1.Start();
                 }
                 else
                 {
-                    aktualnyGracz.Text = uzytkownik.Login;
+                    aktualnyGracz.Text = aplikacja.Login;
                     timer1.Stop();
                 }
                 czyZaczynam = !czyZaczynam;
@@ -153,7 +154,7 @@ namespace WindowsFormsApp2
         }
         async void tick()
         {
-            string odp = await AsynchronousClient.zapytaj("wczytaj_ruchy: " + uzytkownik.Nr_lobby + " " + liczba_ruchow );
+            string odp = await AsynchronousClient.zapytaj("wczytaj_ruchy: " + aplikacja.Nr_lobby + " " + liczba_ruchow );
             if (odp != "error" && odp != "")
             {
                 string[] indeksy = odp.Split(' ');
@@ -206,14 +207,14 @@ namespace WindowsFormsApp2
 
         }
 
-        private void timer1_Tick_1(object sender, EventArgs e)
-        {
-            tick();
-        }
-
         private void zakonczGre_Click(object sender, EventArgs e)
         {
             // jeszcze tutaj kod konca gry;
+        }
+
+        private void timer1_Tick_2(object sender, EventArgs e)
+        {
+            tick();
         }
 
         private void timer1_Tick(object sender, EventArgs e) //ukrywa po upływie kilku sekund obydwa obrazki
