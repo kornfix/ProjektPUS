@@ -11,7 +11,7 @@ namespace Server
         int numer;
         // gracz1 i gracz2 to loginy
         Dictionary<string, bool> loginy;
-        String status="oczekiwanie";
+        String status = "oczekiwanie";
         public Lobby(int i)
         {
             this.numer = i;
@@ -19,7 +19,7 @@ namespace Server
         }
         public Boolean czy_jestem_w_lobby(string gracz)
         {
-            if(loginy.ContainsKey(gracz))
+            if (loginy.ContainsKey(gracz))
             {
                 return true;
             }
@@ -31,17 +31,17 @@ namespace Server
 
         public Boolean dodaj(string gracz)
         {
-            if(loginy.Count <2)
+            if (loginy.Count < 2)
             {
                 loginy.Add(gracz, false);
                 return true;
             }
             return false;
         }
-       // gracz to login 
+        // gracz to login 
         public Boolean usun(string gracz)
         {
-            if(loginy.ContainsKey(gracz))
+            if (loginy.ContainsKey(gracz))
             {
                 loginy.Remove(gracz);
             }
@@ -51,14 +51,22 @@ namespace Server
         {
             int i = 0;
             string odp = "";
-            foreach(var item in loginy)
+            foreach (var item in loginy)
             {
                 i++;
-                odp += "g" + i + ":" + item.Key+" ";
+                odp += "g" + i + ":" + item.Key + " ";
             }
             sprawdz_status_gry();
             odp += "status:" + status;
             return odp;
+        }
+        public string Gracz1()
+        {
+            return loginy.ElementAt(0).Key;
+        }
+        public string Gracz2()
+        {
+            return loginy.ElementAt(1).Key;
         }
         public Boolean czy_pelne_lobby()
         {
@@ -83,7 +91,7 @@ namespace Server
         }
         public void sprawdz_status_gry()
         {
-            if( loginy.Count ==2 && !loginy.ContainsValue(false))
+            if (loginy.Count == 2 && !loginy.ContainsValue(false))
             {
                 status = "rozpoczynam";
             }

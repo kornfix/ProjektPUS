@@ -56,8 +56,19 @@ namespace WindowsFormsApp2
             if(status_gry == "rozpoczynam" && jestem_lobby)
             {
                 // Start gry;
-                MessageBox.Show("Zaczynasz grę :P");
                 timer_aktywnosc.Stop();
+                //timer_aktywnosc.Stop();
+                if (l_gracz1.Text == uzytkownik.Login)
+                {
+                    uzytkownik.Przeciwnik = l_gracz2.Text;
+                }
+                else
+                {
+                    uzytkownik.Przeciwnik = l_gracz1.Text;
+                }
+                Gra gra = new Gra();
+                gra.Show();
+                gra.WczytajDane();
                 // 5 sec sprawdza kto jest w lobby oraz status gry wiec nie musi sprawdac czy drugi gracz jest gotowy
 
             }

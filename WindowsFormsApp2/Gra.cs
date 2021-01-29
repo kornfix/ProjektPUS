@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace WindowsFormsApp2
 {
@@ -15,6 +7,13 @@ namespace WindowsFormsApp2
         public Gra()
         {
             InitializeComponent();
+        }
+
+        public async void WczytajDane()
+        {
+            UC_plansza uc_plansza = new UC_plansza(this);
+            uc_plansza.WczytajPlansze();
+            tableLayoutPanel2.Controls.Add(uc_plansza);
         }
     }
 }

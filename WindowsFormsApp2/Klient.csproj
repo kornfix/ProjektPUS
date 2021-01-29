@@ -98,6 +98,12 @@
     <Compile Include="EdycjaUzytkownika.Designer.cs">
       <DependentUpon>EdycjaUzytkownika.cs</DependentUpon>
     </Compile>
+    <Compile Include="Gra.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gra.Designer.cs">
+      <DependentUpon>Gra.cs</DependentUpon>
+    </Compile>
     <Compile Include="Klient.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -143,6 +149,12 @@
     <Compile Include="UC_menu.Designer.cs">
       <DependentUpon>UC_menu.cs</DependentUpon>
     </Compile>
+    <Compile Include="UC_plansza.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC_plansza.Designer.cs">
+      <DependentUpon>UC_plansza.cs</DependentUpon>
+    </Compile>
     <Compile Include="UC_rejestracja.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -153,6 +165,9 @@
     <Compile Include="Walidacja.cs" />
     <EmbeddedResource Include="EdycjaUzytkownika.resx">
       <DependentUpon>EdycjaUzytkownika.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gra.resx">
+      <DependentUpon>Gra.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Klient.resx">
       <DependentUpon>Klient.cs</DependentUpon>
@@ -184,6 +199,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UC_menu.resx">
       <DependentUpon>UC_menu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC_plansza.resx">
+      <DependentUpon>UC_plansza.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UC_rejestracja.resx">
       <DependentUpon>UC_rejestracja.cs</DependentUpon>

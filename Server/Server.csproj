@@ -71,6 +71,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Baza.dbml</DependentUpon>
     </Compile>
+    <Compile Include="Gra.cs" />
     <Compile Include="hashowanie.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

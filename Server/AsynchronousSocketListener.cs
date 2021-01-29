@@ -16,6 +16,7 @@ namespace Server
         private static int liczba_lobby = 5;
         private static Dictionary<string, Lobby> slownik_lobby;
         private static List<string> gracze = new List<string>();
+        private static Dictionary<string, Gra> aktywne_gry = new Dictionary<string, Gra>();
         // Thread signal.  
         public static ManualResetEvent allDone = new ManualResetEvent(false);
 
@@ -295,6 +296,32 @@ namespace Server
                                     odpowiedz = "False";
                                 }
                                 break;
+                             case "pobierz_plansze:":
+                                if (aktywne_gry.ContainsKey(slowa[1]))
+                                {
+                                    odpowiedz = aktywne_gry[slowa[1]].WylosowaniePlanszy();
+                                }
+                                else
+                                {
+                                    Gra gra = new Gra(slownik_lobby[slowa[1]]);
+                                    aktywne_gry.Add(slowa[1], gra);
+                                    odpowiedz = aktywne_gry[slowa[1]].WylosowaniePlanszy();
+                                }
+                                break;
+                            case "zapisz_ruch:":
+                                //MessageBox.Show(slowa[1] + " " +slowa[2]);
+                                if (aktywne_gry.ContainsKey(slowa[1]))
+                                {
+                                    aktywne_gry[slowa[1]].ZapiszRuch(slowa[2]);
+                                }
+                                break;
+                            case "wczytaj_ruchy:":
+                                MessageBox.Show(slowa[1] + " " + slowa[2]);
+                                if (aktywne_gry.ContainsKey(slowa[1]))
+                                {
+                                    odpowiedz = aktywne_gry[slowa[1]].WczytajRuchy(slowa[2]);
+                                }
+                                break; ;
                             case "uzyt_wartosc_parametru:":
                                 var q_u_p = from uzytkownik in SingletonBaza.Instance.BazaDC.uzytkownicy
                                           where uzytkownik.login == slowa[1]
