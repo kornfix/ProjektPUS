@@ -18,6 +18,7 @@ namespace WindowsFormsApp2
             menu = form as Menu;
             InitializeComponent();
             wczytaj_dane();
+            timer_zalogowany.Start();
             
         }
         public void wczytaj_dane()
@@ -71,7 +72,7 @@ namespace WindowsFormsApp2
         async void SprawdzCzyZalogowany()
         {
             timer_zalogowany.Stop();
-            String odp = await AsynchronicznyKlient.zapytaj("sesja:" + aplikacja.Login);
+            String odp = await AsynchronicznyKlient.zapytaj("kod_sesji: " + aplikacja.Login);
             if(odp != aplikacja.Sesja)
             {
                 aplikacja.clear();

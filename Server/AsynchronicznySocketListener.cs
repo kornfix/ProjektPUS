@@ -190,7 +190,7 @@ namespace Server
                                     {
                                         item.Value.usun(slowa[1]);
                                     }
-                                }
+                                }                             
                                 if(aktywne_sesje.ContainsKey(slowa[1]))
                                 {
                                     hashowanie.ZwolnijSesje(aktywne_sesje[slowa[1]]);
@@ -236,7 +236,7 @@ namespace Server
                                 {
                                     odpowiedz = "False";
                                 }
-                                    break;
+                                break;
                             case "usun_gracz_z_lobby:":
                                 if (slownik_lobby.ContainsKey(slowa[1]))
                                 {
@@ -358,8 +358,8 @@ namespace Server
                                     odpowiedz = "bledneDane";
                                 }
                                 break;
-                            case "sesja:":
-                                if(aktywne_sesje.ContainsKey(slowa[1]))
+                            case "kod_sesji:":
+                                if (aktywne_sesje.ContainsKey(slowa[1]))
                                 {
                                     odpowiedz = aktywne_sesje[slowa[1]];
                                 }
