@@ -25,6 +25,9 @@ namespace WindowsFormsApp2
         public async Task wczytaj_dane()
         {
 
+            status_gry = "";
+            l_gracz1.Text = "";
+            l_gracz2.Text = "";
             // zapytanie do bazy o graczy lobby: 1;
             String odp = await AsynchronicznyKlient.zapytaj("gracze_z_lobby: " + l_numer.Text);
             string[] slowa = odp.Split(' ');
@@ -51,9 +54,10 @@ namespace WindowsFormsApp2
                 {
                     status_gry = parametry[1];
                 }
+                Console.WriteLine(status_gry);
             }
             l_inf.Text = status_gry;
-            if (status_gry == "rozpoczynam" && jestem_lobby && !aplikacja.OstatniaGra)
+            if (status_gry == "rozpoczynam" && jestem_lobby && aplikacja.OstatniaGra == null)
             {
                 // Start gry;
                 timer_aktywnosc.Stop();
@@ -119,7 +123,7 @@ namespace WindowsFormsApp2
         }
         private async void btn_dolacz_Click(object sender, EventArgs e)
         {
-            if (aplikacja.OstatniaGra)
+            if (aplikacja.OstatniaGra !=null)
             {
                 return;
             }
@@ -175,7 +179,7 @@ namespace WindowsFormsApp2
 
         private async void btn_start_Click(object sender, EventArgs e)
         {
-            if (aplikacja.OstatniaGra)
+            if (aplikacja.OstatniaGra!= null)
             {
                 return;
             }
@@ -202,6 +206,9 @@ namespace WindowsFormsApp2
             timer_aktywnosc.Start();
             jestem_gotowy = false;
         }
-
+        public void Zakoncz()
+        {
+            timer_aktywnosc.Stop();
+        }
     }
 }

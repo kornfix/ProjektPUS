@@ -295,6 +295,5 @@ namespace WindowsFormsApp2
             firstClicked = null;
             secondClick = null;
         }
-
     }
 }

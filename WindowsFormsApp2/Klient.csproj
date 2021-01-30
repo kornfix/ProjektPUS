@@ -104,12 +104,6 @@
     <Compile Include="Gra.Designer.cs">
       <DependentUpon>Gra.cs</DependentUpon>
     </Compile>
-    <Compile Include="Klient.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Klient.Designer.cs">
-      <DependentUpon>Klient.cs</DependentUpon>
-    </Compile>
     <Compile Include="Lobby.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -174,9 +168,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Gra.resx">
       <DependentUpon>Gra.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Klient.resx">
-      <DependentUpon>Klient.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Lobby.resx">
       <DependentUpon>Lobby.cs</DependentUpon>

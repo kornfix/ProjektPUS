@@ -70,12 +70,12 @@ namespace WindowsFormsApp2
 
         private void EdycjaUzytkownika_Load(object sender, EventArgs e)
         {
-            aplikacja.EdycjaUzytkownika = true;
+            aplikacja.EdycjaUzytkownika = this;
         }
 
         private void EdycjaUzytkownika_FormClosed(object sender, FormClosedEventArgs e)
         {
-            aplikacja.EdycjaUzytkownika = false;
+            aplikacja.EdycjaUzytkownika = null;
         }
     }
 }

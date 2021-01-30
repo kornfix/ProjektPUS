@@ -15,6 +15,10 @@ namespace Server
             this.numer = i;
             loginy = new Dictionary<string, bool>();
         }
+        public int getNumer()
+        {
+            return numer;
+        }
         public Boolean czy_jestem_w_lobby(string gracz)
         {
             if (loginy.ContainsKey(gracz))
@@ -99,6 +103,9 @@ namespace Server
             if (loginy.Count == 2 && !loginy.ContainsValue(false))
             {
                 status = "rozpoczynam";
+            }else
+            {
+                status = "oczekuje";
             }
         }
         /*

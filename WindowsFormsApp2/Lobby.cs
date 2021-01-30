@@ -58,12 +58,19 @@ namespace WindowsFormsApp2
 
         private void Lobby_Load(object sender, EventArgs e)
         {
-            aplikacja.Lobby = true;
+            aplikacja.Lobby = this;
         }
 
         private void Lobby_FormClosed(object sender, FormClosedEventArgs e)
         {
-            aplikacja.Lobby = false;
+            aplikacja.Lobby = null;
+        }
+        public void Zakoncz()
+        {
+            foreach(var item in wyswietlane_lobby)
+            {
+                item.Value.Zakoncz();
+            }
         }
     }
 }

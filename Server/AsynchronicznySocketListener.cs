@@ -189,6 +189,12 @@ namespace Server
                                     if (item.Value.czy_jestem_w_lobby(slowa[1]))
                                     {
                                         item.Value.usun(slowa[1]);
+                                        item.Value.resetGry();
+                                        string nr_lobby = item.Value.getNumer().ToString();
+                                        if(aktywne_gry.ContainsKey(nr_lobby))
+                                        {
+                                            aktywne_gry.Remove(nr_lobby);
+                                        }
                                     }
                                 }
                                 if (aktywne_sesje.ContainsKey(slowa[1]))
@@ -296,15 +302,18 @@ namespace Server
                                 }
                                 break;
                             case "pobierz_plansze:":
-                                if (aktywne_gry.ContainsKey(slowa[1]))
+                                if (slowa[1] != "")
                                 {
-                                    odpowiedz = aktywne_gry[slowa[1]].WylosowaniePlanszy();
-                                }
-                                else
-                                {
-                                    Gra gra = new Gra(slownik_lobby[slowa[1]]);
-                                    aktywne_gry.Add(slowa[1], gra);
-                                    odpowiedz = aktywne_gry[slowa[1]].WylosowaniePlanszy();
+                                    if (aktywne_gry.ContainsKey(slowa[1]))
+                                    {
+                                        odpowiedz = aktywne_gry[slowa[1]].WylosowaniePlanszy();
+                                    }
+                                    else
+                                    {
+                                        Gra gra = new Gra(slownik_lobby[slowa[1]]);
+                                        aktywne_gry.Add(slowa[1], gra);
+                                        odpowiedz = aktywne_gry[slowa[1]].WylosowaniePlanszy();
+                                    }
                                 }
                                 break;
                             case "zapisz_ruch:":

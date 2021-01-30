@@ -63,11 +63,7 @@ namespace Server
                 {
                     odp += item.Value + " ";
                 }
-            }
-            if (!lobby.czy_pelne_lobby())
-            {
-                odp += "koniec";
-            }
+            }   
             return odp;
         }
 

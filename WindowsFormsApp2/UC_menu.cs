@@ -34,7 +34,7 @@ namespace WindowsFormsApp2
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            if (!aplikacja.Lobby)
+            if (aplikacja.Lobby == null)
             {
                 Lobby lobby = new Lobby();
                 lobby.Show();
@@ -58,7 +58,7 @@ namespace WindowsFormsApp2
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            if (!aplikacja.EdycjaUzytkownika)
+            if (aplikacja.EdycjaUzytkownika==null)
             {
                 EdycjaUzytkownika edycja = new EdycjaUzytkownika(this);
                 edycja.Show();

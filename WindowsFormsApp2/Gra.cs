@@ -25,12 +25,12 @@ namespace WindowsFormsApp2
             String odp = await AsynchronicznyKlient.zapytaj("zakonczGre: " + aplikacja.Nr_lobby);
 
             uC_Lobby.UruchomSprawdzanieLobby();
-            aplikacja.OstatniaGra = false;
+            aplikacja.OstatniaGra = null;
         }
 
         private void Gra_Load(object sender, EventArgs e)
         {
-            aplikacja.OstatniaGra = true;
+            aplikacja.OstatniaGra = this;
         }
     }
 }
