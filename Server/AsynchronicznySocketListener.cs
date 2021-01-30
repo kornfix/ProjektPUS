@@ -17,7 +17,7 @@ namespace Server
         private static Dictionary<string, uzytkownicy> gracze = new Dictionary<string, uzytkownicy>();
         private static Dictionary<string, string> aktywne_sesje = new Dictionary<string, string>();
         private static List<string> zapytania = new List<string>();
-        private static Dictionary<string, Gra> aktywne_gry = new Dictionary<string, Gra>(); 
+        private static Dictionary<string, Gra> aktywne_gry = new Dictionary<string, Gra>();
         public static ManualResetEvent wszystkoWykonane = new ManualResetEvent(false);
 
         public AsynchronicznySocketListener()
@@ -36,7 +36,7 @@ namespace Server
         {
             wczytaj_lobby();
             IPAddress ipAddress = IPAddress.IPv6Any;
-            IPEndPoint lokalnyPK = new IPEndPoint(ipAddress, 11000); 
+            IPEndPoint lokalnyPK = new IPEndPoint(ipAddress, 11000);
             Socket listener = new Socket(ipAddress.AddressFamily,
                 SocketType.Stream, ProtocolType.Tcp);
             try
@@ -44,7 +44,7 @@ namespace Server
                 listener.Bind(lokalnyPK);
                 listener.Listen(100);
                 while (true)
-                { 
+                {
                     wszystkoWykonane.Reset();
                     listener.BeginAccept(
                         new AsyncCallback(Callback),
@@ -63,7 +63,7 @@ namespace Server
         {
             wszystkoWykonane.Set();
             Socket listener = (Socket)ar.AsyncState;
-            Socket handler = listener.EndAccept(ar); 
+            Socket handler = listener.EndAccept(ar);
             StanObiektu stan = new StanObiektu();
             stan.socket = handler;
             handler.BeginReceive(stan.buffer, 0, StanObiektu.rozmiarBuffera, 0,

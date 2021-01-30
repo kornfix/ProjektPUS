@@ -119,6 +119,11 @@ namespace WindowsFormsApp2
         }
         private async void btn_dolacz_Click(object sender, EventArgs e)
         {
+            if (aplikacja.OstatniaGra)
+            {
+                return;
+            }
+
             timer_aktywnosc.Stop();
             if (!jestem_lobby)
             {
@@ -170,6 +175,10 @@ namespace WindowsFormsApp2
 
         private async void btn_start_Click(object sender, EventArgs e)
         {
+            if (aplikacja.OstatniaGra)
+            {
+                return;
+            }
             timer_aktywnosc.Stop();
             if (!jestem_gotowy)
             {
