@@ -95,10 +95,12 @@ namespace Server
                     if (i == ile - 1)
                     {
                         WylosowanaTablica += icons[randomNumber];
+                        Console.WriteLine(i + " " + icons[randomNumber]);
                     }
                     else
                     {
                         WylosowanaTablica += icons[randomNumber] + " ";
+                        Console.WriteLine(i + " " + icons[randomNumber]);
                     }
                     icons.RemoveAt(randomNumber);
                 }

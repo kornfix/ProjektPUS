@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
 namespace WindowsFormsApp2
 {
     public class AsynchronicznyKlient
@@ -15,7 +16,7 @@ namespace WindowsFormsApp2
         private const int port = 11000;
         private ManualResetEvent polaczenieWykonane = new ManualResetEvent(false);
         private ManualResetEvent wyslanieWykonane = new ManualResetEvent(false);
-        private ManualResetEvent odebranieWykonane = new ManualResetEvent(false);
+        private ManualResetEvent odebranieWykonane = new ManualResetEvent(false); 
         private String odpowiedz = String.Empty;
         // Funkcja tworząca pojedyńcze zapytania
         public async static Task<String> zapytaj(string zapytanie)
@@ -25,6 +26,7 @@ namespace WindowsFormsApp2
             return odp;
         }
 
+
         public async Task<String> StartKlienta(string pytanie)
         {
             try
@@ -32,15 +34,20 @@ namespace WindowsFormsApp2
                 IPHostEntry ipHostInfo = await Dns.GetHostEntryAsync(Dns.GetHostName());
                 IPAddress ipAddress = ipHostInfo.AddressList[0];
                 IPEndPoint zdalnyPK = new IPEndPoint(ipAddress, port);
+
                 Socket klient = new Socket(ipAddress.AddressFamily,
                     SocketType.Stream, ProtocolType.Tcp);
+
                 klient.BeginConnect(zdalnyPK,
                     new AsyncCallback(PolaczCallback), klient);
                 polaczenieWykonane.WaitOne();
+
                 Wyslij(klient, pytanie);
                 wyslanieWykonane.WaitOne();
+
                 Odbierz(klient);
                 odebranieWykonane.WaitOne();
+
                 klient.Shutdown(SocketShutdown.Both);
                 klient.Close();
             }
@@ -51,6 +58,7 @@ namespace WindowsFormsApp2
             }
             return odpowiedz;
         }
+
         private void PolaczCallback(IAsyncResult ar)
         {
             try
@@ -64,6 +72,7 @@ namespace WindowsFormsApp2
                 MessageBox.Show(e.ToString());
             }
         }
+
         private void Odbierz(Socket klient)
         {
             try
@@ -78,6 +87,7 @@ namespace WindowsFormsApp2
                 MessageBox.Show(e.ToString());
             }
         }
+
         private void OdbierzCallback(IAsyncResult ar)
         {
             try
@@ -85,6 +95,7 @@ namespace WindowsFormsApp2
                 StanObiektu stan = (StanObiektu)ar.AsyncState;
                 Socket klient = stan.socket;
                 int bajtyOdczytane = klient.EndReceive(ar);
+
                 if (bajtyOdczytane > 0)
                 {
                     stan.sb.Append(Encoding.ASCII.GetString(stan.buffer, 0, bajtyOdczytane));
@@ -105,12 +116,14 @@ namespace WindowsFormsApp2
                 MessageBox.Show(e.ToString());
             }
         }
+
         private void Wyslij(Socket klient, String dane)
-        {
+        {  
             byte[] bajtoweDane = Encoding.ASCII.GetBytes(dane);
             klient.BeginSend(bajtoweDane, 0, bajtoweDane.Length, 0,
                 new AsyncCallback(WyslijCallback), klient);
         }
+
         private void WyslijCallback(IAsyncResult ar)
         {
             try
@@ -124,5 +137,6 @@ namespace WindowsFormsApp2
                 MessageBox.Show(e.ToString());
             }
         }
+
     }
 }
