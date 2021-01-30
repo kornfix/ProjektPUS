@@ -11,7 +11,7 @@ namespace WindowsFormsApp2
             menu = form as Menu;
             InitializeComponent();
             wczytaj_dane();
-
+            timer_zalogowany.Start();
         }
         public void wczytaj_dane()
         {
