@@ -46,7 +46,6 @@ namespace Server
                 icons.Add(znak);
                 icons.Add(znak);
             }
-
         }
 
 
@@ -65,7 +64,7 @@ namespace Server
                     odp += item.Value + " ";
                 }
             }
-            if(!lobby.czy_pelne_lobby())
+            if (!lobby.czy_pelne_lobby())
             {
                 odp += "koniec";
             }

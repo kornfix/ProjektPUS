@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Server
 {
@@ -79,6 +77,13 @@ namespace Server
                 return false;
             }
         }
+
+        public void resetGry()
+        {
+            loginy = loginy.ToDictionary(p => p.Key, p => false);
+            status = "Oczekiwanie";
+        }
+
         public Boolean gotowy(string gracz)
         {
             loginy[gracz] = true;
@@ -96,5 +101,17 @@ namespace Server
                 status = "rozpoczynam";
             }
         }
+        /*
+        public void resetujGre()
+        {
+            foreach (var item in loginy)
+            {
+                loginy[item.Key] = false;
+                //item.Value = false;
+            }
+
+            status = "Czekam";
+        }
+        */
     }
 }

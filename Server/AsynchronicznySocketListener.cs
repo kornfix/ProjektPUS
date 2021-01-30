@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Server
 {
-    public class AsynchronousSocketListener
+    public class AsynchronicznySocketListener
     {
         private static int liczba_lobby = 5;
         private static Dictionary<string, Lobby> slownik_lobby;
@@ -21,9 +21,9 @@ namespace Server
         // Thread signal.  
         public static ManualResetEvent allDone = new ManualResetEvent(false);
 
-        public AsynchronousSocketListener()
+        public AsynchronicznySocketListener()
         {
-            
+
         }
         static void wczytaj_lobby()
         {
@@ -130,13 +130,13 @@ namespace Server
                     // Kod który wczytuje wysłaną wiadomośc i odpowiada.
                     if (slowa.Length >= 2)
                     {
-                        
+
                         switch (slowa[0])
                         {
                             case "sprawdz_email:":
                                 var q_e = from uzytkownik in SingletonBaza.Instance.BazaDC.uzytkownicy
-                                            where uzytkownik.email == slowa[1]
-                                            select uzytkownik;
+                                          where uzytkownik.email == slowa[1]
+                                          select uzytkownik;
                                 if (q_e.Any())
                                 {
                                     odpowiedz = "true";
@@ -149,8 +149,8 @@ namespace Server
                                 break;
                             case "sprawdz_login:":
                                 var q_l = from uzytkownik in SingletonBaza.Instance.BazaDC.uzytkownicy
-                                            where uzytkownik.login == slowa[1]
-                                            select uzytkownik;
+                                          where uzytkownik.login == slowa[1]
+                                          select uzytkownik;
                                 if (q_l.Any())
                                 {
                                     odpowiedz = "true";
@@ -190,7 +190,7 @@ namespace Server
                                         }
                                     }
                                 }
-                                    
+
                                 SingletonBaza.Instance.BazaDC.uzytkownicy.InsertOnSubmit(u);
                                 SingletonBaza.Instance.BazaDC.SubmitChanges();
                                 odpowiedz = "true";
@@ -215,7 +215,7 @@ namespace Server
                                             + " " + zalogowany.login + " " + zalogowany.email;
                                         string sesja = hashowanie.GetSession();
                                         aktywne_sesje.Add(zalogowany.login, sesja);
-                                        odpowiedz +=" "+ sesja;
+                                        odpowiedz += " " + sesja;
                                     }
                                 }
                                 else
@@ -231,7 +231,7 @@ namespace Server
                                         item.Value.usun(slowa[1]);
                                     }
                                 }
-                                if(aktywne_sesje.ContainsKey(slowa[1]))
+                                if (aktywne_sesje.ContainsKey(slowa[1]))
                                 {
                                     hashowanie.ZwolnijSesje(aktywne_sesje[slowa[1]]);
                                     aktywne_sesje.Remove(slowa[1]);
@@ -241,7 +241,8 @@ namespace Server
 
                                     gracze.Remove(slowa[1]);
                                     odpowiedz = "True";
-                                }else
+                                }
+                                else
                                 {
                                     odpowiedz = "False";
                                 }
@@ -272,16 +273,18 @@ namespace Server
                                         odpowiedz = "false";
                                     }
                                     zapytania.Remove(slowa[2]);
-                                }else
+                                }
+                                else
                                 {
                                     odpowiedz = "False";
                                 }
-                                    break;
+                                break;
                             case "usun_gracz_z_lobby:":
                                 if (slownik_lobby.ContainsKey(slowa[1]))
                                 {
                                     odpowiedz = slownik_lobby[slowa[1]].usun(slowa[2]).ToString();
-                                }else
+                                }
+                                else
                                 {
                                     odpowiedz = "False";
                                 }
@@ -290,7 +293,8 @@ namespace Server
                                 if (slownik_lobby.ContainsKey(slowa[1]))
                                 {
                                     odpowiedz = slownik_lobby[slowa[1]].gracze();
-                                }else
+                                }
+                                else
                                 {
                                     odpowiedz = "g1: g2:";
                                 }
@@ -300,7 +304,8 @@ namespace Server
                                 if (slownik_lobby.ContainsKey(slowa[1]))
                                 {
                                     odpowiedz = slownik_lobby[slowa[1]].czy_pelne_lobby().ToString();
-                                }else
+                                }
+                                else
                                 {
                                     odpowiedz = "False";
                                 }
@@ -317,7 +322,7 @@ namespace Server
                                     {
                                         odpowiedz = "False";
                                     }
-                                     zapytania.Remove(slowa[2]);
+                                    zapytania.Remove(slowa[2]);
                                 }
                                 break;
                             case "niejestem_gotowy:":
@@ -330,7 +335,7 @@ namespace Server
                                     odpowiedz = "False";
                                 }
                                 break;
-                             case "pobierz_plansze:":
+                            case "pobierz_plansze:":
                                 if (aktywne_gry.ContainsKey(slowa[1]))
                                 {
                                     odpowiedz = aktywne_gry[slowa[1]].WylosowaniePlanszy();
@@ -360,8 +365,8 @@ namespace Server
                                 if (gracze.ContainsKey(slowa[1]))
                                 {
                                     uzytkownicy edytowany = gracze[slowa[1]];
-                                    var odp= edytowany.GetType().GetProperty(slowa[2]).GetValue(edytowany, null);
-                                    if(odp!=null)
+                                    var odp = edytowany.GetType().GetProperty(slowa[2]).GetValue(edytowany, null);
+                                    if (odp != null)
                                     {
                                         odpowiedz = odp.ToString();
                                     }
@@ -394,15 +399,37 @@ namespace Server
                                 }
                                 else
                                 {
-                                    MessageBox.Show(slowa[1], slowa[2] + " "+ slowa[3]);
+                                    MessageBox.Show(slowa[1], slowa[2] + " " + slowa[3]);
                                     odpowiedz = "bledneDane";
                                 }
                                 break;
                             case "sesja:":
-                                if(aktywne_sesje.ContainsKey(slowa[1]))
+                                if (aktywne_sesje.ContainsKey(slowa[1]))
                                 {
                                     odpowiedz = aktywne_sesje[slowa[1]];
                                 }
+                                break;
+
+                            case "zakonczGre:":
+                                if (aktywne_gry.ContainsKey(slowa[1]))
+                                {
+                                    aktywne_gry.Remove(slowa[1]);
+                                    slownik_lobby[slowa[1]].resetGry();
+                                    //.resetujGre();
+
+                                }
+                                break;
+                            case "czyKoniecGry:":
+                                if (aktywne_gry.ContainsKey(slowa[1]))
+                                {
+                                    odpowiedz = "False";
+                                }
+                                else
+                                {
+                                    odpowiedz = "True";
+                                }
+                                // MessageBox.Show(odpowiedz);
+                                Console.WriteLine(odpowiedz);
                                 break;
                         }
                     }
@@ -410,7 +437,7 @@ namespace Server
                 }
                 else
                 {
-                    
+
                     // Not all data received. Get more.  
                     handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
                     new AsyncCallback(ReadCallback), state);
@@ -441,7 +468,7 @@ namespace Server
                 //MessageBox.Show("Wysłano " + bytesSent + " bitow do klienta");
                 handler.Shutdown(SocketShutdown.Both);
                 handler.Close();
-                
+
             }
             catch (Exception e)
             {

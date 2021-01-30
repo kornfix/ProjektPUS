@@ -18,7 +18,7 @@ namespace WindowsFormsApp2
             imie = 1,
             nazwisko = 2,
             email = 3,
-            haslo = 4        
+            haslo = 4
         }
         private wyk_tryb tryb;
         private Boolean edytowany = false;
@@ -34,7 +34,7 @@ namespace WindowsFormsApp2
             this.nazwa_parametru = wk.ToString();
             l_parametr.Text = FirstLetterToUpper(nazwa_parametru);
             // tryb haslo
-            if(tryb == wyk_tryb.haslo)
+            if (tryb == wyk_tryb.haslo)
             {
                 l_haslo2 = new Label();
                 l_haslo2.Text = "Powtórz";
@@ -51,7 +51,7 @@ namespace WindowsFormsApp2
                 this.Controls.Add(txt_haslo2);
 
                 txt_edytowany.Text = "123456";
-                txt_edytowany.PasswordChar = '*';              
+                txt_edytowany.PasswordChar = '*';
             }
             wczytajWartoscParametru();
         }
@@ -59,18 +59,18 @@ namespace WindowsFormsApp2
         {
             if (tryb != wyk_tryb.haslo)
             {
-                stara_wartosc = await AsynchronousClient.zapytaj("uzyt_wartosc_parametru: " + aplikacja.Login + " " + nazwa_parametru);
+                stara_wartosc = await AsynchronicznyKlient.zapytaj("uzyt_wartosc_parametru: " + aplikacja.Login + " " + nazwa_parametru);
                 txt_edytowany.Text = stara_wartosc;
             }
         }
 
         private void btn_edycja_Click(object sender, EventArgs e)
         {
-            if(!edytowany)
+            if (!edytowany)
             {
                 btn_edycja.Text = "Anuluj";
                 txt_edytowany.Enabled = true;
-                if(tryb == wyk_tryb.haslo)
+                if (tryb == wyk_tryb.haslo)
                 {
                     this.Height = this.Height + wiekszy;
                     btn_edycja.Location = new Point(btn_edycja.Location.X, btn_edycja.Location.Y + wiekszy);
@@ -80,7 +80,8 @@ namespace WindowsFormsApp2
                     txt_haslo2.Clear();
                 }
                 edytowany = !edytowany;
-            }else
+            }
+            else
             {
                 btn_edycja.Text = "Edytuj";
                 errorProvider1.Clear();
@@ -113,16 +114,17 @@ namespace WindowsFormsApp2
                         wynik_walidacji = await Walidacja.WalidacjaNazwiska(txt_edytowany, errorProvider1);
                         break;
                     case wyk_tryb.haslo:
-                        Boolean wynikHaslo1= await Walidacja.WalidacjaHaslo1(txt_edytowany, errorProvider1);
+                        Boolean wynikHaslo1 = await Walidacja.WalidacjaHaslo1(txt_edytowany, errorProvider1);
                         if (wynikHaslo1)
                         {
-                            Boolean wynikHaslo2 = await Walidacja.WalidacjaHaslo2(txt_edytowany.Text,txt_haslo2, errorProvider1);
+                            Boolean wynikHaslo2 = await Walidacja.WalidacjaHaslo2(txt_edytowany.Text, txt_haslo2, errorProvider1);
                             wynik_walidacji = wynikHaslo2;
                         }
                         break;
                 }
                 return wynik_walidacji;
-            }else
+            }
+            else
             {
                 return true;
             }
@@ -132,7 +134,7 @@ namespace WindowsFormsApp2
             Boolean wynik_edycji = true;
             if (wynik_walidacji)
             {
-                String odp = await AsynchronousClient.zapytaj("uzyt_zm_par: " + aplikacja.Login + " " + nazwa_parametru + " " + txt_edytowany.Text);
+                String odp = await AsynchronicznyKlient.zapytaj("uzyt_zm_par: " + aplikacja.Login + " " + nazwa_parametru + " " + txt_edytowany.Text);
                 MessageBox.Show(odp, nazwa_parametru);
                 if (odp == "True")
                 {
@@ -148,10 +150,11 @@ namespace WindowsFormsApp2
                             aplikacja.Nazwisko = txt_edytowany.Text;
                             break;
                     }
-                }else
+                }
+                else
                 {
                     wynik_edycji = false;
-                    MessageBox.Show("Wystapił błąd podczas edycji pola"+ nazwa_parametru);
+                    MessageBox.Show("Wystapił błąd podczas edycji pola" + nazwa_parametru);
                 }
             }
             return wynik_edycji;

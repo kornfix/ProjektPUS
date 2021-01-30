@@ -16,6 +16,9 @@ namespace WindowsFormsApp2
         private static string email;
         private static string nr_lobby = "";
         private static string przeciwnik;
+        private static bool edycjaUzytkownika = false;
+        private static bool lobby = false;
+        private static bool ostatniaGra = false;
         public static string Imie { get => imie; set => imie = value; }
         public static string Nazwisko { get => nazwisko; set => nazwisko = value; }
         public static string Login { get => login; set => login = value; }
@@ -23,6 +26,9 @@ namespace WindowsFormsApp2
         public static string Nr_lobby { get => nr_lobby; set => nr_lobby = value; }
         public static string Przeciwnik { get => przeciwnik; set => przeciwnik = value; }
         public static string Sesja { get => sesja; set => sesja = value; }
+        public static bool EdycjaUzytkownika { get => edycjaUzytkownika; set => edycjaUzytkownika = value; }
+        public static bool Lobby { get => lobby; set => lobby = value; }
+        public static bool OstatniaGra { get => ostatniaGra; set => ostatniaGra = value; }
 
         public static void wait(int milliseconds)
         {

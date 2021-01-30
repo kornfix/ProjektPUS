@@ -25,7 +25,7 @@ namespace WindowsFormsApp2
         {
             foreach (var item in kontrolki)
             {
-                if(item.Key == wk)
+                if (item.Key == wk)
                 {
                     item.Value.Visible = true;
                 }
@@ -45,7 +45,7 @@ namespace WindowsFormsApp2
         public void tryb_logowanie()
         {
 
-            if(!kontrolki.ContainsKey(wybrany_tryb.logowanie))
+            if (!kontrolki.ContainsKey(wybrany_tryb.logowanie))
             {
                 UC_logowanie uC_Logowanie = new UC_logowanie(this);
                 kontrolki.Add(wybrany_tryb.logowanie, uC_Logowanie);
@@ -102,7 +102,7 @@ namespace WindowsFormsApp2
 
         private async void Menu_FormClosed(object sender, FormClosedEventArgs e)
         {
-            String wyl = await AsynchronousClient.zapytaj("wyloguj: " + aplikacja.Login);
+            String wyl = await AsynchronicznyKlient.zapytaj("wyloguj: " + aplikacja.Login);
         }
     }
 }

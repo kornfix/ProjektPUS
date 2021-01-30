@@ -62,7 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AsynchronousSocketListener.cs" />
+    <Compile Include="AsynchronicznySocketListener.cs" />
     <Compile Include="Baza.cs">
       <DependentUpon>Baza.dbml</DependentUpon>
     </Compile>

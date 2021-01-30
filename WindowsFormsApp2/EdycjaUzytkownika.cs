@@ -39,14 +39,14 @@ namespace WindowsFormsApp2
         private async void button_rejestracja_Click(object sender, EventArgs e)
         {
             List<Task<Boolean>> lista_sprawdzania = new List<Task<Boolean>>();
-            foreach(var item in edytowane_parametry)
+            foreach (var item in edytowane_parametry)
             {
                 lista_sprawdzania.Add(item.SprawdzEdycje());
             }
             await Task.WhenAll(lista_sprawdzania.ToArray());
-            foreach(Task<Boolean> task in lista_sprawdzania)
+            foreach (Task<Boolean> task in lista_sprawdzania)
             {
-                if(!task.Result)
+                if (!task.Result)
                 {
                     return;
                 }
@@ -66,6 +66,16 @@ namespace WindowsFormsApp2
             }
             menu.wczytaj_dane();
             this.Close();
+        }
+
+        private void EdycjaUzytkownika_Load(object sender, EventArgs e)
+        {
+            aplikacja.EdycjaUzytkownika = true;
+        }
+
+        private void EdycjaUzytkownika_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            aplikacja.EdycjaUzytkownika = false;
         }
     }
 }

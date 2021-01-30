@@ -18,15 +18,15 @@ namespace WindowsFormsApp2
             InitializeComponent();
             wczytaj_lobby();
         }
-        private async void wczytaj_lobby()
+        public async void wczytaj_lobby()
         {
             // zapytanie do serwera  ile mam lobby;
-            String odp = await AsynchronousClient.zapytaj("wielkosc_lobby:");
-            string[] slowa = odp.Split(':'); 
+            String odp = await AsynchronicznyKlient.zapytaj("wielkosc_lobby:");
+            string[] slowa = odp.Split(':');
             int ile = Int32.Parse(slowa[1]);
-            for (int i=1; i<=ile; i++)
+            for (int i = 1; i <= ile; i++)
             {
-                UC_Lobby uC_Lobby = new UC_Lobby(this,i.ToString());
+                UC_Lobby uC_Lobby = new UC_Lobby(this, i.ToString());
                 uC_Lobby.wczytaj_dane();
                 wyswietlane_lobby.Add(i.ToString(), uC_Lobby);
                 flp_lobby.Controls.Add(uC_Lobby);
@@ -39,9 +39,9 @@ namespace WindowsFormsApp2
         }
         public async Task odswierzReszte(string wywolal)
         {
-            foreach(var item in wyswietlane_lobby)
+            foreach (var item in wyswietlane_lobby)
             {
-                if(item.Key != wywolal)
+                if (item.Key != wywolal)
                 {
                     item.Value.wywołajOdswierzenie();
                 }
@@ -50,10 +50,20 @@ namespace WindowsFormsApp2
 
         private void Lobby_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if(aplikacja.Nr_lobby!="")
+            if (aplikacja.Nr_lobby != "")
             {
                 wyswietlane_lobby[aplikacja.Nr_lobby].Zamykanie();
             }
+        }
+
+        private void Lobby_Load(object sender, EventArgs e)
+        {
+            aplikacja.Lobby = true;
+        }
+
+        private void Lobby_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            aplikacja.Lobby = false;
         }
     }
 }

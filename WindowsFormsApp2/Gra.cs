@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 
 namespace WindowsFormsApp2
 {
@@ -16,11 +17,20 @@ namespace WindowsFormsApp2
             UC_plansza uc_plansza = new UC_plansza(this);
             uc_plansza.WczytajPlansze();
             tableLayoutPanel2.Controls.Add(uc_plansza);
+            tableLayoutPanel2.Anchor = AnchorStyles.None;
         }
 
-        private async void Gra_FormClosed(object sender, FormClosedEventArgs e)
+        public async void Gra_FormClosed(object sender, FormClosedEventArgs e)
         {
-            await uC_Lobby.Zamykanie();
+            String odp = await AsynchronicznyKlient.zapytaj("zakonczGre: " + aplikacja.Nr_lobby);
+
+            uC_Lobby.UruchomSprawdzanieLobby();
+            aplikacja.OstatniaGra = false;
+        }
+
+        private void Gra_Load(object sender, EventArgs e)
+        {
+            aplikacja.OstatniaGra = true;
         }
     }
 }

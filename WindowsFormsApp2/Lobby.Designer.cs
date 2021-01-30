@@ -46,11 +46,12 @@ namespace WindowsFormsApp2
             this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.461394F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 94.5386F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(340, 531);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(453, 654);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // flp_lobby
@@ -59,9 +60,10 @@ namespace WindowsFormsApp2
             this.flp_lobby.AutoSize = true;
             this.flp_lobby.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flp_lobby.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flp_lobby.Location = new System.Drawing.Point(3, 32);
+            this.flp_lobby.Location = new System.Drawing.Point(4, 39);
+            this.flp_lobby.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.flp_lobby.Name = "flp_lobby";
-            this.flp_lobby.Size = new System.Drawing.Size(334, 496);
+            this.flp_lobby.Size = new System.Drawing.Size(445, 611);
             this.flp_lobby.TabIndex = 0;
             this.flp_lobby.WrapContents = false;
             // 
@@ -69,29 +71,34 @@ namespace WindowsFormsApp2
             // 
             this.panel1.Controls.Add(this.label1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(3, 3);
+            this.panel1.Location = new System.Drawing.Point(4, 4);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(334, 23);
+            this.panel1.Size = new System.Drawing.Size(445, 27);
             this.panel1.TabIndex = 1;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 6);
+            this.label1.Location = new System.Drawing.Point(12, 7);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(36, 13);
+            this.label1.Size = new System.Drawing.Size(47, 17);
             this.label1.TabIndex = 0;
             this.label1.Text = "Lobby";
             // 
             // Lobby
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(340, 531);
+            this.ClientSize = new System.Drawing.Size(453, 654);
             this.Controls.Add(this.tableLayoutPanel1);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Lobby";
             this.Text = "Lobby";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Lobby_FormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Lobby_FormClosed);
+            this.Load += new System.EventHandler(this.Lobby_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.panel1.ResumeLayout(false);
