@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-
 namespace WindowsFormsApp2
 {
     public partial class UC_plansza : UserControl
@@ -9,7 +8,6 @@ namespace WindowsFormsApp2
         class Przycisk : Label
         {
             int indeks;
-
             public Przycisk(int i)
             {
                 indeks = i;
@@ -20,25 +18,20 @@ namespace WindowsFormsApp2
             }
         }
 
-
         Label firstClicked, secondClick;
-
         Color kolor;
         Color kolor1 = Color.Blue;
         Color kolor2 = Color.Green;
-
         int pkt_gr1 = 0;
         int pkt_gr2 = 0;
         int liczba_ruchow = 0;
         Gra gra;
         Boolean czyZaczynam;
-
         public UC_plansza(Form form)
         {
             InitializeComponent();
             gra = form as Gra;
         }
-
         public async void WczytajPlansze()
         {
             String odp = await AsynchronicznyKlient.zapytaj("pobierz_plansze: " + aplikacja.Nr_lobby);
@@ -51,19 +44,21 @@ namespace WindowsFormsApp2
             wygeneruj_labele(rozmiar);
             gracz1.Text = aplikacja.Login;
             gracz2.Text = aplikacja.Przeciwnik;
-
             if (odpowiedz[1] == aplikacja.Login)
             {
                 aktualnyGracz.Text = aplikacja.Login;
                 czyZaczynam = true;
+                ruch.BackColor = kolor2;
+                aktualnyGracz.BackColor = kolor2;
             }
             else
             {
                 aktualnyGracz.Text = aplikacja.Przeciwnik;
                 czyZaczynam = false;
+                ruch.BackColor = kolor1;
+                aktualnyGracz.BackColor = kolor1;
             }
             int koniec = odpowiedz.Length;
-
             for (int i = 2; i < koniec; i++)
             {
                 string litera = odpowiedz[i].ToString();
@@ -78,12 +73,9 @@ namespace WindowsFormsApp2
             if (!czyZaczynam)
             {
                 timer1.Start();
-
             }
-
             timer2_koniecGry.Start();
         }
-
         private void click_Label(object sender, EventArgs e)
         {
             if (!czyZaczynam)
@@ -94,12 +86,9 @@ namespace WindowsFormsApp2
         {
             if (firstClicked != null && secondClick != null)
                 return;
-
             Przycisk clickLabel = sender as Przycisk;
-
             if (clickLabel == null)
                 return;
-
             if (clickLabel.ForeColor == Color.Black)
                 return;
             if (czyZaczynam)
@@ -111,32 +100,23 @@ namespace WindowsFormsApp2
                 }
             }
             liczba_ruchow++;
-
             if (firstClicked == null)
             {
                 firstClicked = clickLabel;
                 firstClicked.ForeColor = Color.Black;
-
                 if (aktualnyGracz.Text == aplikacja.Przeciwnik)
                     firstClicked.BackColor = kolor1;
                 else if (aktualnyGracz.Text == aplikacja.Login)
                     firstClicked.BackColor = kolor2;
 
-
                 return;
             }
-
             secondClick = clickLabel;
             secondClick.ForeColor = Color.Black;
-
             if (aktualnyGracz.Text == aplikacja.Przeciwnik)
                 secondClick.BackColor = kolor1;
             else if (aktualnyGracz.Text == aplikacja.Login)
                 secondClick.BackColor = kolor2;
-
-
-            CheckWinner();
-
             if (firstClicked.Text == secondClick.Text)
             {
                 // wyślij inf na server; uzykownik.Nr_lobby " " zmienna bool czy koniec gry + ruch
@@ -155,22 +135,17 @@ namespace WindowsFormsApp2
             {
                 // wyślij inf na server oraz to że zaczyna drugi gracz // nie aktualne ??
                 // żle kliknął
-
                 aplikacja.wait(2000);
-
                 firstClicked.BackColor = kolor;
                 secondClick.BackColor = kolor;
-
                 firstClicked.ForeColor = firstClicked.BackColor;
                 secondClick.ForeColor = firstClicked.BackColor;
-
                 if (czyZaczynam)
                 {
                     aktualnyGracz.Text = aplikacja.Przeciwnik;
                     aktualnyGracz.BackColor = kolor1;
                     ruch.BackColor = kolor1;
                     timer1.Start();
-
                 }
                 else
                 {
@@ -178,18 +153,18 @@ namespace WindowsFormsApp2
                     aktualnyGracz.BackColor = kolor2;
                     ruch.BackColor = kolor2;
                     timer1.Stop();
-
                 }
                 czyZaczynam = !czyZaczynam;
             }
             firstClicked = null;
             secondClick = null;
 
+            CheckWinner();
+
         }
         async void tick()
         {
             string odp = await AsynchronicznyKlient.zapytaj("wczytaj_ruchy: " + aplikacja.Nr_lobby + " " + liczba_ruchow);
-
             if (odp != "error" && odp != "")
             {
                 string[] indeksy = odp.Split(' ');
@@ -199,7 +174,6 @@ namespace WindowsFormsApp2
                     {
                         continue;
                     }
-
                     int indeks = Int32.Parse(s);
                     if (tableLayoutPanel1.Controls[indeks] is Przycisk)
                     {
@@ -215,22 +189,22 @@ namespace WindowsFormsApp2
             for (int i = 0; i < tableLayoutPanel1.Controls.Count; i++)
             {
                 label = tableLayoutPanel1.Controls[i] as Label;
-
                 if (label != null && label.ForeColor == label.BackColor)
                     return;
             }
-
             int punkty_1 = Convert.ToInt32(g1_pkt.Text); // czyzaczynam - login
             int punkty_2 = Convert.ToInt32(g2_pkt.Text);
-
             if (punkty_1 > punkty_2)
             {
                 MessageBox.Show($"Wygrał użytkownik: {aplikacja.Login}. {aplikacja.Login} zyskałeś {punkty_1} punktów. Gratulacje!");
-
             }
             else if (punkty_1 < punkty_2)
             {
                 MessageBox.Show($"Wygrał użytkownik: {aplikacja.Przeciwnik}. {aplikacja.Przeciwnik} zyskałeś {punkty_2} punktów. Gratulacje!");
+            }
+            else if (punkty_1 == punkty_2)
+            {
+                MessageBox.Show($"Gra zakończyła się remisem.");
             }
             aplikacja.wait(2000);
             zakonczGre_Click(null, null);
@@ -252,29 +226,24 @@ namespace WindowsFormsApp2
                 tableLayoutPanel1.Controls.Add(przycisk);
             }
         }
-
         async void zakonczGre_Click(object sender, EventArgs e)
         {
             timer1.Stop();
             timer2_koniecGry.Stop();
             gra.Close();
         }
-
         private void timer1_Tick_2(object sender, EventArgs e)
         {
             tick();
         }
-
         private void timer2_koniec(object sender, EventArgs e)
         {
             czyKoniecGry();
         }
-
         async void czyKoniecGry()
         {
             timer2_koniecGry.Stop();
             String odp = await AsynchronicznyKlient.zapytaj("czyKoniecGry: " + aplikacja.Nr_lobby);
-
             if (odp == "True")
             {
                 MessageBox.Show("Gra zakonczona");
@@ -288,10 +257,8 @@ namespace WindowsFormsApp2
         private void timer1_Tick(object sender, EventArgs e) //ukrywa po upływie kilku sekund obydwa obrazki
         {
             timer1.Stop();
-
             firstClicked.ForeColor = firstClicked.BackColor;
             secondClick.ForeColor = secondClick.BackColor;
-
             firstClicked = null;
             secondClick = null;
         }

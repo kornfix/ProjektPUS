@@ -38,13 +38,16 @@ namespace Server
                 rozmiar++;
                 ile = rozmiar * rozmiar / 2;
             }
-            for (int i = 0; i < ile; i++)
+            List<string> wylosowane = new List<string>();
+            while (wylosowane.Count < ile)
             {
                 string znak = znaki[rnd.Next(znaki.Length)].ToString();
-                Console.WriteLine(znak);
-                znaki.Replace(znak, "");
-                icons.Add(znak);
-                icons.Add(znak);
+                if (!wylosowane.Contains(znak))
+                {
+                    wylosowane.Add(znak);
+                    icons.Add(znak);
+                    icons.Add(znak);
+                }
             }
         }
 
