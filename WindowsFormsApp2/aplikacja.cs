@@ -19,6 +19,7 @@ namespace WindowsFormsApp2
         private static EdycjaUzytkownika edycjaUzytkownika;
         private static Lobby lobby;
         private static Gra ostatniaGra;
+
         public static string Imie { get => imie; set => imie = value; }
         public static string Nazwisko { get => nazwisko; set => nazwisko = value; }
         public static string Login { get => login; set => login = value; }

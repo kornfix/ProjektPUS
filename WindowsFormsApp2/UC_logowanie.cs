@@ -21,10 +21,11 @@ namespace WindowsFormsApp2
 
         private async void buttonZaloguj_Click(object sender, EventArgs e)
         {
+            errorProvider1.Clear();
             var walidacjaLoginu = WalidacjaLoginu();
             var walidacjaHasla = WalidacjaHasla();
             Task[] zadania = new Task[] { walidacjaLoginu, walidacjaHasla };
-            menu.tryb_czekanie();
+            
             await Task.WhenAll(zadania);
             aplikacja.wait(1000);
             if (!walidacjaLoginu.Result || !walidacjaHasla.Result)
@@ -32,6 +33,7 @@ namespace WindowsFormsApp2
                 menu.tryb_logowanie();
                 return;
             }
+            menu.tryb_czekanie();
             // Zapytanie do serwera z tym stringiem
             string zapytanie = "zaloguj: " + textBoxLogin1.Text + " " + textBoxHaslo1.Text;
             String odp = await AsynchronicznyKlient.zapytaj(zapytanie);
@@ -54,6 +56,7 @@ namespace WindowsFormsApp2
             // prosba nieudana
             else if (slowa.Length == 1 && slowa[0] == "bledneDane")
             {
+                menu.tryb_logowanie();
                 errorProvider1.SetError(linkLabelZapomnialem, "Błędne dane");
             }
             else if (slowa.Length == 1 && slowa[0] == "uzytkownik_jest_juz_zalogowany")
@@ -64,6 +67,9 @@ namespace WindowsFormsApp2
                     String wyl = await AsynchronicznyKlient.zapytaj("wyloguj: " + textBoxLogin1.Text);
                     String zaloguj = await AsynchronicznyKlient.zapytaj("zaloguj: " + textBoxLogin1.Text + " " + textBoxHaslo1.Text);
                     zalogowanieUzytkownika(zaloguj);
+                }else
+                {
+                    menu.tryb_logowanie();
                 }
             }
         }

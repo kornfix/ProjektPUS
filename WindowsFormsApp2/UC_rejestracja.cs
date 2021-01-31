@@ -62,6 +62,10 @@ namespace WindowsFormsApp2
                 menu.tryb_menu();
                 menu.reset_rejestacji();
             }
+            else
+            {
+                menu.tryb_czekanie();
+            }
             // logowanie do menu
             //menu.tryb_menu();
             // prośba nie udana wyświetlenie inf
