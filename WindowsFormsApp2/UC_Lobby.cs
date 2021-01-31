@@ -123,7 +123,7 @@ namespace WindowsFormsApp2
         }
         private async void btn_dolacz_Click(object sender, EventArgs e)
         {
-            if (aplikacja.OstatniaGra !=null)
+            if (aplikacja.OstatniaGra != null)
             {
                 return;
             }
@@ -179,7 +179,7 @@ namespace WindowsFormsApp2
 
         private async void btn_start_Click(object sender, EventArgs e)
         {
-            if (aplikacja.OstatniaGra!= null)
+            if (aplikacja.OstatniaGra != null)
             {
                 return;
             }
@@ -205,10 +205,11 @@ namespace WindowsFormsApp2
         {
             timer_aktywnosc.Start();
             jestem_gotowy = false;
-        }
+        }              
+
         public void Zakoncz()
         {
-            if(aplikacja.OstatniaGra!=null)
+            if (aplikacja.OstatniaGra != null)
             {
                 aplikacja.OstatniaGra.Close();
             }

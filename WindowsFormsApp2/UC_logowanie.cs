@@ -25,7 +25,7 @@ namespace WindowsFormsApp2
             var walidacjaLoginu = WalidacjaLoginu();
             var walidacjaHasla = WalidacjaHasla();
             Task[] zadania = new Task[] { walidacjaLoginu, walidacjaHasla };
-            
+
             await Task.WhenAll(zadania);
             aplikacja.wait(1000);
             if (!walidacjaLoginu.Result || !walidacjaHasla.Result)
@@ -67,7 +67,8 @@ namespace WindowsFormsApp2
                     String wyl = await AsynchronicznyKlient.zapytaj("wyloguj: " + textBoxLogin1.Text);
                     String zaloguj = await AsynchronicznyKlient.zapytaj("zaloguj: " + textBoxLogin1.Text + " " + textBoxHaslo1.Text);
                     zalogowanieUzytkownika(zaloguj);
-                }else
+                }
+                else
                 {
                     menu.tryb_logowanie();
                 }

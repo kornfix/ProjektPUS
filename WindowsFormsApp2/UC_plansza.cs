@@ -20,8 +20,8 @@ namespace WindowsFormsApp2
 
         Label firstClicked, secondClick;
         Color kolor;
-        Color kolor1 = Color.Blue;
-        Color kolor2 = Color.Green;
+        Color kolor1 = Color.LightSteelBlue;
+        Color kolor2 = Color.CornflowerBlue;
         int pkt_gr1 = 0;
         int pkt_gr2 = 0;
         int liczba_ruchow = 0;
@@ -48,15 +48,13 @@ namespace WindowsFormsApp2
             {
                 aktualnyGracz.Text = aplikacja.Login;
                 czyZaczynam = true;
-                ruch.BackColor = kolor2;
-                aktualnyGracz.BackColor = kolor2;
+                aktualnyGracz.ForeColor = kolor2;
             }
             else
             {
                 aktualnyGracz.Text = aplikacja.Przeciwnik;
                 czyZaczynam = false;
-                ruch.BackColor = kolor1;
-                aktualnyGracz.BackColor = kolor1;
+                aktualnyGracz.ForeColor = kolor1;
             }
             int koniec = odpowiedz.Length;
             for (int i = 2; i < koniec; i++)
@@ -67,7 +65,7 @@ namespace WindowsFormsApp2
                 {
                     label = (Przycisk)tableLayoutPanel1.Controls[i - 2];
                     label.Text = litera;
-                    label.ForeColor = Color.Bisque;
+                    label.ForeColor = Color.LightGray;
                 }
             }
             if (!czyZaczynam)
@@ -119,7 +117,6 @@ namespace WindowsFormsApp2
                 secondClick.BackColor = kolor2;
             if (firstClicked.Text == secondClick.Text)
             {
-                // wyślij inf na server; uzykownik.Nr_lobby " " zmienna bool czy koniec gry + ruch
                 if (czyZaczynam)
                 {
                     pkt_gr1 += 10;
@@ -133,8 +130,6 @@ namespace WindowsFormsApp2
             }
             else
             {
-                // wyślij inf na server oraz to że zaczyna drugi gracz // nie aktualne ??
-                // żle kliknął
                 aplikacja.wait(2000);
                 firstClicked.BackColor = kolor;
                 secondClick.BackColor = kolor;
@@ -143,15 +138,13 @@ namespace WindowsFormsApp2
                 if (czyZaczynam)
                 {
                     aktualnyGracz.Text = aplikacja.Przeciwnik;
-                    aktualnyGracz.BackColor = kolor1;
-                    ruch.BackColor = kolor1;
+                    aktualnyGracz.ForeColor = kolor1;
                     timer1.Start();
                 }
                 else
                 {
                     aktualnyGracz.Text = aplikacja.Login;
-                    aktualnyGracz.BackColor = kolor2;
-                    ruch.BackColor = kolor2;
+                    aktualnyGracz.ForeColor = kolor2;
                     timer1.Stop();
                 }
                 czyZaczynam = !czyZaczynam;
@@ -160,7 +153,6 @@ namespace WindowsFormsApp2
             secondClick = null;
 
             CheckWinner();
-
         }
         async void tick()
         {
@@ -254,6 +246,17 @@ namespace WindowsFormsApp2
                 timer2_koniecGry.Start();
             }
         }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void g2_pkt_Click(object sender, EventArgs e)
+        {
+
+        }
+
         private void timer1_Tick(object sender, EventArgs e) //ukrywa po upływie kilku sekund obydwa obrazki
         {
             timer1.Stop();

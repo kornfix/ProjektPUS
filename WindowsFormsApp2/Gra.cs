@@ -31,6 +31,6 @@ namespace WindowsFormsApp2
         private void Gra_Load(object sender, EventArgs e)
         {
             aplikacja.OstatniaGra = this;
-        }
+        }              
     }
 }
