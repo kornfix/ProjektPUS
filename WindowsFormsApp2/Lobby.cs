@@ -63,6 +63,7 @@ namespace WindowsFormsApp2
 
         private void Lobby_FormClosed(object sender, FormClosedEventArgs e)
         {
+            Zakoncz();
             aplikacja.Lobby = null;
         }
         public void Zakoncz()

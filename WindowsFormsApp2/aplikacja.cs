@@ -74,8 +74,6 @@ namespace WindowsFormsApp2
             {
                 EdycjaUzytkownika.Close();
             }
-
-
         }
     }
 }

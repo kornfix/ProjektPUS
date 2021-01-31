@@ -208,6 +208,10 @@ namespace WindowsFormsApp2
         }
         public void Zakoncz()
         {
+            if(aplikacja.OstatniaGra !=null)
+            {
+                aplikacja.OstatniaGra.Close();
+            }
             timer_aktywnosc.Stop();
         }
     }
