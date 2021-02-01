@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-
 namespace WindowsFormsApp2
 {
     public class AsynchronicznyKlient
@@ -16,7 +15,7 @@ namespace WindowsFormsApp2
         private const int port = 11000;
         private ManualResetEvent polaczenieWykonane = new ManualResetEvent(false);
         private ManualResetEvent wyslanieWykonane = new ManualResetEvent(false);
-        private ManualResetEvent odebranieWykonane = new ManualResetEvent(false); 
+        private ManualResetEvent odebranieWykonane = new ManualResetEvent(false);
         private String odpowiedz = String.Empty;
         // Funkcja tworząca pojedyńcze zapytania
         public async static Task<String> zapytaj(string zapytanie)
@@ -118,7 +117,7 @@ namespace WindowsFormsApp2
         }
 
         private void Wyslij(Socket klient, String dane)
-        {  
+        {
             byte[] bajtoweDane = Encoding.ASCII.GetBytes(dane);
             klient.BeginSend(bajtoweDane, 0, bajtoweDane.Length, 0,
                 new AsyncCallback(WyslijCallback), klient);

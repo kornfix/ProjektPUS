@@ -54,7 +54,7 @@ namespace WindowsFormsApp2
                 {
                     status_gry = parametry[1];
                 }
-                Console.WriteLine(status_gry);
+                //Console.WriteLine(status_gry);
             }
             l_inf.Text = status_gry;
             if (status_gry == "rozpoczynam" && jestem_lobby && aplikacja.OstatniaGra == null)
@@ -205,7 +205,7 @@ namespace WindowsFormsApp2
         {
             timer_aktywnosc.Start();
             jestem_gotowy = false;
-        }              
+        }
 
         public void Zakoncz()
         {

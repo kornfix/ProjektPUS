@@ -63,9 +63,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsynchronicznySocketListener.cs" />
-    <Compile Include="Baza.cs">
-      <DependentUpon>Baza.dbml</DependentUpon>
-    </Compile>
     <Compile Include="Baza.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

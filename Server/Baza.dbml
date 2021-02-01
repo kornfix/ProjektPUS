@@ -1,29 +1,16 @@
-﻿<?xml version="1.0" encoding="utf-8"?><Database Name="baza_danych" Class="BazaDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=bazadanychpus.database.windows.net;Initial Catalog=baza_danych;User ID=bazadanychpus_admin;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False" SettingsObjectName="Server.Properties.Settings" SettingsPropertyName="baza_danychConnectionString" Provider="System.Data.SqlClient" />
-  <Table Name="dbo.uzytkownicy" Member="uzytkownicy">
-    <Type Name="uzytkownicy">
-      <Column Name="id_uzytkownika" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="imie" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="nazwisko" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="email" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="login" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="haslo" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
-      <Association Name="uzytkownicy_rozgrywki" Member="rozgrywki" ThisKey="id_uzytkownika" OtherKey="id_gracza_nr_dwa" Type="rozgrywki" />
-      <Association Name="uzytkownicy_rozgrywki1" Member="rozgrywki1" ThisKey="id_uzytkownika" OtherKey="id_gracza_nr_jeden" Type="rozgrywki" />
-      <Association Name="uzytkownicy_ruchy_graczy" Member="ruchy_graczy" ThisKey="id_uzytkownika" OtherKey="id_gracza" Type="ruchy_graczy" />
-    </Type>
-  </Table>
-  <Table Name="dbo.plansze" Member="plansze">
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="bazaDanych" Class="BazaDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=bazaDanych;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False" SettingsObjectName="Server.Properties.Settings" SettingsPropertyName="bazaDanychConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.plansze" Member="planszes">
     <Type Name="plansze">
       <Column Name="id_planszy" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="wiersz" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="kolumna" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="sciezka_do_zdjecia" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="nazwa_panelu" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="id_gry" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Association Name="rozgrywki_plansze" Member="rozgrywki" ThisKey="id_gry" OtherKey="id_gry" Type="rozgrywki" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.rozgrywki" Member="rozgrywki">
+  <Table Name="dbo.rozgrywki" Member="rozgrywkis">
     <Type Name="rozgrywki">
       <Column Name="id_gry" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="data" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
@@ -31,21 +18,34 @@
       <Column Name="wynik" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="id_gracza_nr_jeden" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="id_gracza_nr_dwa" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="rozgrywki_plansze" Member="plansze" ThisKey="id_gry" OtherKey="id_gry" Type="plansze" />
-      <Association Name="rozgrywki_ruchy_graczy" Member="ruchy_graczy" ThisKey="id_gry" OtherKey="id_gry" Type="ruchy_graczy" />
-      <Association Name="uzytkownicy_rozgrywki" Member="uzytkownicy" ThisKey="id_gracza_nr_dwa" OtherKey="id_uzytkownika" Type="uzytkownicy" IsForeignKey="true" />
-      <Association Name="uzytkownicy_rozgrywki1" Member="uzytkownicy1" ThisKey="id_gracza_nr_jeden" OtherKey="id_uzytkownika" Type="uzytkownicy" IsForeignKey="true" />
+      <Association Name="rozgrywki_plansze" Member="planszes" ThisKey="id_gry" OtherKey="id_gry" Type="plansze" />
+      <Association Name="rozgrywki_ruchy_graczy" Member="ruchy_graczies" ThisKey="id_gry" OtherKey="id_gry" Type="ruchy_graczy" />
+      <Association Name="uzytkownicy_rozgrywki" Member="uzytkownicy" ThisKey="id_gracza_nr_jeden" OtherKey="id_uzytkownika" Type="uzytkownicy" IsForeignKey="true" />
+      <Association Name="uzytkownicy_rozgrywki1" Member="uzytkownicy1" ThisKey="id_gracza_nr_dwa" OtherKey="id_uzytkownika" Type="uzytkownicy" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.ruchy_graczy" Member="ruchy_graczy">
+  <Table Name="dbo.ruchy_graczy" Member="ruchy_graczies">
     <Type Name="ruchy_graczy">
       <Column Name="id_ruchu" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="nr_ruchu" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="ruch" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="ruch" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="id_gracza" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="id_gry" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="uzytkownicy_ruchy_graczy" Member="uzytkownicy" ThisKey="id_gracza" OtherKey="id_uzytkownika" Type="uzytkownicy" IsForeignKey="true" />
       <Association Name="rozgrywki_ruchy_graczy" Member="rozgrywki" ThisKey="id_gry" OtherKey="id_gry" Type="rozgrywki" IsForeignKey="true" />
+      <Association Name="uzytkownicy_ruchy_graczy" Member="uzytkownicy" ThisKey="id_gracza" OtherKey="id_uzytkownika" Type="uzytkownicy" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.uzytkownicy" Member="uzytkownicies">
+    <Type Name="uzytkownicy">
+      <Column Name="id_uzytkownika" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="imie" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="nazwisko" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="email" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="login" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="haslo" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Association Name="uzytkownicy_rozgrywki" Member="rozgrywkis" ThisKey="id_uzytkownika" OtherKey="id_gracza_nr_jeden" Type="rozgrywki" />
+      <Association Name="uzytkownicy_rozgrywki1" Member="rozgrywkis1" ThisKey="id_uzytkownika" OtherKey="id_gracza_nr_dwa" Type="rozgrywki" />
+      <Association Name="uzytkownicy_ruchy_graczy" Member="ruchy_graczies" ThisKey="id_uzytkownika" OtherKey="id_gracza" Type="ruchy_graczy" />
     </Type>
   </Table>
 </Database>

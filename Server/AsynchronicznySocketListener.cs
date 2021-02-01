@@ -94,7 +94,7 @@ namespace Server
                         switch (slowa[0])
                         {
                             case "sprawdz_email:":
-                                var q_e = from uzytkownik in SingletonBaza.Instance.BazaDC.uzytkownicy
+                                var q_e = from uzytkownik in SingletonBaza.Instance.BazaDC.uzytkownicies
                                           where uzytkownik.email == slowa[1]
                                           select uzytkownik;
                                 if (q_e.Any())
@@ -108,7 +108,7 @@ namespace Server
                                 }
                                 break;
                             case "sprawdz_login:":
-                                var q_l = from uzytkownik in SingletonBaza.Instance.BazaDC.uzytkownicy
+                                var q_l = from uzytkownik in SingletonBaza.Instance.BazaDC.uzytkownicies
                                           where uzytkownik.login == slowa[1]
                                           select uzytkownik;
                                 if (q_l.Any())
@@ -151,12 +151,12 @@ namespace Server
                                     }
                                 }
 
-                                SingletonBaza.Instance.BazaDC.uzytkownicy.InsertOnSubmit(u);
+                                SingletonBaza.Instance.BazaDC.uzytkownicies.InsertOnSubmit(u);
                                 SingletonBaza.Instance.BazaDC.SubmitChanges();
                                 odpowiedz = "true";
                                 break;
                             case "zaloguj:":
-                                var q_z = from uzytkownik in SingletonBaza.Instance.BazaDC.uzytkownicy
+                                var q_z = from uzytkownik in SingletonBaza.Instance.BazaDC.uzytkownicies
                                           where uzytkownik.login == slowa[1]
                                           && uzytkownik.haslo ==
                                           hashowanie.GetHashString(slowa[2])
@@ -191,7 +191,7 @@ namespace Server
                                         item.Value.usun(slowa[1]);
                                         item.Value.resetGry();
                                         string nr_lobby = item.Value.getNumer().ToString();
-                                        if(aktywne_gry.ContainsKey(nr_lobby))
+                                        if (aktywne_gry.ContainsKey(nr_lobby))
                                         {
                                             aktywne_gry.Remove(nr_lobby);
                                         }
@@ -398,7 +398,7 @@ namespace Server
                                     odpowiedz = "True";
                                 }
                                 // MessageBox.Show(odpowiedz);
-                                Console.WriteLine(odpowiedz);
+                                //Console.WriteLine(odpowiedz);
                                 break;
                         }
                     }

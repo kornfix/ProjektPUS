@@ -135,7 +135,7 @@ namespace WindowsFormsApp2
             if (wynik_walidacji)
             {
                 String odp = await AsynchronicznyKlient.zapytaj("uzyt_zm_par: " + aplikacja.Login + " " + nazwa_parametru + " " + txt_edytowany.Text);
-                MessageBox.Show(odp, nazwa_parametru);
+                //MessageBox.Show(odp, nazwa_parametru);
                 if (odp == "True")
                 {
                     switch (tryb)

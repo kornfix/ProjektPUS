@@ -18,6 +18,8 @@ namespace WindowsFormsApp2
             InitializeComponent();
             wczytaj_lobby();
         }
+
+
         public async void wczytaj_lobby()
         {
             // zapytanie do serwera  ile mam lobby;
@@ -68,10 +70,11 @@ namespace WindowsFormsApp2
         }
         public void Zakoncz()
         {
-            foreach(var item in wyswietlane_lobby)
+            foreach (var item in wyswietlane_lobby)
             {
                 item.Value.Zakoncz();
             }
+            aplikacja.Nr_lobby = "";
         }
     }
 }
