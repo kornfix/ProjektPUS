@@ -26,9 +26,11 @@ namespace Server
         }
         static void wczytaj_lobby()
         {
+            Console.WriteLine("Wczytywanie lobby");
             slownik_lobby = new Dictionary<string, Lobby>();
             for (int i = 1; i <= liczba_lobby; i++)
             {
+                Console.WriteLine($"Wczytano lobby nr {i}");
                 slownik_lobby.Add(i.ToString(), new Lobby(i));
             }
         }
@@ -43,6 +45,7 @@ namespace Server
             {
                 listener.Bind(lokalnyPK);
                 listener.Listen(100);
+                Console.WriteLine("Nasłuchiwanie serwera");
                 while (true)
                 {
                     wszystkoWykonane.Reset();
@@ -55,7 +58,7 @@ namespace Server
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.ToString());
+                Console.WriteLine(e.ToString());
             }
         }
 
@@ -83,8 +86,10 @@ namespace Server
                     stan.buffer, 0, bajtyPrzeczytane));
 
                 zawartosc = stan.sb.ToString();
+                Console.WriteLine($"Tresc zapytania: {zawartosc}");
                 if (zawartosc.IndexOf("<EOF>") > -1)
                 {
+                    
                     string[] slowa = zawartosc.Split(' ');
                     string odpowiedz = "error";
                     // Kod który wczytuje wysłaną wiadomośc i odpowiada.
@@ -94,32 +99,14 @@ namespace Server
                         switch (slowa[0])
                         {
                             case "sprawdz_email:":
-                                var q_e = from uzytkownik in SingletonBaza.Instance.BazaDC.uzytkownicies
-                                          where uzytkownik.email == slowa[1]
-                                          select uzytkownik;
-                                if (q_e.Any())
-                                {
-                                    odpowiedz = "true";
-
-                                }
-                                else
-                                {
-                                    odpowiedz = "false";
-                                }
+                                odpowiedz = (from uzytkownik in SingletonBaza.Instance.BazaDC.uzytkownicy
+                                             where uzytkownik.email == slowa[1] 
+                                             select uzytkownik).Any().ToString();
                                 break;
                             case "sprawdz_login:":
-                                var q_l = from uzytkownik in SingletonBaza.Instance.BazaDC.uzytkownicies
+                                odpowiedz = (from uzytkownik in SingletonBaza.Instance.BazaDC.uzytkownicy
                                           where uzytkownik.login == slowa[1]
-                                          select uzytkownik;
-                                if (q_l.Any())
-                                {
-                                    odpowiedz = "true";
-
-                                }
-                                else
-                                {
-                                    odpowiedz = "false";
-                                }
+                                          select uzytkownik).Any().ToString();
                                 break;
                             case "zarejestruj_uzytkownika:":
                                 uzytkownicy u = new uzytkownicy();
@@ -151,12 +138,12 @@ namespace Server
                                     }
                                 }
 
-                                SingletonBaza.Instance.BazaDC.uzytkownicies.InsertOnSubmit(u);
+                                SingletonBaza.Instance.BazaDC.uzytkownicy.InsertOnSubmit(u);
                                 SingletonBaza.Instance.BazaDC.SubmitChanges();
                                 odpowiedz = "true";
                                 break;
                             case "zaloguj:":
-                                var q_z = from uzytkownik in SingletonBaza.Instance.BazaDC.uzytkownicies
+                                var q_z = from uzytkownik in SingletonBaza.Instance.BazaDC.uzytkownicy
                                           where uzytkownik.login == slowa[1]
                                           && uzytkownik.haslo ==
                                           hashowanie.GetHashString(slowa[2])
@@ -174,6 +161,7 @@ namespace Server
                                         odpowiedz = zalogowany.imie + " " + zalogowany.nazwisko
                                             + " " + zalogowany.login + " " + zalogowany.email;
                                         string sesja = hashowanie.GetSession();
+                                        Console.WriteLine($"Zalogowano użytkownika: {zalogowany.login}, Nadano numer sesji: {sesja}");
                                         aktywne_sesje.Add(zalogowany.login, sesja);
                                         odpowiedz += " " + sesja;
                                     }
@@ -204,7 +192,6 @@ namespace Server
                                 }
                                 if (gracze.ContainsKey(slowa[1]))
                                 {
-
                                     gracze.Remove(slowa[1]);
                                     odpowiedz = "True";
                                 }
@@ -221,7 +208,9 @@ namespace Server
                                 {
                                     zapytania.Add(slowa[2]);
 
-                                    Boolean wynik_sprawdzania = true;
+                                    Boolean wynik_sprawdzania = !slownik_lobby.Any(n => n.Value.czy_jestem_w_lobby(slowa[2]));
+                                    MessageBox.Show($"Sprawdzanie {wynik_sprawdzania}");
+                                    /*
                                     foreach (Lobby w in slownik_lobby.Values)
                                     {
                                         if (w.czy_jestem_w_lobby(slowa[2]))
@@ -229,7 +218,7 @@ namespace Server
                                             wynik_sprawdzania = false;
                                             break;
                                         }
-                                    }
+                                    }*/
                                     if (wynik_sprawdzania && slownik_lobby.ContainsKey(slowa[1]))
                                     {
                                         odpowiedz = slownik_lobby[slowa[1]].dodaj(slowa[2]).ToString();
@@ -276,7 +265,7 @@ namespace Server
                                     odpowiedz = "False";
                                 }
                                 break;
-                            case "jestem_gotowy:":
+                            case "jestem_gotowy :":
                                 if (!zapytania.Contains(slowa[2]))
                                 {
                                     zapytania.Add(slowa[2]);
@@ -291,7 +280,7 @@ namespace Server
                                     zapytania.Remove(slowa[2]);
                                 }
                                 break;
-                            case "niejestem_gotowy:":
+                            case "niejestem_gotowy :":
                                 if (slownik_lobby.ContainsKey(slowa[1]))
                                 {
                                     odpowiedz = slownik_lobby[slowa[1]].niegotowy(slowa[2]).ToString();
@@ -402,6 +391,7 @@ namespace Server
                                 break;
                         }
                     }
+                    Console.WriteLine($"Tresc odpowiedzi: {odpowiedz}");
                     Wyslij(handler, odpowiedz);
                 }
                 else

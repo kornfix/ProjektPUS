@@ -22,7 +22,7 @@ namespace WindowsFormsApp2
         }
         private wyk_tryb tryb;
         private Boolean edytowany = false;
-        private Boolean wynik_walidacji = false;
+        private Error wynik_walidacji = null;
         private string nazwa_parametru;
         private string stara_wartosc;
         private Label l_haslo2;
@@ -55,12 +55,19 @@ namespace WindowsFormsApp2
             }
             wczytajWartoscParametru();
         }
-        private async void wczytajWartoscParametru()
+        private void wczytajWartoscParametru()
         {
             if (tryb != wyk_tryb.haslo)
             {
-                stara_wartosc = await AsynchronicznyKlient.zapytaj("uzyt_wartosc_parametru: " + aplikacja.Login + " " + nazwa_parametru);
-                txt_edytowany.Text = stara_wartosc;
+                String odp = AsynchronicznyKlient.zapytaj("uzyt_wartosc_parametru: " + Uzytkownik.Login + " " + nazwa_parametru);
+                if (odp == "CzasUplynal" || odp == "error")
+                {
+                    MessageBox.Show("Nie udane komunikacja z serwerem!");
+                }
+                else
+                {
+                    txt_edytowany.Text = odp;
+                }
             }
         }
 
@@ -98,56 +105,55 @@ namespace WindowsFormsApp2
                 edytowany = !edytowany;
             }
         }
-        public async Task<Boolean> SprawdzEdycje()
-        {
-            if (edytowany && stara_wartosc != txt_edytowany.Text)
-            {
-                switch (tryb)
-                {
-                    case wyk_tryb.email:
-                        wynik_walidacji = await Walidacja.WalidacjaEmail(txt_edytowany, errorProvider1);
-                        break;
-                    case wyk_tryb.imie:
-                        wynik_walidacji = await Walidacja.WalidacjaImienia(txt_edytowany, errorProvider1);
-                        break;
-                    case wyk_tryb.nazwisko:
-                        wynik_walidacji = await Walidacja.WalidacjaNazwiska(txt_edytowany, errorProvider1);
-                        break;
-                    case wyk_tryb.haslo:
-                        Boolean wynikHaslo1 = await Walidacja.WalidacjaHaslo1(txt_edytowany, errorProvider1);
-                        if (wynikHaslo1)
-                        {
-                            Boolean wynikHaslo2 = await Walidacja.WalidacjaHaslo2(txt_edytowany.Text, txt_haslo2, errorProvider1);
-                            wynik_walidacji = wynikHaslo2;
-                        }
-                        break;
-                }
-                return wynik_walidacji;
-            }
-            else
-            {
-                return true;
-            }
-        }
+        //public async Task<Error> SprawdzEdycjeAsync()
+        //{
+        //    if (edytowany && stara_wartosc != txt_edytowany.Text)
+        //    {
+        //        switch (tryb)
+        //        {
+        //            case wyk_tryb.email:
+        //                wynik_walidacji = await Walidacja.WalidacjaEmail(txt_edytowany);
+        //                break;
+        //            case wyk_tryb.imie:
+        //                wynik_walidacji = await Walidacja.WalidacjaImienia(txt_edytowany);
+        //                break;
+        //            case wyk_tryb.nazwisko:
+        //                wynik_walidacji = await Walidacja.WalidacjaNazwiska(txt_edytowany);
+        //                break;
+        //            case wyk_tryb.haslo:
+        //                Error wynikHaslo1 = await Walidacja.WalidacjaHaslo1(txt_edytowany);
+        //                if (wynikHaslo1 !=null)
+        //                {
+        //                    wynik_walidacji = await Walidacja.WalidacjaHaslo2(txt_edytowany.Text, txt_haslo2);
+        //                }
+        //                break;
+        //        }
+        //        return wynik_walidacji;
+        //    }
+        //    else
+        //    {
+        //        return null;
+        //    }
+        //}
         public async Task<Boolean> ZakonczEdycje()
         {
             Boolean wynik_edycji = true;
-            if (wynik_walidacji)
+            if (wynik_walidacji == null)
             {
-                String odp = await AsynchronicznyKlient.zapytaj("uzyt_zm_par: " + aplikacja.Login + " " + nazwa_parametru + " " + txt_edytowany.Text);
+                String odp = AsynchronicznyKlient.zapytaj("uzyt_zm_par: " + Uzytkownik.Login + " " + nazwa_parametru + " " + txt_edytowany.Text);
                 //MessageBox.Show(odp, nazwa_parametru);
                 if (odp == "True")
                 {
                     switch (tryb)
                     {
                         case wyk_tryb.email:
-                            aplikacja.Email = txt_edytowany.Text;
+                            Uzytkownik.Email = txt_edytowany.Text;
                             break;
                         case wyk_tryb.imie:
-                            aplikacja.Imie = txt_edytowany.Text;
+                            Uzytkownik.Imie = txt_edytowany.Text;
                             break;
                         case wyk_tryb.nazwisko:
-                            aplikacja.Nazwisko = txt_edytowany.Text;
+                            Uzytkownik.Nazwisko = txt_edytowany.Text;
                             break;
                     }
                 }

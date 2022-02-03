@@ -5,8 +5,8 @@ namespace WindowsFormsApp2
 {
     public partial class Gra : Form
     {
-        UC_Lobby uC_Lobby;
-        public Gra(UC_Lobby uC_Lobby)
+        UC_pokoj_lobby uC_Lobby;
+        public Gra(UC_pokoj_lobby uC_Lobby)
         {
             this.uC_Lobby = uC_Lobby;
             InitializeComponent();
@@ -19,18 +19,23 @@ namespace WindowsFormsApp2
             tableLayoutPanel2.Controls.Add(uc_plansza);
             tableLayoutPanel2.Anchor = AnchorStyles.None;
         }
-
-        public async void Gra_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            String odp = await AsynchronicznyKlient.zapytaj("zakonczGre: " + aplikacja.Nr_lobby);
-
-            uC_Lobby.UruchomSprawdzanieLobby();
-            aplikacja.OstatniaGra = null;
-        }
-
         private void Gra_Load(object sender, EventArgs e)
         {
-            aplikacja.OstatniaGra = this;
-        }              
+            Aplikacja.OstatniaGra = this;
+        }
+
+        private void Gra_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            String odp = AsynchronicznyKlient.zapytaj("zakonczGre: " + Rozgrywka.Nr_lobby);
+            if (odp == "CzasUplynal" || odp == "error")
+            {
+                e.Cancel = true;
+                MessageBox.Show("Nie udane wyjscie z gry");
+            }
+            else
+            {
+                Aplikacja.OstatniaGra = null;
+            }
+        }
     }
 }

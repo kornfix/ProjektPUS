@@ -12,7 +12,7 @@ namespace WindowsFormsApp2
 {
     public partial class Lobby : Form
     {
-        Dictionary<string, UC_Lobby> wyswietlane_lobby = new Dictionary<string, UC_Lobby>();
+        Dictionary<string, UC_pokoj_lobby> wyswietlane_lobby = new Dictionary<string, UC_pokoj_lobby>();
         public Lobby()
         {
             InitializeComponent();
@@ -20,61 +20,89 @@ namespace WindowsFormsApp2
         }
 
 
-        public async void wczytaj_lobby()
+        public void wczytaj_lobby()
         {
-            // zapytanie do serwera  ile mam lobby;
-            String odp = await AsynchronicznyKlient.zapytaj("wielkosc_lobby:");
-            string[] slowa = odp.Split(':');
-            int ile = Int32.Parse(slowa[1]);
-            for (int i = 1; i <= ile; i++)
+            if (!backgroundWorker1.IsBusy)
             {
-                UC_Lobby uC_Lobby = new UC_Lobby(this, i.ToString());
-                uC_Lobby.wczytaj_dane();
-                wyswietlane_lobby.Add(i.ToString(), uC_Lobby);
-                flp_lobby.Controls.Add(uC_Lobby);
-            }
+                backgroundWorker1.RunWorkerAsync();
+            }   
         }
         private void btn_refresh_Click(object sender, EventArgs e)
         {
             flp_lobby.Controls.Clear();
             wczytaj_lobby();
         }
-        public async Task odswierzReszte(string wywolal)
-        {
-            foreach (var item in wyswietlane_lobby)
-            {
-                if (item.Key != wywolal)
-                {
-                    item.Value.wywołajOdswierzenie();
-                }
-            }
-        }
-
         private void Lobby_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (aplikacja.Nr_lobby != "")
+            if (Rozgrywka.Nr_lobby != "")
             {
-                wyswietlane_lobby[aplikacja.Nr_lobby].Zamykanie();
+                wyswietlane_lobby[Rozgrywka.Nr_lobby].Zamykanie();
             }
         }
 
         private void Lobby_Load(object sender, EventArgs e)
         {
-            aplikacja.Lobby = this;
+            Aplikacja.Lobby = this;
         }
 
         private void Lobby_FormClosed(object sender, FormClosedEventArgs e)
         {
             Zakoncz();
-            aplikacja.Lobby = null;
+            Aplikacja.Lobby = null;
         }
         public void Zakoncz()
         {
-            foreach (var item in wyswietlane_lobby)
+            wyswietlane_lobby.Values.ToList().ForEach(x => x.Zakoncz());
+            Rozgrywka.Nr_lobby = "";
+        }
+
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            // zapytanie do serwera  ile mam lobby;   
+            e.Result = AsynchronicznyKlient.zapytaj("wielkosc_lobby:");
+        }
+
+        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            
+            if (e.Error != null)
             {
-                item.Value.Zakoncz();
+                MessageBox.Show(e.Error.ToString(), "Problem");
+                Aplikacja.clear();
+                Close();
+                return;
             }
-            aplikacja.Nr_lobby = "";
+            else if (e.Cancelled)
+            {
+                MessageBox.Show("Brak dostępu do serwera!");
+                Aplikacja.clear();
+                Close();
+                return;
+            }
+            if (e.Result != null)
+            {
+
+                String odp = e.Result.ToString();
+                if (odp == "CzasUplynal" || odp == "error")
+                {
+                    MessageBox.Show("Coś poszło nie tak!");
+                    Close();
+                    return;
+                }
+                else
+                {
+                    string[] slowa = e.Result.ToString().Split(':');
+                    int ile = Int32.Parse(slowa[1]);
+                    for (int i = 1; i <= ile; i++)
+                    {
+                        UC_pokoj_lobby uC_Lobby = new UC_pokoj_lobby(this, i.ToString());
+                        uC_Lobby.wczytaj_dane();
+                        wyswietlane_lobby.Add(i.ToString(), uC_Lobby);
+                        flp_lobby.Controls.Add(uC_Lobby);
+                    }
+                }
+
+            }
         }
     }
 }

@@ -7,13 +7,13 @@ namespace Server
     class Lobby
     {
         int numer;
-        // gracz1 i gracz2 to loginy
+        String status;
         Dictionary<string, bool> loginy;
-        String status = "oczekiwanie";
         public Lobby(int i)
         {
             this.numer = i;
             loginy = new Dictionary<string, bool>();
+            status = "oczekiwanie";
         }
         public int getNumer()
         {

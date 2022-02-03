@@ -15,19 +15,20 @@ namespace WindowsFormsApp2
         Dictionary<wybrany_tryb, UserControl> kontrolki;
         enum wybrany_tryb
         {
-            logowanie = 0,
-            rejestracja = 1,
-            menu = 2,
-            czekanie = 3
+            logowanie,
+            rejestracja,
+            menu,
+            czekanie
         }
 
-        private void zmiana_trybu(wybrany_tryb wk)
+        private void zmiana_trybu(wybrany_tryb wybranyTryb)
         {
             foreach (var item in kontrolki)
             {
-                if (item.Key == wk)
+                if (item.Key == wybranyTryb)
                 {
-                    item.Value.Visible = true;
+
+                        item.Value.Visible = true;
                 }
                 else
                 {
@@ -58,7 +59,7 @@ namespace WindowsFormsApp2
         {
             if (!kontrolki.ContainsKey(wybrany_tryb.rejestracja))
             {
-                UC_rejestracja uC_Rejestracja = new UC_rejestracja(this);
+                UC_rejestracja2 uC_Rejestracja = new UC_rejestracja2(this);
                 kontrolki.Add(wybrany_tryb.rejestracja, uC_Rejestracja);
                 TLP_MENU.Controls.Add(uC_Rejestracja);
                 uC_Rejestracja.Anchor = AnchorStyles.None;
@@ -92,17 +93,25 @@ namespace WindowsFormsApp2
 
         internal void reset_rejestacji()
         {
-            kontrolki.Remove(wybrany_tryb.rejestracja);
+            if (kontrolki.ContainsKey(wybrany_tryb.rejestracja))
+            {
+                TLP_MENU.Controls.Remove(kontrolki[wybrany_tryb.rejestracja]);
+                kontrolki.Remove(wybrany_tryb.rejestracja);
+            }
         }
 
         private void Menu_Load(object sender, EventArgs e)
         {
             tryb_logowanie();
         }
-
-        private async void Menu_FormClosed(object sender, FormClosedEventArgs e)
+        private void Menu_FormClosing(object sender, FormClosingEventArgs e)
         {
-            String wyl = await AsynchronicznyKlient.zapytaj("wyloguj: " + aplikacja.Login);
+            String odp = AsynchronicznyKlient.zapytaj("wyloguj: " + Uzytkownik.Login);
+            if (odp == "CzasUplynal" || odp == "error")
+            {
+                e.Cancel = true;
+                MessageBox.Show("Nie udane wylogowanie");
+            }
         }
     }
 }

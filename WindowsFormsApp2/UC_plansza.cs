@@ -32,27 +32,28 @@ namespace WindowsFormsApp2
             InitializeComponent();
             gra = form as Gra;
         }
-        public async void WczytajPlansze()
+        public void WczytajPlansze()
         {
-            String odp = await AsynchronicznyKlient.zapytaj("pobierz_plansze: " + aplikacja.Nr_lobby);
-            if (odp == "error")
+            String odp = AsynchronicznyKlient.zapytaj("pobierz_plansze: " + Rozgrywka.Nr_lobby);
+            if (odp == "CzasUplynal" || odp == "error")
             {
+                MessageBox.Show("Nie udane połaczenie z serwerem");
                 return;
             }
             string[] odpowiedz = odp.Split(' ');
             int rozmiar = Int32.Parse(odpowiedz[0]);
             wygeneruj_labele(rozmiar);
-            gracz1.Text = aplikacja.Login;
-            gracz2.Text = aplikacja.Przeciwnik;
-            if (odpowiedz[1] == aplikacja.Login)
+            gracz1.Text = Uzytkownik.Login;
+            gracz2.Text = Rozgrywka.Przeciwnik;
+            if (odpowiedz[1] == Uzytkownik.Login)
             {
-                aktualnyGracz.Text = aplikacja.Login;
+                aktualnyGracz.Text = Uzytkownik.Login;
                 czyZaczynam = true;
                 aktualnyGracz.ForeColor = kolor2;
             }
             else
             {
-                aktualnyGracz.Text = aplikacja.Przeciwnik;
+                aktualnyGracz.Text = Rozgrywka.Przeciwnik;
                 czyZaczynam = false;
                 aktualnyGracz.ForeColor = kolor1;
             }
@@ -80,7 +81,7 @@ namespace WindowsFormsApp2
                 return;
             przycisk_click(sender, e);
         }
-        private async void przycisk_click(object sender, EventArgs e)
+        private void przycisk_click(object sender, EventArgs e)
         {
             if (firstClicked != null && secondClick != null)
                 return;
@@ -91,9 +92,11 @@ namespace WindowsFormsApp2
                 return;
             if (czyZaczynam)
             {
-                String odp = await AsynchronicznyKlient.zapytaj("zapisz_ruch: " + aplikacja.Nr_lobby + " " + clickLabel.getIndeks());
-                if (odp == "False")
+                String odp = AsynchronicznyKlient.zapytaj("zapisz_ruch: " + Rozgrywka.Nr_lobby + " " + clickLabel.getIndeks());
+                if (odp == "CzasUplynal" || odp == "error" || odp == "False")
                 {
+
+                    MessageBox.Show("Nie udane połączenie z serwerem");
                     return;
                 }
             }
@@ -102,18 +105,18 @@ namespace WindowsFormsApp2
             {
                 firstClicked = clickLabel;
                 firstClicked.ForeColor = Color.Black;
-                if (aktualnyGracz.Text == aplikacja.Przeciwnik)
+                if (aktualnyGracz.Text == Rozgrywka.Przeciwnik)
                     firstClicked.BackColor = kolor1;
-                else if (aktualnyGracz.Text == aplikacja.Login)
+                else if (aktualnyGracz.Text == Uzytkownik.Login)
                     firstClicked.BackColor = kolor2;
 
                 return;
             }
             secondClick = clickLabel;
             secondClick.ForeColor = Color.Black;
-            if (aktualnyGracz.Text == aplikacja.Przeciwnik)
+            if (aktualnyGracz.Text == Rozgrywka.Przeciwnik)
                 secondClick.BackColor = kolor1;
-            else if (aktualnyGracz.Text == aplikacja.Login)
+            else if (aktualnyGracz.Text == Uzytkownik.Login)
                 secondClick.BackColor = kolor2;
             if (firstClicked.Text == secondClick.Text)
             {
@@ -130,20 +133,20 @@ namespace WindowsFormsApp2
             }
             else
             {
-                aplikacja.wait(2000);
+                Uzytkownik.wait(2000);
                 firstClicked.BackColor = kolor;
                 secondClick.BackColor = kolor;
                 firstClicked.ForeColor = firstClicked.BackColor;
                 secondClick.ForeColor = firstClicked.BackColor;
                 if (czyZaczynam)
                 {
-                    aktualnyGracz.Text = aplikacja.Przeciwnik;
+                    aktualnyGracz.Text = Rozgrywka.Przeciwnik;
                     aktualnyGracz.ForeColor = kolor1;
                     timer1.Start();
                 }
                 else
                 {
-                    aktualnyGracz.Text = aplikacja.Login;
+                    aktualnyGracz.Text = Uzytkownik.Login;
                     aktualnyGracz.ForeColor = kolor2;
                     timer1.Stop();
                 }
@@ -154,26 +157,30 @@ namespace WindowsFormsApp2
 
             CheckWinner();
         }
-        async void tick()
+        void tick()
         {
-            string odp = await AsynchronicznyKlient.zapytaj("wczytaj_ruchy: " + aplikacja.Nr_lobby + " " + liczba_ruchow);
-            if (odp != "error" && odp != "")
+            string odp = AsynchronicznyKlient.zapytaj("wczytaj_ruchy: " + Rozgrywka.Nr_lobby + " " + liczba_ruchow);
+            if( odp == "error" || odp == "" || odp == "CzasUplynal")
             {
-                string[] indeksy = odp.Split(' ');
-                foreach (string s in indeksy)
+                MessageBox.Show("Nie udane polaczenie z serwerem!");
+                return;
+            }
+
+            string[] indeksy = odp.Split(' ');
+            foreach (string s in indeksy)
+            {
+                if (s == "")
                 {
-                    if (s == "")
-                    {
-                        continue;
-                    }
-                    int indeks = Int32.Parse(s);
-                    if (tableLayoutPanel1.Controls[indeks] is Przycisk)
-                    {
-                        Przycisk przycisk = tableLayoutPanel1.Controls[indeks] as Przycisk;
-                        przycisk_click(przycisk, EventArgs.Empty);
-                    }
+                    continue;
+                }
+                int indeks = Int32.Parse(s);
+                if (tableLayoutPanel1.Controls[indeks] is Przycisk)
+                {
+                    Przycisk przycisk = tableLayoutPanel1.Controls[indeks] as Przycisk;
+                    przycisk_click(przycisk, EventArgs.Empty);
                 }
             }
+            
         }
         private void CheckWinner()
         {
@@ -188,17 +195,17 @@ namespace WindowsFormsApp2
             int punkty_2 = Convert.ToInt32(g2_pkt.Text);
             if (punkty_1 > punkty_2)
             {
-                MessageBox.Show($"Wygrał użytkownik: {aplikacja.Login}. {aplikacja.Login} zyskałeś {punkty_1} punktów. Gratulacje!");
+                MessageBox.Show($"Wygrał użytkownik: {Uzytkownik.Login}. {Uzytkownik.Login} zyskałeś {punkty_1} punktów. Gratulacje!");
             }
             else if (punkty_1 < punkty_2)
             {
-                MessageBox.Show($"Wygrał użytkownik: {aplikacja.Przeciwnik}. {aplikacja.Przeciwnik} zyskałeś {punkty_2} punktów. Gratulacje!");
+                MessageBox.Show($"Wygrał użytkownik: {Rozgrywka.Przeciwnik}. {Rozgrywka.Przeciwnik} zyskałeś {punkty_2} punktów. Gratulacje!");
             }
             else if (punkty_1 == punkty_2)
             {
-                MessageBox.Show($"Gra zakończyła się remisem.");
+                MessageBox.Show("Gra zakończyła się remisem.");
             }
-            aplikacja.wait(2000);
+            Uzytkownik.wait(2000);
             zakonczGre_Click(null, null);
         }
         private void wygeneruj_labele(int rozmiar)
@@ -235,8 +242,13 @@ namespace WindowsFormsApp2
         async void czyKoniecGry()
         {
             timer2_koniecGry.Stop();
-            String odp = await AsynchronicznyKlient.zapytaj("czyKoniecGry: " + aplikacja.Nr_lobby);
-            if (odp == "True")
+            String odp =  AsynchronicznyKlient.zapytaj("czyKoniecGry: " + Rozgrywka.Nr_lobby);
+            if (odp == "CzasUplynal" || odp == "error")
+            {
+                MessageBox.Show("Nie udane połaczenie z serwerem");
+                timer2_koniecGry.Start();
+            }
+            else if (odp == "True")
             {
                 MessageBox.Show("Gra zakonczona");
                 zakonczGre_Click(null, null);

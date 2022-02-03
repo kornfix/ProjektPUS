@@ -13,6 +13,8 @@ namespace WindowsFormsApp2
     public partial class UC_logowanie : UserControl
     {
         private Menu menu = null;
+        private List<Task<Error>> zadania = new List<Task<Error>>();
+
         public UC_logowanie(Form form)
         {
             menu = form as Menu;
@@ -22,22 +24,11 @@ namespace WindowsFormsApp2
         private async void buttonZaloguj_Click(object sender, EventArgs e)
         {
             errorProvider1.Clear();
-            var walidacjaLoginu = WalidacjaLoginu();
-            var walidacjaHasla = WalidacjaHasla();
-            Task[] zadania = new Task[] { walidacjaLoginu, walidacjaHasla };
-
-            await Task.WhenAll(zadania);
-            aplikacja.wait(1000);
-            if (!walidacjaLoginu.Result || !walidacjaHasla.Result)
+            lb_ogolny.Visible = false;
+            if (!backgroundWorker1.IsBusy)
             {
-                menu.tryb_logowanie();
-                return;
+                backgroundWorker1.RunWorkerAsync();
             }
-            menu.tryb_czekanie();
-            // Zapytanie do serwera z tym stringiem
-            string zapytanie = "zaloguj: " + textBoxLogin1.Text + " " + textBoxHaslo1.Text;
-            String odp = await AsynchronicznyKlient.zapytaj(zapytanie);
-            zalogowanieUzytkownika(odp);
         }
         async void zalogowanieUzytkownika(string odp)
         {
@@ -45,28 +36,46 @@ namespace WindowsFormsApp2
             // prosba udana 
             if (slowa.Length == 5)
             {
-                aplikacja.Imie = slowa[0];
-                aplikacja.Nazwisko = slowa[1];
-                aplikacja.Login = slowa[2];
-                aplikacja.Email = slowa[3];
-                aplikacja.Sesja = slowa[4];
+                Uzytkownik.Imie = slowa[0];
+                Uzytkownik.Nazwisko = slowa[1];
+                Uzytkownik.Login = slowa[2];
+                Uzytkownik.Email = slowa[3];
+                Uzytkownik.Sesja = slowa[4];
                 menu.tryb_menu();
-                menu.reset_rejestacji();
             }
             // prosba nieudana
             else if (slowa.Length == 1 && slowa[0] == "bledneDane")
             {
                 menu.tryb_logowanie();
-                errorProvider1.SetError(linkLabelZapomnialem, "Błędne dane");
+                lb_ogolny.Text = "Nie poprawny login lub hasło!";
+                lb_ogolny.Visible = true;
+                errorProvider1.SetError(lb_ogolny, "Nie poprawny login lub hasło!");
             }
             else if (slowa.Length == 1 && slowa[0] == "uzytkownik_jest_juz_zalogowany")
             {
                 DialogResult dialogResult = MessageBox.Show("Powyższy użytkownik jest już zalogowany! Czy chcesz wymusić jego wylogowanie?", "Logowanie", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes)
                 {
-                    String wyl = await AsynchronicznyKlient.zapytaj("wyloguj: " + textBoxLogin1.Text);
-                    String zaloguj = await AsynchronicznyKlient.zapytaj("zaloguj: " + textBoxLogin1.Text + " " + textBoxHaslo1.Text);
-                    zalogowanieUzytkownika(zaloguj);
+                    String wyl = AsynchronicznyKlient.zapytaj("wyloguj: " + textBoxLogin1.Text);
+                    if (wyl == "True")
+                    {
+                        String zaloguj = AsynchronicznyKlient.zapytaj("zaloguj: " + textBoxLogin1.Text + " " + textBoxHaslo1.Text);
+                        if (zaloguj == "CzasUplynal" || zaloguj == "error")
+                        {
+                            lb_ogolny.Text = "Nie udane połączenie z serwerem!";
+                            lb_ogolny.Visible = true;
+                            errorProvider1.SetError(lb_ogolny, "Nie udane połączenie z serwerem!"); ;
+                        }
+                        else
+                        {
+                            zalogowanieUzytkownika(zaloguj);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Nie udana próba wylogowania");
+                        menu.tryb_logowanie();
+                    }
                 }
                 else
                 {
@@ -80,28 +89,81 @@ namespace WindowsFormsApp2
             menu.tryb_rejestracja();
         }
 
-        async Task<Boolean> WalidacjaLoginu()
+        async Task<Error> WalidacjaLoginu()
         {
-            String login = textBoxLogin1.Text;
-            errorProvider1.SetError(textBoxLogin1, "");
-
-            if (login.Length == 0)
+            if (textBoxLogin1.Text.Length == 0)
             {
-                errorProvider1.SetError(textBoxLogin1, "Nie podano loginu!");
-                return false;
+                return new Error(textBoxLogin1, "Nie podano loginu!");
             }
-            return true;
+            return null;
         }
-        async Task<Boolean> WalidacjaHasla()
+        async Task<Error> WalidacjaHasla()
         {
-            String haslo = textBoxHaslo1.Text;
-            errorProvider1.SetError(textBoxHaslo1, "");
-            if (haslo.Length == 0)
+            if (textBoxHaslo1.Text.Length == 0)
             {
-                errorProvider1.SetError(textBoxHaslo1, "Nie podano hasła!");
-                return false;
+                return new Error(textBoxHaslo1,"Nie podano hasła!");
             }
-            return true;
+            return null;
+        }
+
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            zadania.Clear();
+            var walidacjaLoginu = WalidacjaLoginu();
+            zadania.Add(walidacjaLoginu);
+            var walidacjaHasla = WalidacjaHasla();
+            zadania.Add(walidacjaHasla);
+            Task.WaitAll(zadania.ToArray());
+            Boolean udanaWalidacja = true;
+            foreach (Task<Error> task in zadania)
+            {
+                if (task.Result != null)
+                {
+                    e.Cancel = true;
+                    udanaWalidacja = false;
+                    break;
+                }
+            }
+            if (udanaWalidacja)
+            {
+                //menu.tryb_czekanie();
+                // Zapytanie do serwera z tym stringiem
+                e.Result = AsynchronicznyKlient.zapytaj("zaloguj: " + textBoxLogin1.Text + " " + textBoxHaslo1.Text);
+            }
+        }
+        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Error != null )
+            {
+                MessageBox.Show(e.Error.ToString());
+                return;
+            }else if (e.Cancelled)
+            {
+                foreach (Task<Error> task in zadania)
+                {
+                    if (task.Result != null)
+                    {
+                        Error error = task.Result;
+                        errorProvider1.SetError(error.Control, error.Tresc);
+                    }
+                }
+                return;
+            }         
+            if (e.Result != null)
+            {
+                String odp = e.Result.ToString();
+                if (odp =="CzasUplynal" || odp == "error")
+                {
+                    lb_ogolny.Text = "Nie udane połączenie z serwerem!";
+                    lb_ogolny.Visible = true;
+                    errorProvider1.SetError(lb_ogolny, "Nie udane połączenie z serwerem!");
+                }
+                else 
+                {
+                    zalogowanieUzytkownika(e.Result.ToString());
+                }
+            }
+            
         }
     }
 }

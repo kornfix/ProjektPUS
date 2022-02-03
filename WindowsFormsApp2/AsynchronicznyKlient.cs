@@ -18,11 +18,18 @@ namespace WindowsFormsApp2
         private ManualResetEvent odebranieWykonane = new ManualResetEvent(false);
         private String odpowiedz = String.Empty;
         // Funkcja tworząca pojedyńcze zapytania
-        public async static Task<String> zapytaj(string zapytanie)
+        public static String zapytaj(string zapytanie)
         {
-            AsynchronicznyKlient asynchronousClient = new AsynchronicznyKlient();
-            String odp = await asynchronousClient.StartKlienta(zapytanie + " <EOF>");
-            return odp;
+            AsynchronicznyKlient asynchronousClient = new AsynchronicznyKlient();    
+            Task<String> task = asynchronousClient.StartKlienta(zapytanie + " <EOF>");
+            if (task.Wait(10000))
+            {
+                return task.Result.ToString();
+            }
+            else
+            {
+                return "CzasUplynal";
+            }
         }
 
 
@@ -52,7 +59,7 @@ namespace WindowsFormsApp2
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.ToString());
+                MessageBox.Show(e.ToString(),"Wystapił problem z połaczeniem");
                 odpowiedz = "error";
             }
             return odpowiedz;

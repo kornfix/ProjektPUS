@@ -12,6 +12,14 @@ namespace Server
 
         private void button1_Click(object sender, EventArgs e)
         {
+            if(!backgroundWorker1.IsBusy)
+            {
+                backgroundWorker1.RunWorkerAsync();
+            }
+        }
+
+        private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
             AsynchronicznySocketListener.StartSerwera();
         }
     }

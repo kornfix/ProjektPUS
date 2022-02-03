@@ -14,9 +14,10 @@ namespace Server
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Server());
+            //Application.EnableVisualStyles();
+            //Application.SetCompatibleTextRenderingDefault(false);
+            //Application.Run(new Server());
+            AsynchronicznySocketListener.StartSerwera();
         }
     }
 }

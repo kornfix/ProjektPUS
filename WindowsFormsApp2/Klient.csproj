@@ -91,6 +91,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Aplikacja.cs" />
     <Compile Include="AsynchronicznyKlient.cs" />
     <Compile Include="EdycjaUzytkownika.cs">
       <SubType>Form</SubType>
@@ -98,6 +99,7 @@
     <Compile Include="EdycjaUzytkownika.Designer.cs">
       <DependentUpon>EdycjaUzytkownika.cs</DependentUpon>
     </Compile>
+    <Compile Include="Error.cs" />
     <Compile Include="Gra.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -118,6 +120,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rozgrywka.cs" />
     <Compile Include="StanObiektu.cs" />
     <Compile Include="UC_czekanie.cs">
       <SubType>UserControl</SubType>
@@ -131,11 +134,11 @@
     <Compile Include="UC_edycja_parametru.Designer.cs">
       <DependentUpon>UC_edycja_parametru.cs</DependentUpon>
     </Compile>
-    <Compile Include="UC_Lobby.cs">
+    <Compile Include="UC_pokoj_lobby.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UC_Lobby.Designer.cs">
-      <DependentUpon>UC_Lobby.cs</DependentUpon>
+    <Compile Include="UC_pokoj_lobby.Designer.cs">
+      <DependentUpon>UC_pokoj_lobby.cs</DependentUpon>
     </Compile>
     <Compile Include="UC_logowanie.cs">
       <SubType>UserControl</SubType>
@@ -161,7 +164,13 @@
     <Compile Include="UC_rejestracja.Designer.cs">
       <DependentUpon>UC_rejestracja.cs</DependentUpon>
     </Compile>
-    <Compile Include="aplikacja.cs" />
+    <Compile Include="Uzytkownik.cs" />
+    <Compile Include="UC_rejestracja2.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC_rejestracja2.Designer.cs">
+      <DependentUpon>UC_rejestracja2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Walidacja.cs" />
     <EmbeddedResource Include="EdycjaUzytkownika.resx">
       <DependentUpon>EdycjaUzytkownika.cs</DependentUpon>
@@ -191,8 +200,8 @@
     <EmbeddedResource Include="UC_edycja_parametru.resx">
       <DependentUpon>UC_edycja_parametru.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UC_Lobby.resx">
-      <DependentUpon>UC_Lobby.cs</DependentUpon>
+    <EmbeddedResource Include="UC_pokoj_lobby.resx">
+      <DependentUpon>UC_pokoj_lobby.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UC_logowanie.resx">
       <DependentUpon>UC_logowanie.cs</DependentUpon>
@@ -205,6 +214,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UC_rejestracja.resx">
       <DependentUpon>UC_rejestracja.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC_rejestracja2.resx">
+      <DependentUpon>UC_rejestracja2.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

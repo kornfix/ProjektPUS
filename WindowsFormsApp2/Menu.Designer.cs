@@ -52,7 +52,7 @@
             this.Controls.Add(this.TLP_MENU);
             this.Name = "Menu";
             this.Text = "Menu";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Menu_FormClosed);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Menu_FormClosing);
             this.Load += new System.EventHandler(this.Menu_Load);
             this.ResumeLayout(false);
 
