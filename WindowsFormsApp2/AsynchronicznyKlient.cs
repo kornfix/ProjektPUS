@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -18,17 +19,20 @@ namespace WindowsFormsApp2
         private ManualResetEvent odebranieWykonane = new ManualResetEvent(false);
         private String odpowiedz = String.Empty;
         // Funkcja tworząca pojedyńcze zapytania
-        public static String zapytaj(string zapytanie)
+        public static Odpowiedz zapytaj(Pytanie.komendy komenda, object[] argumenty)
         {
-            AsynchronicznyKlient asynchronousClient = new AsynchronicznyKlient();    
-            Task<String> task = asynchronousClient.StartKlienta(zapytanie + " <EOF>");
-            if (task.Wait(10000))
+            Pytanie pytanie = new Pytanie();
+            pytanie.Komenda = komenda;
+            pytanie.Sesja = Uzytkownik.Instance.Sesja;
+            pytanie.Argumenty = argumenty;
+            Task<String> task = new AsynchronicznyKlient().StartKlienta(JsonSerializer.Serialize<Pytanie>(pytanie) + "<EOF>");
+            if (task.Wait(10000) && task.Result!=null)
             {
-                return task.Result.ToString();
+                return JsonSerializer.Deserialize<Odpowiedz>(task.Result);
             }
             else
             {
-                return "CzasUplynal";
+                return new Odpowiedz(new object[] { "CzasUplynal" });
             }
         }
 

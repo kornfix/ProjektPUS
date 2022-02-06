@@ -175,7 +175,7 @@
             // 
             // timer_zalogowany
             // 
-            this.timer_zalogowany.Interval = 1000;
+            this.timer_zalogowany.Interval = 15000;
             this.timer_zalogowany.Tick += new System.EventHandler(this.timer_zalogowany_Tick);
             // 
             // backgroundWorker1

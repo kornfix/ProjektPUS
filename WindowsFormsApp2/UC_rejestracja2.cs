@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -36,7 +37,7 @@ namespace WindowsFormsApp2
             lb_haslo1.Visible = false;
             lb_haslo2.Visible = false;
             lb_ogolny.Visible = false;
-            if (backgroundWorker1.IsBusy != true)
+            if (!backgroundWorker1.IsBusy)
             {
                 menu.tryb_czekanie();
                 backgroundWorker1.RunWorkerAsync();
@@ -72,29 +73,16 @@ namespace WindowsFormsApp2
             }
             if (udanaWalidacja)
             {
-                string email = " email:" + txt_email.Text;
-                string haslo = " haslo:" + txt_haslo1.Text;
-                string login = " login:" + txt_login.Text;
-                string imie = " imie:" + txt_imie.Text;
-                string nazwisko = " nazwisko:" + txt_nazwisko.Text;
+                uzytkownicy u = new uzytkownicy();
+                u.Email = txt_email.Text;
+                u.Haslo = txt_haslo1.Text;
+                u.Login = txt_login.Text;
+                u.Imie = txt_imie.Text;
+                u.Nazwisko = txt_nazwisko.Text;
                 // Kod wyslania prośby do serwera
                 // oczekiwanie prośby
-                String odp = AsynchronicznyKlient.zapytaj("zarejestruj_uzytkownika: " + email + haslo + login
-                    + imie + nazwisko);
-
-                if (odp == "CzasUplynal" || odp == "error")
-                {
-                    // problem z serwerem udana 
-                    MessageBox.Show("Nie udane wyjscie z gry");
-                }
-                else
-                {
-                    // prosba udana 
-                    e.Result = odp;
-                }
-                // logowanie do menu
-                //menu.tryb_menu();
-                // prośba nie udana wyświetlenie inf
+                e.Result = AsynchronicznyKlient.zapytaj(Pytanie.komendy.zarejestruj_uzytkownika,
+                    new object[] { u});
             }
         }
 
@@ -120,18 +108,19 @@ namespace WindowsFormsApp2
             }
             else if (e.Result != null)
             {
-                if (e.Result.ToString() == "true")
+                Odpowiedz odp = (Odpowiedz)e.Result;
+                if (((JsonElement)odp.Argumenty[0]).GetBoolean())
                 {
-                    Uzytkownik.Imie = txt_imie.Text;
-                    Uzytkownik.Nazwisko = txt_nazwisko.Text;
-                    Uzytkownik.Login = txt_login.Text;
-                    Uzytkownik.Email = txt_email.Text;
+                    Uzytkownik.Instance.Imie = txt_imie.Text;
+                    Uzytkownik.Instance.Nazwisko = txt_nazwisko.Text;
+                    Uzytkownik.Instance.Login = txt_login.Text;
+                    Uzytkownik.Instance.Email = txt_email.Text;
                     menu.tryb_menu();
                     menu.reset_rejestacji();
                 }
                 else
                 {
-                    MessageBox.Show("Nie udana rejestracja!");
+                    MessageBox.Show("Nie udana rejestracja!", "Problem");
                 }
             }
         }

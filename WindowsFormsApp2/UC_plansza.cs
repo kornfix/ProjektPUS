@@ -1,10 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Text.Json;
 using System.Windows.Forms;
 namespace WindowsFormsApp2
 {
     public partial class UC_plansza : UserControl
     {
+        int liczba_ruchow = 0;
+        private Dictionary<string, int> wyniki_graczy = new Dictionary<string, int>();
+        Label firstClicked, secondClick;
+        Color kolor;
+        Color kolor1 = Color.LightSteelBlue;
+        Color kolor2 = Color.CornflowerBlue;
+        Gra gra;
+        Boolean czyZaczynam;
         class Przycisk : Label
         {
             int indeks;
@@ -16,64 +26,64 @@ namespace WindowsFormsApp2
             {
                 return indeks;
             }
-        }
-
-        Label firstClicked, secondClick;
-        Color kolor;
-        Color kolor1 = Color.LightSteelBlue;
-        Color kolor2 = Color.CornflowerBlue;
-        int pkt_gr1 = 0;
-        int pkt_gr2 = 0;
-        int liczba_ruchow = 0;
-        Gra gra;
-        Boolean czyZaczynam;
+        }  
         public UC_plansza(Form form)
         {
             InitializeComponent();
             gra = form as Gra;
         }
+
+        public UC_plansza(int liczba_ruchow)
+        {
+            this.liczba_ruchow = liczba_ruchow;
+        }
+
         public void WczytajPlansze()
         {
-            String odp = AsynchronicznyKlient.zapytaj("pobierz_plansze: " + Rozgrywka.Nr_lobby);
-            if (odp == "CzasUplynal" || odp == "error")
-            {
-                MessageBox.Show("Nie udane połaczenie z serwerem");
-                return;
-            }
-            string[] odpowiedz = odp.Split(' ');
-            int rozmiar = Int32.Parse(odpowiedz[0]);
-            wygeneruj_labele(rozmiar);
-            gracz1.Text = Uzytkownik.Login;
-            gracz2.Text = Rozgrywka.Przeciwnik;
-            if (odpowiedz[1] == Uzytkownik.Login)
-            {
-                aktualnyGracz.Text = Uzytkownik.Login;
-                czyZaczynam = true;
-                aktualnyGracz.ForeColor = kolor2;
-            }
-            else
-            {
-                aktualnyGracz.Text = Rozgrywka.Przeciwnik;
-                czyZaczynam = false;
-                aktualnyGracz.ForeColor = kolor1;
-            }
-            int koniec = odpowiedz.Length;
-            for (int i = 2; i < koniec; i++)
-            {
-                string litera = odpowiedz[i].ToString();
-                Przycisk label;
-                if (tableLayoutPanel1.Controls[i - 2] is Przycisk)
-                {
-                    label = (Przycisk)tableLayoutPanel1.Controls[i - 2];
-                    label.Text = litera;
-                    label.ForeColor = Color.LightGray;
-                }
-            }
-            if (!czyZaczynam)
-            {
-                timer1.Start();
-            }
-            timer2_koniecGry.Start();
+            //TODO
+            // Klasa zwracana plansze
+            //String odp = AsynchronicznyKlient.zapytaj(Pytanie.komendy.pobierz_plansze,new object[] { Rozgrywka.Nr_lobby });
+            //if (odp == "CzasUplynal" || odp == "error")
+            //{
+            //    MessageBox.Show("Nie udane połaczenie z serwerem");
+            //    return;
+            //}
+            //string[] odpowiedz = odp.Split(' ');
+            //int rozmiar = Int32.Parse(odpowiedz[0]);
+            //wygeneruj_labele(rozmiar);
+            //wyniki_graczy.Add(Uzytkownik.Login, 0);
+            //wyniki_graczy.Add(Rozgrywka.Przeciwnik,0);
+            //gracz1.Text = Uzytkownik.Login;
+            //gracz2.Text = Rozgrywka.Przeciwnik;
+            //if (odpowiedz[1] == Uzytkownik.Login)
+            //{
+            //    aktualnyGracz.Text = Uzytkownik.Login;
+            //    czyZaczynam = true;
+            //    aktualnyGracz.ForeColor = kolor2;
+            //}
+            //else
+            //{
+            //    aktualnyGracz.Text = Rozgrywka.Przeciwnik;
+            //    czyZaczynam = false;
+            //    aktualnyGracz.ForeColor = kolor1;
+            //}
+            //int koniec = odpowiedz.Length;
+            //for (int i = 2; i < koniec; i++)
+            //{
+            //    string litera = odpowiedz[i].ToString();
+            //    Przycisk label;
+            //    if (tableLayoutPanel1.Controls[i - 2] is Przycisk)
+            //    {
+            //        label = (Przycisk)tableLayoutPanel1.Controls[i - 2];
+            //        label.Text = litera;
+            //        label.ForeColor = Color.LightGray;
+            //    }
+            //}
+            //if (!czyZaczynam)
+            //{
+            //    timer1.Start();
+            //}
+            //timer2_koniecGry.Start();
         }
         private void click_Label(object sender, EventArgs e)
         {
@@ -92,13 +102,15 @@ namespace WindowsFormsApp2
                 return;
             if (czyZaczynam)
             {
-                String odp = AsynchronicznyKlient.zapytaj("zapisz_ruch: " + Rozgrywka.Nr_lobby + " " + clickLabel.getIndeks());
-                if (odp == "CzasUplynal" || odp == "error" || odp == "False")
-                {
+                //TODO
+                //String odp = AsynchronicznyKlient.zapytaj(Pytanie.komendy.zapisz_ruch,
+                //    new object []{Rozgrywka.Nr_lobby, Uzytkownik.Login, Uzytkownik.Sesja, clickLabel.getIndeks()});
+                //if (odp == "CzasUplynal" || odp == "error" || odp == "False")
+                //{
 
-                    MessageBox.Show("Nie udane połączenie z serwerem");
-                    return;
-                }
+                //    MessageBox.Show("Nie udane połączenie z serwerem");
+                //    return;
+                //}
             }
             liczba_ruchow++;
             if (firstClicked == null)
@@ -107,29 +119,27 @@ namespace WindowsFormsApp2
                 firstClicked.ForeColor = Color.Black;
                 if (aktualnyGracz.Text == Rozgrywka.Przeciwnik)
                     firstClicked.BackColor = kolor1;
-                else if (aktualnyGracz.Text == Uzytkownik.Login)
+                else if (aktualnyGracz.Text == Uzytkownik.Instance.Login)
                     firstClicked.BackColor = kolor2;
-
                 return;
             }
             secondClick = clickLabel;
             secondClick.ForeColor = Color.Black;
             if (aktualnyGracz.Text == Rozgrywka.Przeciwnik)
                 secondClick.BackColor = kolor1;
-            else if (aktualnyGracz.Text == Uzytkownik.Login)
+            else if (aktualnyGracz.Text == Uzytkownik.Instance.Login)
                 secondClick.BackColor = kolor2;
             if (firstClicked.Text == secondClick.Text)
             {
                 if (czyZaczynam)
                 {
-                    pkt_gr1 += 10;
-                    g1_pkt.Text = pkt_gr1.ToString();
+                    wyniki_graczy[Uzytkownik.Instance.Login]+=10;
                 }
                 else
                 {
-                    pkt_gr2 += 10;
-                    g2_pkt.Text = pkt_gr2.ToString();
+                    wyniki_graczy[Rozgrywka.Przeciwnik] += 10;
                 }
+                odswierz_pola_wynikow();
             }
             else
             {
@@ -146,7 +156,7 @@ namespace WindowsFormsApp2
                 }
                 else
                 {
-                    aktualnyGracz.Text = Uzytkownik.Login;
+                    aktualnyGracz.Text = Uzytkownik.Instance.Login;
                     aktualnyGracz.ForeColor = kolor2;
                     timer1.Stop();
                 }
@@ -159,29 +169,13 @@ namespace WindowsFormsApp2
         }
         void tick()
         {
-            string odp = AsynchronicznyKlient.zapytaj("wczytaj_ruchy: " + Rozgrywka.Nr_lobby + " " + liczba_ruchow);
-            if( odp == "error" || odp == "" || odp == "CzasUplynal")
-            {
-                MessageBox.Show("Nie udane polaczenie z serwerem!");
-                return;
-            }
-
-            string[] indeksy = odp.Split(' ');
-            foreach (string s in indeksy)
-            {
-                if (s == "")
-                {
-                    continue;
-                }
-                int indeks = Int32.Parse(s);
-                if (tableLayoutPanel1.Controls[indeks] is Przycisk)
-                {
-                    Przycisk przycisk = tableLayoutPanel1.Controls[indeks] as Przycisk;
-                    przycisk_click(przycisk, EventArgs.Empty);
-                }
-            }
-            
         }
+        public void odswierz_pola_wynikow()
+        {
+            g1_pkt.Text = wyniki_graczy[Uzytkownik.Instance.Login].ToString();
+            g2_pkt.Text = wyniki_graczy[Rozgrywka.Przeciwnik].ToString();
+        }
+
         private void CheckWinner()
         {
             Label label;
@@ -195,7 +189,7 @@ namespace WindowsFormsApp2
             int punkty_2 = Convert.ToInt32(g2_pkt.Text);
             if (punkty_1 > punkty_2)
             {
-                MessageBox.Show($"Wygrał użytkownik: {Uzytkownik.Login}. {Uzytkownik.Login} zyskałeś {punkty_1} punktów. Gratulacje!");
+                MessageBox.Show($"Wygrał użytkownik: {Uzytkownik.Instance.Login}. {Uzytkownik.Instance.Login} zyskałeś {punkty_1} punktów. Gratulacje!");
             }
             else if (punkty_1 < punkty_2)
             {
@@ -233,7 +227,10 @@ namespace WindowsFormsApp2
         }
         private void timer1_Tick_2(object sender, EventArgs e)
         {
-            tick();
+            if (!bg_stanGry.IsBusy)
+            {
+                bg_stanGry.RunWorkerAsync();
+            }
         }
         private void timer2_koniec(object sender, EventArgs e)
         {
@@ -241,22 +238,24 @@ namespace WindowsFormsApp2
         }
         async void czyKoniecGry()
         {
+            //TODO
             timer2_koniecGry.Stop();
-            String odp =  AsynchronicznyKlient.zapytaj("czyKoniecGry: " + Rozgrywka.Nr_lobby);
-            if (odp == "CzasUplynal" || odp == "error")
-            {
-                MessageBox.Show("Nie udane połaczenie z serwerem");
-                timer2_koniecGry.Start();
-            }
-            else if (odp == "True")
-            {
-                MessageBox.Show("Gra zakonczona");
-                zakonczGre_Click(null, null);
-            }
-            else
-            {
-                timer2_koniecGry.Start();
-            }
+            //String odp =  AsynchronicznyKlient.zapytaj(Pytanie.komendy.czy_koniec_gry, 
+            //    new object[] { Rozgrywka.Nr_lobby });
+            //if (odp == "CzasUplynal" || odp == "error")
+            //{
+            //    MessageBox.Show("Nie udane połaczenie z serwerem");
+            //    timer2_koniecGry.Start();
+            //}
+            //else if (odp == "True")
+            //{
+            //    MessageBox.Show("Gra zakonczona");
+            //    zakonczGre_Click(null, null);
+            //}
+            //else
+            //{
+            //    timer2_koniecGry.Start();
+            //}
         }
 
         private void label3_Click(object sender, EventArgs e)
@@ -265,6 +264,66 @@ namespace WindowsFormsApp2
         }
 
         private void g2_pkt_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            e.Result = AsynchronicznyKlient.zapytaj(Pytanie.komendy.wczytaj_ruchy,
+                new object[] {Rozgrywka.Nr_lobby, liczba_ruchow });
+        }
+
+        private void backgroundWorker1_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            if (e.Error != null)
+            {
+                MessageBox.Show(e.Error.ToString(), "Problem");
+            }
+            else if (e.Cancelled)
+            {
+                MessageBox.Show(e.Error.ToString(), "Problem");
+            }
+            else if (e.Result != null)
+            {
+                String odp = e.Result.ToString();
+                if (odp == "CzasUplynal" || odp == "error")
+                {
+                    MessageBox.Show("Nie udane polaczenie z serverem!", "Problem");
+                }
+                else
+                {
+                    string[] dane_gry = odp.Split(';');
+                    string[] gracz1 = dane_gry[0].Split(':');
+                    string[] gracz2 = dane_gry[1].Split(':');
+                    int wynik1;
+                    wyniki_graczy[gracz1[0]] = Int32.Parse(gracz1[1]);
+                    wyniki_graczy[gracz2[0]] = Int32.Parse(gracz2[1]);
+                    odswierz_pola_wynikow();
+                    string[] indeksy = dane_gry[2].Split(' ');
+                    foreach (string s in indeksy)
+                    {
+                        if (s == "")
+                        {
+                            continue;
+                        }
+                        int indeks = Int32.Parse(s);
+                        if (tableLayoutPanel1.Controls[indeks] is Przycisk)
+                        {
+                            Przycisk przycisk = tableLayoutPanel1.Controls[indeks] as Przycisk;
+                            przycisk_click(przycisk, EventArgs.Empty);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void backgroundWorker1_DoWork_1(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+
+        }
+
+        private void backgroundWorker1_RunWorkerCompleted_1(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
 
         }

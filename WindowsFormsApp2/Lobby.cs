@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -58,8 +59,7 @@ namespace WindowsFormsApp2
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-            // zapytanie do serwera  ile mam lobby;   
-            e.Result = AsynchronicznyKlient.zapytaj("wielkosc_lobby:");
+            e.Result = AsynchronicznyKlient.zapytaj(Pytanie.komendy.wielkosc_lobby,null);
         }
 
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

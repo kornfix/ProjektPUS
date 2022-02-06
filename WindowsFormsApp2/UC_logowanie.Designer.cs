@@ -36,10 +36,11 @@
             this.linkLabelZapomnialem = new System.Windows.Forms.LinkLabel();
             this.buttonZaloguj = new System.Windows.Forms.Button();
             this.groupBoxLogin = new System.Windows.Forms.GroupBox();
+            this.lb_ogolny = new System.Windows.Forms.Label();
             this.button_rejestracja = new System.Windows.Forms.Button();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.lb_ogolny = new System.Windows.Forms.Label();
+            this.bg_logowanie = new System.ComponentModel.BackgroundWorker();
+            this.bg_wylogowywanie = new System.ComponentModel.BackgroundWorker();
             this.groupBoxLogin.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
@@ -134,6 +135,20 @@
             this.groupBoxLogin.TabIndex = 17;
             this.groupBoxLogin.TabStop = false;
             // 
+            // lb_ogolny
+            // 
+            this.lb_ogolny.AutoSize = true;
+            this.lb_ogolny.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.lb_ogolny.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lb_ogolny.Font = new System.Drawing.Font("Gadugi", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_ogolny.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lb_ogolny.Location = new System.Drawing.Point(21, 159);
+            this.lb_ogolny.Name = "lb_ogolny";
+            this.lb_ogolny.Size = new System.Drawing.Size(53, 21);
+            this.lb_ogolny.TabIndex = 30;
+            this.lb_ogolny.Text = "label1";
+            this.lb_ogolny.Visible = false;
+            // 
             // button_rejestracja
             // 
             this.button_rejestracja.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
@@ -150,26 +165,17 @@
             // 
             this.errorProvider1.ContainerControl = this;
             // 
-            // backgroundWorker1
+            // bg_logowanie
             // 
-            this.backgroundWorker1.WorkerReportsProgress = true;
-            this.backgroundWorker1.WorkerSupportsCancellation = true;
-            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
-            this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
+            this.bg_logowanie.WorkerReportsProgress = true;
+            this.bg_logowanie.WorkerSupportsCancellation = true;
+            this.bg_logowanie.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+            this.bg_logowanie.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
             // 
-            // lb_ogolny
+            // bg_wylogowywanie
             // 
-            this.lb_ogolny.AutoSize = true;
-            this.lb_ogolny.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.lb_ogolny.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lb_ogolny.Font = new System.Drawing.Font("Gadugi", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb_ogolny.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lb_ogolny.Location = new System.Drawing.Point(21, 159);
-            this.lb_ogolny.Name = "lb_ogolny";
-            this.lb_ogolny.Size = new System.Drawing.Size(53, 21);
-            this.lb_ogolny.TabIndex = 30;
-            this.lb_ogolny.Text = "label1";
-            this.lb_ogolny.Visible = false;
+            this.bg_wylogowywanie.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bg_wylogowywanie_DoWork);
+            this.bg_wylogowywanie.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bg_wylogowywanie_RunWorkerCompleted);
             // 
             // UC_logowanie
             // 
@@ -196,7 +202,8 @@
         private System.Windows.Forms.GroupBox groupBoxLogin;
         private System.Windows.Forms.Button button_rejestracja;
         private System.Windows.Forms.ErrorProvider errorProvider1;
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.ComponentModel.BackgroundWorker bg_logowanie;
         private System.Windows.Forms.Label lb_ogolny;
+        private System.ComponentModel.BackgroundWorker bg_wylogowywanie;
     }
 }

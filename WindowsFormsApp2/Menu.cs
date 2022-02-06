@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -106,8 +107,8 @@ namespace WindowsFormsApp2
         }
         private void Menu_FormClosing(object sender, FormClosingEventArgs e)
         {
-            String odp = AsynchronicznyKlient.zapytaj("wyloguj: " + Uzytkownik.Login);
-            if (odp == "CzasUplynal" || odp == "error")
+            Odpowiedz odp = AsynchronicznyKlient.zapytaj(Pytanie.komendy.wyloguj, new object[] { Uzytkownik.Instance.Login});
+            if (odp == null || odp.czy_wzrocono_error())
             {
                 e.Cancel = true;
                 MessageBox.Show("Nie udane wylogowanie");

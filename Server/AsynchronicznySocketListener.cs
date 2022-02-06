@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -17,7 +18,6 @@ namespace Server
         private static Dictionary<string, uzytkownicy> gracze = new Dictionary<string, uzytkownicy>();
         private static Dictionary<string, string> aktywne_sesje = new Dictionary<string, string>();
         private static List<string> zapytania = new List<string>();
-        private static Dictionary<string, Gra> aktywne_gry = new Dictionary<string, Gra>();
         public static ManualResetEvent wszystkoWykonane = new ManualResetEvent(false);
 
         public AsynchronicznySocketListener()
@@ -89,310 +89,282 @@ namespace Server
                 Console.WriteLine($"Tresc zapytania: {zawartosc}");
                 if (zawartosc.IndexOf("<EOF>") > -1)
                 {
-                    
-                    string[] slowa = zawartosc.Split(' ');
-                    string odpowiedz = "error";
+                    zawartosc = zawartosc.Replace("<EOF>", "");
+                    Pytanie pytanie = JsonSerializer.Deserialize<Pytanie>(zawartosc);
+                    Odpowiedz odpowiedz =new Odpowiedz();
                     // Kod który wczytuje wysłaną wiadomośc i odpowiada.
-                    if (slowa.Length >= 2)
+                    if (pytanie != null)
                     {
-
-                        switch (slowa[0])
+                        //TODO
+                        // Sprawdzenie sesji 
+                        if (pytanie.Sesja == null)
                         {
-                            case "sprawdz_email:":
-                                odpowiedz = (from uzytkownik in SingletonBaza.Instance.BazaDC.uzytkownicy
-                                             where uzytkownik.email == slowa[1] 
-                                             select uzytkownik).Any().ToString();
-                                break;
-                            case "sprawdz_login:":
-                                odpowiedz = (from uzytkownik in SingletonBaza.Instance.BazaDC.uzytkownicy
-                                          where uzytkownik.login == slowa[1]
-                                          select uzytkownik).Any().ToString();
-                                break;
-                            case "zarejestruj_uzytkownika:":
-                                uzytkownicy u = new uzytkownicy();
-
-                                foreach (string s in slowa)
-                                {
-                                    string[] parametry = s.Split(':');
-
-                                    if (parametry.Length != 2)
+                            // Komendy dla nie zalogowanych
+                            switch (pytanie.Komenda)
+                            {
+                                case Pytanie.komendy.sprawdz_email:
+                                    odpowiedz.Argumenty[0] = (from uzytkownik in SingletonBaza.Instance.BazaDC.uzytkownicy
+                                                 where uzytkownik.email.Equals(pytanie.Argumenty[0].ToString())
+                                                 select uzytkownik).Any();
+                                    break;
+                                case Pytanie.komendy.sprawdz_login:
+                                    odpowiedz.Argumenty[0] = (from uzytkownik in SingletonBaza.Instance.BazaDC.uzytkownicy
+                                                 where uzytkownik.login.Equals(pytanie.Argumenty[0].ToString())
+                                                 select uzytkownik).Any();
+                                    break;
+                                case Pytanie.komendy.zarejestruj_uzytkownika:
+                                    string zu_uzytkownik = pytanie.Argumenty[0].ToString();
+                                    uzytkownicy u = JsonSerializer.Deserialize<uzytkownicy>(zu_uzytkownik);
+                                    u.haslo = hashowanie.GetHashString(u.haslo);
+                                    SingletonBaza.Instance.BazaDC.uzytkownicy.InsertOnSubmit(u);
+                                    SingletonBaza.Instance.BazaDC.SubmitChanges();
+                                    odpowiedz.Argumenty[0] = true;
+                                    break;
+                                case Pytanie.komendy.zaloguj:
+                                    string z_login = pytanie.Argumenty[0].ToString();
+                                    string z_haslo = pytanie.Argumenty[1].ToString();
+                                    var q_z = from uzytkownik in SingletonBaza.Instance.BazaDC.uzytkownicy
+                                              where uzytkownik.login.Equals(z_login)
+                                              && uzytkownik.haslo.Equals(hashowanie.GetHashString(z_haslo))
+                                              select uzytkownik;
+                                    if (q_z.Any())
                                     {
-                                        continue;
-                                    }
-                                    //MessageBox.Show(String.Join(" ", parametry),s);
-                                    if (parametry[0] == "haslo")
-                                    {
-                                        u.haslo = hashowanie.GetHashString(parametry[1]);
-                                    }
-                                    else
-                                    {
-                                        PropertyInfo prop = u.GetType().GetProperty(parametry[0]);
-                                        if (prop != null)
+                                        uzytkownicy zalogowany = q_z.FirstOrDefault();
+                                        if (gracze.ContainsKey(zalogowany.login))
                                         {
-                                            prop.SetValue(u, parametry[1], null);
+                                            odpowiedz.Argumenty[0] = "uzytkownik_jest_juz_zalogowany";
                                         }
                                         else
                                         {
-                                            continue;
+                                            gracze.Add(zalogowany.login, zalogowany);
+                                            string sesja = hashowanie.GetSession();
+                                            odpowiedz = new Odpowiedz(new object[] { new Uzytkownik(zalogowany, sesja) });
+                                            aktywne_sesje.Add(zalogowany.login, sesja);
+                                            Console.WriteLine($"Zalogowano użytkownika: {zalogowany.login}, Nadano numer sesji: {sesja}");
                                         }
                                     }
-                                }
+                                    else
+                                    {
+                                        odpowiedz.Argumenty[0] = "bledneDane";
+                                    }
+                                    break;
+                            }
+                        }else if(aktywne_sesje.ContainsValue(pytanie.Sesja))
+                        {
+                            // Komendy dla zalogowanych 
+                            switch (pytanie.Komenda)
+                            {
 
-                                SingletonBaza.Instance.BazaDC.uzytkownicy.InsertOnSubmit(u);
-                                SingletonBaza.Instance.BazaDC.SubmitChanges();
-                                odpowiedz = "true";
-                                break;
-                            case "zaloguj:":
-                                var q_z = from uzytkownik in SingletonBaza.Instance.BazaDC.uzytkownicy
-                                          where uzytkownik.login == slowa[1]
-                                          && uzytkownik.haslo ==
-                                          hashowanie.GetHashString(slowa[2])
-                                          select uzytkownik;
-                                if (q_z.Any())
-                                {
-                                    uzytkownicy zalogowany = q_z.FirstOrDefault();
-                                    if (gracze.ContainsKey(zalogowany.login))
+                                case Pytanie.komendy.wyloguj:
+                                    string w_login = pytanie.Argumenty[0].ToString();
+                                    string w_sesja = pytanie.Argumenty[1].ToString();
+                                    foreach (var item in slownik_lobby)
                                     {
-                                        odpowiedz = "uzytkownik_jest_juz_zalogowany";
-                                    }
-                                    else
-                                    {
-                                        gracze.Add(zalogowany.login, zalogowany);
-                                        odpowiedz = zalogowany.imie + " " + zalogowany.nazwisko
-                                            + " " + zalogowany.login + " " + zalogowany.email;
-                                        string sesja = hashowanie.GetSession();
-                                        Console.WriteLine($"Zalogowano użytkownika: {zalogowany.login}, Nadano numer sesji: {sesja}");
-                                        aktywne_sesje.Add(zalogowany.login, sesja);
-                                        odpowiedz += " " + sesja;
-                                    }
-                                }
-                                else
-                                {
-                                    odpowiedz = "bledneDane";
-                                }
-                                break;
-                            case "wyloguj:":
-                                foreach (var item in slownik_lobby)
-                                {
-                                    if (item.Value.czy_jestem_w_lobby(slowa[1]))
-                                    {
-                                        item.Value.usun(slowa[1]);
-                                        item.Value.resetGry();
-                                        string nr_lobby = item.Value.getNumer().ToString();
-                                        if (aktywne_gry.ContainsKey(nr_lobby))
+                                        if (item.Value.czy_jestem_w_lobby(w_login,w_sesja))
                                         {
-                                            aktywne_gry.Remove(nr_lobby);
+                                            odpowiedz.Argumenty[0] = item.Value.usun(w_login, w_sesja);
                                         }
                                     }
-                                }
-                                if (aktywne_sesje.ContainsKey(slowa[1]))
-                                {
-                                    hashowanie.ZwolnijSesje(aktywne_sesje[slowa[1]]);
-                                    aktywne_sesje.Remove(slowa[1]);
-                                }
-                                if (gracze.ContainsKey(slowa[1]))
-                                {
-                                    gracze.Remove(slowa[1]);
-                                    odpowiedz = "True";
-                                }
-                                else
-                                {
-                                    odpowiedz = "False";
-                                }
-                                break;
-                            case "wielkosc_lobby:":
-                                odpowiedz = "ll:" + liczba_lobby;
-                                break;
-                            case "dodaj_gracza_do_lobby:":
-                                if (!zapytania.Contains(slowa[2]))
-                                {
-                                    zapytania.Add(slowa[2]);
+                                    if (aktywne_sesje.ContainsKey(w_login))
+                                    {
+                                        hashowanie.ZwolnijSesje(aktywne_sesje[w_login]);
+                                        aktywne_sesje.Remove(w_login);
+                                    }
+                                    odpowiedz.Argumenty[0] = gracze.ContainsKey(w_login);
+                                    if (gracze.ContainsKey(w_login))
+                                    {
+                                        gracze.Remove(w_login);
+                                    }
+                                    odpowiedz.Argumenty[0] = true;
+                                    break;
+                                case Pytanie.komendy.wielkosc_lobby:
+                                    odpowiedz.Argumenty[0] = "ll:" + liczba_lobby;
+                                    break;
+                                case Pytanie.komendy.dodaj_gracza_do_lobby:
+                                    string dgdl_numer_lobby = pytanie.Argumenty[0].ToString();
+                                    string dgdl_login = pytanie.Argumenty[1].ToString();
+                                    string dgdl_sesja = pytanie.Argumenty[2].ToString();
+                                    if (!zapytania.Contains(dgdl_login))
+                                    {
+                                        zapytania.Add(dgdl_login);
+                                        Boolean wynik_sprawdzania = !slownik_lobby.Any(n => n.Value.czy_jestem_w_lobby(dgdl_login, dgdl_sesja));
+                                        //MessageBox.Show($"Sprawdzanie {wynik_sprawdzania}");
+                                        if (wynik_sprawdzania && slownik_lobby.ContainsKey(dgdl_numer_lobby))
+                                        {
 
-                                    Boolean wynik_sprawdzania = !slownik_lobby.Any(n => n.Value.czy_jestem_w_lobby(slowa[2]));
-                                    MessageBox.Show($"Sprawdzanie {wynik_sprawdzania}");
-                                    /*
-                                    foreach (Lobby w in slownik_lobby.Values)
-                                    {
-                                        if (w.czy_jestem_w_lobby(slowa[2]))
-                                        {
-                                            wynik_sprawdzania = false;
-                                            break;
+                                            odpowiedz.Argumenty[0] = slownik_lobby[dgdl_numer_lobby].dodaj(dgdl_login, dgdl_sesja);
                                         }
-                                    }*/
-                                    if (wynik_sprawdzania && slownik_lobby.ContainsKey(slowa[1]))
-                                    {
-                                        odpowiedz = slownik_lobby[slowa[1]].dodaj(slowa[2]).ToString();
-                                    }
-                                    else
-                                    {
-                                        odpowiedz = "false";
-                                    }
-                                    zapytania.Remove(slowa[2]);
-                                }
-                                else
-                                {
-                                    odpowiedz = "False";
-                                }
-                                break;
-                            case "usun_gracz_z_lobby:":
-                                if (slownik_lobby.ContainsKey(slowa[1]))
-                                {
-                                    odpowiedz = slownik_lobby[slowa[1]].usun(slowa[2]).ToString();
-                                }
-                                else
-                                {
-                                    odpowiedz = "False";
-                                }
-                                break;
-                            case "gracze_z_lobby:":
-                                if (slownik_lobby.ContainsKey(slowa[1]))
-                                {
-                                    odpowiedz = slownik_lobby[slowa[1]].gracze();
-                                }
-                                else
-                                {
-                                    odpowiedz = "g1: g2:";
-                                }
-                                break;
-                            case "czy_pelne_lobby:":
-                                // Sprawdzić użycie w kliencie
-                                if (slownik_lobby.ContainsKey(slowa[1]))
-                                {
-                                    odpowiedz = slownik_lobby[slowa[1]].czy_pelne_lobby().ToString();
-                                }
-                                else
-                                {
-                                    odpowiedz = "False";
-                                }
-                                break;
-                            case "jestem_gotowy :":
-                                if (!zapytania.Contains(slowa[2]))
-                                {
-                                    zapytania.Add(slowa[2]);
-                                    if (slownik_lobby.ContainsKey(slowa[1]))
-                                    {
-                                        odpowiedz = slownik_lobby[slowa[1]].gotowy(slowa[2]).ToString();
-                                    }
-                                    else
-                                    {
-                                        odpowiedz = "False";
-                                    }
-                                    zapytania.Remove(slowa[2]);
-                                }
-                                break;
-                            case "niejestem_gotowy :":
-                                if (slownik_lobby.ContainsKey(slowa[1]))
-                                {
-                                    odpowiedz = slownik_lobby[slowa[1]].niegotowy(slowa[2]).ToString();
-                                }
-                                else
-                                {
-                                    odpowiedz = "False";
-                                }
-                                break;
-                            case "pobierz_plansze:":
-                                if (slowa[1] != "")
-                                {
-                                    if (aktywne_gry.ContainsKey(slowa[1]))
-                                    {
-                                        odpowiedz = aktywne_gry[slowa[1]].WylosowaniePlanszy();
-                                    }
-                                    else
-                                    {
-                                        Gra gra = new Gra(slownik_lobby[slowa[1]]);
-                                        aktywne_gry.Add(slowa[1], gra);
-                                        odpowiedz = aktywne_gry[slowa[1]].WylosowaniePlanszy();
-                                    }
-                                }
-                                break;
-                            case "zapisz_ruch:":
-                                //MessageBox.Show(slowa[1] + " " +slowa[2]);
-                                if (aktywne_gry.ContainsKey(slowa[1]))
-                                {
-                                    aktywne_gry[slowa[1]].ZapiszRuch(slowa[2]);
-                                }
-                                break;
-                            case "wczytaj_ruchy:":
-                                //MessageBox.Show(slowa[1] + " " + slowa[2]);
-                                if (aktywne_gry.ContainsKey(slowa[1]))
-                                {
-                                    odpowiedz = aktywne_gry[slowa[1]].WczytajRuchy(slowa[2]);
-                                }
-                                break; ;
-                            case "uzyt_wartosc_parametru:":
-                                if (gracze.ContainsKey(slowa[1]))
-                                {
-                                    uzytkownicy edytowany = gracze[slowa[1]];
-                                    var odp = edytowany.GetType().GetProperty(slowa[2]).GetValue(edytowany, null);
-                                    if (odp != null)
-                                    {
-                                        odpowiedz = odp.ToString();
-                                    }
-                                }
-                                else
-                                {
-                                    odpowiedz = "bledneDane";
-                                }
-                                break;
-                            case "uzyt_zm_par:":
-                                if (gracze.ContainsKey(slowa[1]))
-                                {
-                                    uzytkownicy edytowany = gracze[slowa[1]];
-                                    if (slowa[2] == "haslo")
-                                    {
-                                        edytowany.haslo = hashowanie.GetHashString(slowa[3]);
-                                        SingletonBaza.Instance.BazaDC.SubmitChanges();
-                                        odpowiedz = "True";
-                                    }
-                                    else
-                                    {
-                                        PropertyInfo prop = edytowany.GetType().GetProperty(slowa[2]);
-                                        if (prop != null)
+                                        else
                                         {
-                                            prop.SetValue(edytowany, slowa[3], null);
+                                            odpowiedz.Argumenty[0] = false;
+                                        }
+                                        zapytania.Remove(dgdl_login);
+                                    }
+                                    else
+                                    {
+                                        odpowiedz.Argumenty[0] = false;
+                                    }
+                                    break;
+                                case Pytanie.komendy.usun_gracz_z_lobby:
+                                    string ugzl_nr_lobby = pytanie.Argumenty[0].ToString();
+                                    string ugzl_login =  pytanie.Argumenty[1].ToString();
+                                    string ugzl_sesja = pytanie.Argumenty[2].ToString();
+                                    if (slownik_lobby.ContainsKey(ugzl_nr_lobby))
+                                    {
+                                        odpowiedz.Argumenty[0] = slownik_lobby[ugzl_nr_lobby].usun(ugzl_login, ugzl_sesja);
+                                    }
+                                    break;
+                                case Pytanie.komendy.gracze_z_lobby:
+                                    string gzl_nr_lobby = pytanie.Argumenty[0].ToString();
+                                    if (slownik_lobby.ContainsKey(gzl_nr_lobby))
+                                    {
+                                        odpowiedz.Argumenty[0] = slownik_lobby[gzl_nr_lobby].gracze();
+                                    }
+                                    break;
+                                case Pytanie.komendy.czy_pelne_lobby:
+                                    // Sprawdzić użycie w kliencie
+                                    string cpl_nr_lobby = pytanie.Argumenty[0].ToString();
+                                    if (slownik_lobby.ContainsKey(cpl_nr_lobby))
+                                    {
+                                        odpowiedz.Argumenty[0] = slownik_lobby[cpl_nr_lobby].czy_pelne_lobby();
+                                    }
+                                    break;
+                                case Pytanie.komendy.jestem_gotowy:
+                                    string jg_nr_pokoju = pytanie.Argumenty[0].ToString();
+                                    string jg_login_gracza = pytanie.Argumenty[1].ToString();
+                                    string jg_sesja = pytanie.Argumenty[2].ToString();
+                                    if (!zapytania.Contains(jg_login_gracza))
+                                    {
+                                        zapytania.Add(jg_login_gracza);
+                                        if (slownik_lobby.ContainsKey(jg_nr_pokoju))
+                                        {
+                                            odpowiedz.Argumenty[0] = slownik_lobby[jg_nr_pokoju].gotowy(jg_login_gracza, jg_sesja);
+                                        }
+                                        zapytania.Remove(jg_login_gracza);
+                                    }
+                                    break;
+                                case Pytanie.komendy.niejestem_gotowy:
+                                    string ng_nr_pokoju = pytanie.Argumenty[0].ToString();
+                                    string ng_login = pytanie.Argumenty[1].ToString();
+                                    string ng_sesja = pytanie.Argumenty[2].ToString();
+                                    if (slownik_lobby.ContainsKey(ng_nr_pokoju))
+                                    {
+                                        odpowiedz.Argumenty[0] = slownik_lobby[ng_nr_pokoju].niegotowy(ng_login, ng_sesja);
+                                    }
+                                    break;
+                                case Pytanie.komendy.pobierz_plansze:
+                                    
+                                    if (pytanie.Argumenty[0] != null)
+                                    {
+                                        string pp_nr_lobby = pytanie.Argumenty[0].ToString();
+                                        string pp_login = pytanie.Argumenty[1].ToString();
+                                        string pp_sesja = pytanie.Argumenty[2].ToString();
+                                        if (slownik_lobby.ContainsKey(pp_nr_lobby))
+                                        {
+                                            odpowiedz.Argumenty[0] = slownik_lobby[pp_nr_lobby]
+                                                .get_plansza(pp_login,pp_sesja);
+                                        }
+                                    }
+                                    break;
+                                case Pytanie.komendy.zapisz_ruch:
+                                    string zp_nr_lobby = pytanie.Argumenty[0].ToString();
+                                    string zp_login = pytanie.Argumenty[1].ToString();
+                                    string zp_sesja = pytanie.Argumenty[2].ToString();
+                                    int zp_indeks = ((JsonElement)pytanie.Argumenty[3]).GetInt32();
+                                    if (slownik_lobby.ContainsKey(zp_nr_lobby))
+                                    {
+                                        odpowiedz.Argumenty[0] = slownik_lobby[zp_nr_lobby]
+                                            .zapisz_ruch(zp_login, zp_sesja, zp_indeks);
+                                    }
+                                    break;
+                                case Pytanie.komendy.wczytaj_ruchy:
+                                    string wr_nr_lobby = pytanie.Argumenty[0].ToString();
+                                    string wr_login = pytanie.Argumenty[1].ToString();
+                                    string wr_sesja = pytanie.Argumenty[2].ToString();
+                                    int wr_liczba_ruchow = ((JsonElement)pytanie.Argumenty[0]).GetInt32(); ;
+                                    if (slownik_lobby.ContainsKey(wr_nr_lobby))
+                                    {
+                                        odpowiedz.Argumenty[0] = slownik_lobby[wr_nr_lobby]
+                                            .get_ruchy(wr_login, wr_sesja, wr_liczba_ruchow);
+                                    }
+                                    break;
+                                case Pytanie.komendy.uzyt_wartosc_parametru:
+                                    string uwp_login_gracza = pytanie.Argumenty[0].ToString();
+                                    string uwp_nazwa_parametru = pytanie.Argumenty[1].ToString();
+                                    if (gracze.ContainsKey(uwp_login_gracza))
+                                    {
+                                        uzytkownicy edytowany = gracze[uwp_login_gracza];
+                                        var odp = edytowany.GetType().GetProperty(uwp_nazwa_parametru).GetValue(edytowany, null);
+                                        if (odp != null)
+                                        {
+                                            odpowiedz.Argumenty[0] = odp.ToString();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        odpowiedz.Argumenty[0] = "bledneDane";
+                                    }
+                                    break;
+                                case Pytanie.komendy.uzyt_zm_par:
+                                    string uzp_login_gracza = pytanie.Argumenty[0].ToString();
+                                    string uzp_nazwa_parametru = pytanie.Argumenty[1].ToString();
+                                    string uzp_nowa_wartosc =pytanie.Argumenty[2].ToString();
+                                    if (gracze.ContainsKey(uzp_login_gracza))
+                                    {
+                                        uzytkownicy edytowany = gracze[uzp_login_gracza];
+                                        if (uzp_nazwa_parametru.Equals("haslo"))
+                                        {
+                                            edytowany.haslo = hashowanie.GetHashString(uzp_nowa_wartosc);
                                             SingletonBaza.Instance.BazaDC.SubmitChanges();
-                                            odpowiedz = "True";
+                                            odpowiedz.Argumenty[0] = true;
+                                        }
+                                        else
+                                        {
+                                            PropertyInfo prop = edytowany.GetType().GetProperty(uzp_nazwa_parametru);
+                                            if (prop != null)
+                                            {
+                                                prop.SetValue(edytowany, uzp_nowa_wartosc, null);
+                                                SingletonBaza.Instance.BazaDC.SubmitChanges();
+                                                odpowiedz.Argumenty[0] = true;
+                                            }
                                         }
                                     }
-                                }
-                                else
-                                {
-                                    MessageBox.Show(slowa[1], slowa[2] + " " + slowa[3]);
-                                    odpowiedz = "bledneDane";
-                                }
-                                break;
-                            case "sesja:":
-                                if (aktywne_sesje.ContainsKey(slowa[1]))
-                                {
-                                    odpowiedz = aktywne_sesje[slowa[1]];
-                                }
-                                break;
-
-                            case "zakonczGre:":
-                                if (aktywne_gry.ContainsKey(slowa[1]))
-                                {
-                                    aktywne_gry.Remove(slowa[1]);
-                                    slownik_lobby[slowa[1]].resetGry();
-                                    //.resetujGre();
-
-                                }
-                                break;
-                            case "czyKoniecGry:":
-                                if (aktywne_gry.ContainsKey(slowa[1]))
-                                {
-                                    odpowiedz = "False";
-                                }
-                                else
-                                {
-                                    odpowiedz = "True";
-                                }
-                                // MessageBox.Show(odpowiedz);
-                                //Console.WriteLine(odpowiedz);
-                                break;
+                                    else
+                                    {
+                                        //MessageBox.Show(slowa[1], slowa[2] + " " + slowa[3]);
+                                        odpowiedz.Argumenty[0] = "bledneDane";
+                                    }
+                                    break;
+                                case Pytanie.komendy.sesja:
+                                    string sesja_login = pytanie.Argumenty[0].ToString();
+                                    string sesja_kod = pytanie.Argumenty[1].ToString();
+                                    if (aktywne_sesje.ContainsKey(sesja_login))
+                                    {
+                                        odpowiedz.Argumenty[0] = aktywne_sesje[sesja_login].Equals(sesja_kod);
+                                    }else
+                                    {
+                                        odpowiedz.Argumenty[0] = false;
+                                    }
+                                    break;
+                                case Pytanie.komendy.zakoncz_gre:
+                                    string zg_nr_lobby = pytanie.Argumenty[0].ToString();
+                                    if (slownik_lobby.ContainsKey(zg_nr_lobby))
+                                    {
+                                        slownik_lobby[zg_nr_lobby].resetGry();
+                                    }
+                                    odpowiedz.Argumenty[0] = true;
+                                    break;
+                                case Pytanie.komendy.czy_koniec_gry:
+                                    string ckg_nr_lobby = pytanie.Argumenty[0].ToString();
+                                    odpowiedz.Argumenty[0] = slownik_lobby[ckg_nr_lobby]
+                                        .czy_koniec_gry();
+                                    break;
+                            }
                         }
                     }
-                    Console.WriteLine($"Tresc odpowiedzi: {odpowiedz}");
-                    Wyslij(handler, odpowiedz);
+                    string odwp = JsonSerializer.Serialize<Odpowiedz>(odpowiedz);
+                    Console.WriteLine($"Tresc odpowiedzi: {odwp}");
+                    Wyslij(handler, JsonSerializer.Serialize<Odpowiedz>(odpowiedz));
                 }
                 else
                 {

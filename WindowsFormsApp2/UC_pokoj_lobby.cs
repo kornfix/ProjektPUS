@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -60,7 +61,8 @@ namespace WindowsFormsApp2
         {
             if (w_lobby)
             {
-                AsynchronicznyKlient.zapytaj("usun_gracz_z_lobby: " + l_numer.Text + " " + Uzytkownik.Login);
+                AsynchronicznyKlient.zapytaj(Pytanie.komendy.usun_gracz_z_lobby,
+                    new object[] { l_numer.Text, Uzytkownik.Instance.Login});
             }
         }
 
@@ -76,11 +78,13 @@ namespace WindowsFormsApp2
         {
             if (!w_lobby)
             {
-                e.Result = AsynchronicznyKlient.zapytaj("dodaj_gracza_do_lobby: " + l_numer.Text + " " + Uzytkownik.Login);
+                e.Result = AsynchronicznyKlient.zapytaj(Pytanie.komendy.dodaj_gracza_do_lobby,
+                    new object[] { l_numer.Text, Uzytkownik.Instance.Login });
             }
             else
             {
-                e.Result = AsynchronicznyKlient.zapytaj("usun_gracz_z_lobby: " + l_numer.Text + " " + Uzytkownik.Login);
+                e.Result = AsynchronicznyKlient.zapytaj(Pytanie.komendy.usun_gracz_z_lobby, 
+                    new object[] { l_numer.Text, Uzytkownik.Instance.Login});
             }
         }
         private void bg_dolaczanie_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -113,11 +117,15 @@ namespace WindowsFormsApp2
         {
             if (!jestem_gotowy)
             {
-               e.Result = AsynchronicznyKlient.zapytaj("jestem_gotowy : " + l_numer.Text + " " + Uzytkownik.Login);
+                e.Result = AsynchronicznyKlient.zapytaj(Pytanie.komendy.jestem_gotowy,
+                    new object[] { l_numer.Text, Uzytkownik.Instance.Login, 
+                        Uzytkownik.Instance.Sesja});
             }
             else
             {
-               e.Result = AsynchronicznyKlient.zapytaj("niejestem_gotowy : " + l_numer.Text + " " + Uzytkownik.Login);
+                e.Result = AsynchronicznyKlient.zapytaj(Pytanie.komendy.niejestem_gotowy,
+                    new object[] { l_numer.Text, Uzytkownik.Instance.Login,
+                        Uzytkownik.Instance.Sesja });
             }
         }
 
@@ -147,7 +155,8 @@ namespace WindowsFormsApp2
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-            e.Result = AsynchronicznyKlient.zapytaj("gracze_z_lobby: " + l_numer.Text);
+            e.Result = AsynchronicznyKlient.zapytaj(Pytanie.komendy.gracze_z_lobby
+                , new object[] { l_numer.Text});
         }
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
@@ -194,7 +203,7 @@ namespace WindowsFormsApp2
                     if (status_gry == "rozpoczynam" && w_lobby && Aplikacja.OstatniaGra == null)
                     {
                         // Start gry;
-                        Rozgrywka.Przeciwnik = gracz1.Equals(Uzytkownik.Login) ? gracz2 : gracz1;
+                        Rozgrywka.Przeciwnik = gracz1.Equals(Uzytkownik.Instance.Login) ? gracz2 : gracz1;
                         Gra gra = new Gra(this);
                         gra.Show();
                         gra.WczytajDane();

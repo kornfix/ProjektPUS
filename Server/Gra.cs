@@ -1,31 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Server
 {
     class Gra
     {
-        private string aktualnie_wybierajacy;
+        // Tablica
         private int rozmiar;
-        private Lobby lobby;
-        private int i = 0;
-        private Dictionary<int, string> ruchy = new Dictionary<int, string>();
-        List<string> icons = new List<string>();
-        /*
-        {
-            "!", "!", "N", "N", ",", ",", "k", "k", "b", "b", "v", "v", "w", "w", "z", "z"
-        };
-        */
-        private string gracz1;
-        private string gracz2;
-        private string WylosowanaTablica = "";
+        private Dictionary<int, string> TablicaGry;
+
+        // Ruchy 
+        private Dictionary<int, int> ruchy = new Dictionary<int, int>();
+        private int licznik_ruchow;
+        private string ostatni_ruch;
+
+        // Generacja elementów w talbicy
+        private List<string> icons = new List<string>();
         Random rnd = new Random();
-        public Gra(Lobby lobby)
+
+        // Gracze
+        private bool czy_pierwszy;
+        private int[] wyniki_graczy = new int[2];
+
+        public int[] Wyniki_graczy { get => wyniki_graczy; set => wyniki_graczy = value; }
+
+        public Gra()
         {
-            this.lobby = lobby;
-            gracz1 = lobby.Gracz1();
-            gracz2 = lobby.Gracz2();
+            licznik_ruchow = 0;
+            ostatni_ruch = "";
+            wyniki_graczy[0] = 0;
+            wyniki_graczy[1] = 0;
             rozmiar = 4; // zawsze musibyć  rozmiar*rozmiar % 2 == 0
             generujIcony();
         }
@@ -52,60 +58,48 @@ namespace Server
         }
 
 
-        public void ZapiszRuch(string ruch)
+        public bool ZapiszRuch(int indeks_ruchu)
         {
-            ruchy.Add(++i, ruch);
-        }
-        public string WczytajRuchy(string indeks)
-        {
-            string odp = "";
-            int liczba = Int32.Parse(indeks);
-            foreach (var item in ruchy)
+            if (indeks_ruchu >= 0 && indeks_ruchu < TablicaGry.Count)
             {
-                if (item.Key > liczba)
+                ruchy.Add(++licznik_ruchow, indeks_ruchu);
+                if (ruchy.Count % 2 == 0)
                 {
-                    odp += item.Value + " ";
+                    if (ostatni_ruch.Equals(TablicaGry[indeks_ruchu]))
+                    {
+                        wyniki_graczy[czy_pierwszy ? 0 : 1] += 10;
+                    }
+                    else
+                    {
+                        czy_pierwszy = !czy_pierwszy;
+                    }
                 }
-            }   
-            return odp;
-        }
-
-        public void negacjaGraczow()
-        {
-            if (aktualnie_wybierajacy == gracz1)
-            {
-                aktualnie_wybierajacy = gracz2;
+                ostatni_ruch = TablicaGry[indeks_ruchu];
+                return true;
             }
-            else if (aktualnie_wybierajacy == gracz2)
-            {
-                aktualnie_wybierajacy = gracz1;
-            }
+            return false;
         }
-
-        public string WylosowaniePlanszy()
+        public List<int> WczytajRuchy(int indeks)
         {
-            if (WylosowanaTablica == "")
+            return ruchy.Where(k => k.Key > indeks)
+                .Select( m => m.Value).ToList();
+        }
+        public Dictionary<int, string> wygenerowanie_planszy()
+        {
+            if (TablicaGry== null)
             {
+                TablicaGry = new Dictionary<int, string>();
                 int randomNumber;
                 int ile = icons.Count;
                 for (int i = 0; i < ile; i++)
                 {
                     randomNumber = rnd.Next(0, icons.Count);
-                    if (i == ile - 1)
-                    {
-                        WylosowanaTablica += icons[randomNumber];
-                        Console.WriteLine(i + " " + icons[randomNumber]);
-                    }
-                    else
-                    {
-                        WylosowanaTablica += icons[randomNumber] + " ";
-                        Console.WriteLine(i + " " + icons[randomNumber]);
-                    }
+                    TablicaGry.Add(i, icons[randomNumber]);
+                    Console.WriteLine(i + " " + icons[randomNumber]);
                     icons.RemoveAt(randomNumber);
                 }
             }
-            aktualnie_wybierajacy = gracz1;
-            return rozmiar + " " + gracz1 + " " + WylosowanaTablica;
+            return TablicaGry;
         }
     }
 }

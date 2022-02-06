@@ -9,17 +9,33 @@ namespace WindowsFormsApp2
 {
     public class Uzytkownik
     {
-        private static string sesja;
-        private static string imie;
-        private static string nazwisko;
-        private static string login;
-        private static string email;
-        public static string Imie { get => imie; set => imie = value; }
-        public static string Nazwisko { get => nazwisko; set => nazwisko = value; }
-        public static string Login { get => login; set => login = value; }
-        public static string Email { get => email; set => email = value; }
-        public static string Sesja { get => sesja; set => sesja = value; }
+        private static Uzytkownik _instance;
+        private string sesja;
+        private  string imie;
+        private  string nazwisko;
+        private  string login;
+        private  string email;
+        public  string Imie { get => imie; set => imie = value; }
+        public  string Nazwisko { get => nazwisko; set => nazwisko = value; }
+        public  string Login { get => login; set => login = value; }
+        public  string Email { get => email; set => email = value; }
+        public  string Sesja { get => sesja; set => sesja = value; }
+        public static Uzytkownik Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new Uzytkownik();
 
+                }
+                return _instance;
+            }
+            set
+            {
+                _instance = value;
+            }
+        }
 
         public static void wait(int milliseconds)
         {
@@ -45,11 +61,7 @@ namespace WindowsFormsApp2
         }
         public static void clear()
         {
-            imie = "";
-            nazwisko = "";
-            login = "";
-            email = "";
-            sesja = "";
+            _instance = null;
         }
     }
 }

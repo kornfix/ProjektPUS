@@ -33,15 +33,15 @@ namespace Server
     partial void Insertuzytkownicy(uzytkownicy instance);
     partial void Updateuzytkownicy(uzytkownicy instance);
     partial void Deleteuzytkownicy(uzytkownicy instance);
+    partial void Insertruchy_graczy(ruchy_graczy instance);
+    partial void Updateruchy_graczy(ruchy_graczy instance);
+    partial void Deleteruchy_graczy(ruchy_graczy instance);
     partial void Insertplansze(plansze instance);
     partial void Updateplansze(plansze instance);
     partial void Deleteplansze(plansze instance);
     partial void Insertrozgrywki(rozgrywki instance);
     partial void Updaterozgrywki(rozgrywki instance);
     partial void Deleterozgrywki(rozgrywki instance);
-    partial void Insertruchy_graczy(ruchy_graczy instance);
-    partial void Updateruchy_graczy(ruchy_graczy instance);
-    partial void Deleteruchy_graczy(ruchy_graczy instance);
     #endregion
 		
 		public BazaDataContext() : 
@@ -82,6 +82,14 @@ namespace Server
 			}
 		}
 		
+		public System.Data.Linq.Table<ruchy_graczy> ruchy_graczy
+		{
+			get
+			{
+				return this.GetTable<ruchy_graczy>();
+			}
+		}
+		
 		public System.Data.Linq.Table<plansze> plansze
 		{
 			get
@@ -95,14 +103,6 @@ namespace Server
 			get
 			{
 				return this.GetTable<rozgrywki>();
-			}
-		}
-		
-		public System.Data.Linq.Table<ruchy_graczy> ruchy_graczy
-		{
-			get
-			{
-				return this.GetTable<ruchy_graczy>();
 			}
 		}
 	}
@@ -125,11 +125,11 @@ namespace Server
 		
 		private string _haslo;
 		
+		private EntitySet<ruchy_graczy> _ruchy_graczy;
+		
 		private EntitySet<rozgrywki> _rozgrywki;
 		
 		private EntitySet<rozgrywki> _rozgrywki1;
-		
-		private EntitySet<ruchy_graczy> _ruchy_graczy;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -151,9 +151,9 @@ namespace Server
 		
 		public uzytkownicy()
 		{
+			this._ruchy_graczy = new EntitySet<ruchy_graczy>(new Action<ruchy_graczy>(this.attach_ruchy_graczy), new Action<ruchy_graczy>(this.detach_ruchy_graczy));
 			this._rozgrywki = new EntitySet<rozgrywki>(new Action<rozgrywki>(this.attach_rozgrywki), new Action<rozgrywki>(this.detach_rozgrywki));
 			this._rozgrywki1 = new EntitySet<rozgrywki>(new Action<rozgrywki>(this.attach_rozgrywki1), new Action<rozgrywki>(this.detach_rozgrywki1));
-			this._ruchy_graczy = new EntitySet<ruchy_graczy>(new Action<ruchy_graczy>(this.attach_ruchy_graczy), new Action<ruchy_graczy>(this.detach_ruchy_graczy));
 			OnCreated();
 		}
 		
@@ -277,6 +277,19 @@ namespace Server
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="uzytkownicy_ruchy_graczy", Storage="_ruchy_graczy", ThisKey="id_uzytkownika", OtherKey="id_gracza")]
+		public EntitySet<ruchy_graczy> ruchy_graczy
+		{
+			get
+			{
+				return this._ruchy_graczy;
+			}
+			set
+			{
+				this._ruchy_graczy.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="uzytkownicy_rozgrywki", Storage="_rozgrywki", ThisKey="id_uzytkownika", OtherKey="id_gracza_nr_dwa")]
 		public EntitySet<rozgrywki> rozgrywki
 		{
@@ -303,19 +316,6 @@ namespace Server
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="uzytkownicy_ruchy_graczy", Storage="_ruchy_graczy", ThisKey="id_uzytkownika", OtherKey="id_gracza")]
-		public EntitySet<ruchy_graczy> ruchy_graczy
-		{
-			get
-			{
-				return this._ruchy_graczy;
-			}
-			set
-			{
-				this._ruchy_graczy.Assign(value);
-			}
-		}
-		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -334,6 +334,18 @@ namespace Server
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+		
+		private void attach_ruchy_graczy(ruchy_graczy entity)
+		{
+			this.SendPropertyChanging();
+			entity.uzytkownicy = this;
+		}
+		
+		private void detach_ruchy_graczy(ruchy_graczy entity)
+		{
+			this.SendPropertyChanging();
+			entity.uzytkownicy = null;
 		}
 		
 		private void attach_rozgrywki(rozgrywki entity)
@@ -358,537 +370,6 @@ namespace Server
 		{
 			this.SendPropertyChanging();
 			entity.uzytkownicy1 = null;
-		}
-		
-		private void attach_ruchy_graczy(ruchy_graczy entity)
-		{
-			this.SendPropertyChanging();
-			entity.uzytkownicy = this;
-		}
-		
-		private void detach_ruchy_graczy(ruchy_graczy entity)
-		{
-			this.SendPropertyChanging();
-			entity.uzytkownicy = null;
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.plansze")]
-	public partial class plansze : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _id_planszy;
-		
-		private int _wiersz;
-		
-		private int _kolumna;
-		
-		private string _sciezka_do_zdjecia;
-		
-		private int _id_gry;
-		
-		private EntityRef<rozgrywki> _rozgrywki;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void Onid_planszyChanging(int value);
-    partial void Onid_planszyChanged();
-    partial void OnwierszChanging(int value);
-    partial void OnwierszChanged();
-    partial void OnkolumnaChanging(int value);
-    partial void OnkolumnaChanged();
-    partial void Onsciezka_do_zdjeciaChanging(string value);
-    partial void Onsciezka_do_zdjeciaChanged();
-    partial void Onid_gryChanging(int value);
-    partial void Onid_gryChanged();
-    #endregion
-		
-		public plansze()
-		{
-			this._rozgrywki = default(EntityRef<rozgrywki>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_planszy", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int id_planszy
-		{
-			get
-			{
-				return this._id_planszy;
-			}
-			set
-			{
-				if ((this._id_planszy != value))
-				{
-					this.Onid_planszyChanging(value);
-					this.SendPropertyChanging();
-					this._id_planszy = value;
-					this.SendPropertyChanged("id_planszy");
-					this.Onid_planszyChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_wiersz", DbType="Int NOT NULL")]
-		public int wiersz
-		{
-			get
-			{
-				return this._wiersz;
-			}
-			set
-			{
-				if ((this._wiersz != value))
-				{
-					this.OnwierszChanging(value);
-					this.SendPropertyChanging();
-					this._wiersz = value;
-					this.SendPropertyChanged("wiersz");
-					this.OnwierszChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_kolumna", DbType="Int NOT NULL")]
-		public int kolumna
-		{
-			get
-			{
-				return this._kolumna;
-			}
-			set
-			{
-				if ((this._kolumna != value))
-				{
-					this.OnkolumnaChanging(value);
-					this.SendPropertyChanging();
-					this._kolumna = value;
-					this.SendPropertyChanged("kolumna");
-					this.OnkolumnaChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_sciezka_do_zdjecia", DbType="VarChar(500) NOT NULL", CanBeNull=false)]
-		public string sciezka_do_zdjecia
-		{
-			get
-			{
-				return this._sciezka_do_zdjecia;
-			}
-			set
-			{
-				if ((this._sciezka_do_zdjecia != value))
-				{
-					this.Onsciezka_do_zdjeciaChanging(value);
-					this.SendPropertyChanging();
-					this._sciezka_do_zdjecia = value;
-					this.SendPropertyChanged("sciezka_do_zdjecia");
-					this.Onsciezka_do_zdjeciaChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_gry", DbType="Int NOT NULL")]
-		public int id_gry
-		{
-			get
-			{
-				return this._id_gry;
-			}
-			set
-			{
-				if ((this._id_gry != value))
-				{
-					if (this._rozgrywki.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.Onid_gryChanging(value);
-					this.SendPropertyChanging();
-					this._id_gry = value;
-					this.SendPropertyChanged("id_gry");
-					this.Onid_gryChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="rozgrywki_plansze", Storage="_rozgrywki", ThisKey="id_gry", OtherKey="id_gry", IsForeignKey=true)]
-		public rozgrywki rozgrywki
-		{
-			get
-			{
-				return this._rozgrywki.Entity;
-			}
-			set
-			{
-				rozgrywki previousValue = this._rozgrywki.Entity;
-				if (((previousValue != value) 
-							|| (this._rozgrywki.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._rozgrywki.Entity = null;
-						previousValue.plansze.Remove(this);
-					}
-					this._rozgrywki.Entity = value;
-					if ((value != null))
-					{
-						value.plansze.Add(this);
-						this._id_gry = value.id_gry;
-					}
-					else
-					{
-						this._id_gry = default(int);
-					}
-					this.SendPropertyChanged("rozgrywki");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.rozgrywki")]
-	public partial class rozgrywki : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _id_gry;
-		
-		private System.DateTime _data;
-		
-		private string _status;
-		
-		private string _wynik;
-		
-		private int _id_gracza_nr_jeden;
-		
-		private int _id_gracza_nr_dwa;
-		
-		private EntitySet<plansze> _plansze;
-		
-		private EntitySet<ruchy_graczy> _ruchy_graczy;
-		
-		private EntityRef<uzytkownicy> _uzytkownicy;
-		
-		private EntityRef<uzytkownicy> _uzytkownicy1;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void Onid_gryChanging(int value);
-    partial void Onid_gryChanged();
-    partial void OndataChanging(System.DateTime value);
-    partial void OndataChanged();
-    partial void OnstatusChanging(string value);
-    partial void OnstatusChanged();
-    partial void OnwynikChanging(string value);
-    partial void OnwynikChanged();
-    partial void Onid_gracza_nr_jedenChanging(int value);
-    partial void Onid_gracza_nr_jedenChanged();
-    partial void Onid_gracza_nr_dwaChanging(int value);
-    partial void Onid_gracza_nr_dwaChanged();
-    #endregion
-		
-		public rozgrywki()
-		{
-			this._plansze = new EntitySet<plansze>(new Action<plansze>(this.attach_plansze), new Action<plansze>(this.detach_plansze));
-			this._ruchy_graczy = new EntitySet<ruchy_graczy>(new Action<ruchy_graczy>(this.attach_ruchy_graczy), new Action<ruchy_graczy>(this.detach_ruchy_graczy));
-			this._uzytkownicy = default(EntityRef<uzytkownicy>);
-			this._uzytkownicy1 = default(EntityRef<uzytkownicy>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_gry", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int id_gry
-		{
-			get
-			{
-				return this._id_gry;
-			}
-			set
-			{
-				if ((this._id_gry != value))
-				{
-					this.Onid_gryChanging(value);
-					this.SendPropertyChanging();
-					this._id_gry = value;
-					this.SendPropertyChanged("id_gry");
-					this.Onid_gryChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_data", DbType="DateTime NOT NULL")]
-		public System.DateTime data
-		{
-			get
-			{
-				return this._data;
-			}
-			set
-			{
-				if ((this._data != value))
-				{
-					this.OndataChanging(value);
-					this.SendPropertyChanging();
-					this._data = value;
-					this.SendPropertyChanged("data");
-					this.OndataChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_status", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
-		public string status
-		{
-			get
-			{
-				return this._status;
-			}
-			set
-			{
-				if ((this._status != value))
-				{
-					this.OnstatusChanging(value);
-					this.SendPropertyChanging();
-					this._status = value;
-					this.SendPropertyChanged("status");
-					this.OnstatusChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_wynik", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
-		public string wynik
-		{
-			get
-			{
-				return this._wynik;
-			}
-			set
-			{
-				if ((this._wynik != value))
-				{
-					this.OnwynikChanging(value);
-					this.SendPropertyChanging();
-					this._wynik = value;
-					this.SendPropertyChanged("wynik");
-					this.OnwynikChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_gracza_nr_jeden", DbType="Int NOT NULL")]
-		public int id_gracza_nr_jeden
-		{
-			get
-			{
-				return this._id_gracza_nr_jeden;
-			}
-			set
-			{
-				if ((this._id_gracza_nr_jeden != value))
-				{
-					if (this._uzytkownicy1.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.Onid_gracza_nr_jedenChanging(value);
-					this.SendPropertyChanging();
-					this._id_gracza_nr_jeden = value;
-					this.SendPropertyChanged("id_gracza_nr_jeden");
-					this.Onid_gracza_nr_jedenChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_gracza_nr_dwa", DbType="Int NOT NULL")]
-		public int id_gracza_nr_dwa
-		{
-			get
-			{
-				return this._id_gracza_nr_dwa;
-			}
-			set
-			{
-				if ((this._id_gracza_nr_dwa != value))
-				{
-					if (this._uzytkownicy.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.Onid_gracza_nr_dwaChanging(value);
-					this.SendPropertyChanging();
-					this._id_gracza_nr_dwa = value;
-					this.SendPropertyChanged("id_gracza_nr_dwa");
-					this.Onid_gracza_nr_dwaChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="rozgrywki_plansze", Storage="_plansze", ThisKey="id_gry", OtherKey="id_gry")]
-		public EntitySet<plansze> plansze
-		{
-			get
-			{
-				return this._plansze;
-			}
-			set
-			{
-				this._plansze.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="rozgrywki_ruchy_graczy", Storage="_ruchy_graczy", ThisKey="id_gry", OtherKey="id_gry")]
-		public EntitySet<ruchy_graczy> ruchy_graczy
-		{
-			get
-			{
-				return this._ruchy_graczy;
-			}
-			set
-			{
-				this._ruchy_graczy.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="uzytkownicy_rozgrywki", Storage="_uzytkownicy", ThisKey="id_gracza_nr_dwa", OtherKey="id_uzytkownika", IsForeignKey=true)]
-		public uzytkownicy uzytkownicy
-		{
-			get
-			{
-				return this._uzytkownicy.Entity;
-			}
-			set
-			{
-				uzytkownicy previousValue = this._uzytkownicy.Entity;
-				if (((previousValue != value) 
-							|| (this._uzytkownicy.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._uzytkownicy.Entity = null;
-						previousValue.rozgrywki.Remove(this);
-					}
-					this._uzytkownicy.Entity = value;
-					if ((value != null))
-					{
-						value.rozgrywki.Add(this);
-						this._id_gracza_nr_dwa = value.id_uzytkownika;
-					}
-					else
-					{
-						this._id_gracza_nr_dwa = default(int);
-					}
-					this.SendPropertyChanged("uzytkownicy");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="uzytkownicy_rozgrywki1", Storage="_uzytkownicy1", ThisKey="id_gracza_nr_jeden", OtherKey="id_uzytkownika", IsForeignKey=true)]
-		public uzytkownicy uzytkownicy1
-		{
-			get
-			{
-				return this._uzytkownicy1.Entity;
-			}
-			set
-			{
-				uzytkownicy previousValue = this._uzytkownicy1.Entity;
-				if (((previousValue != value) 
-							|| (this._uzytkownicy1.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._uzytkownicy1.Entity = null;
-						previousValue.rozgrywki1.Remove(this);
-					}
-					this._uzytkownicy1.Entity = value;
-					if ((value != null))
-					{
-						value.rozgrywki1.Add(this);
-						this._id_gracza_nr_jeden = value.id_uzytkownika;
-					}
-					else
-					{
-						this._id_gracza_nr_jeden = default(int);
-					}
-					this.SendPropertyChanged("uzytkownicy1");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_plansze(plansze entity)
-		{
-			this.SendPropertyChanging();
-			entity.rozgrywki = this;
-		}
-		
-		private void detach_plansze(plansze entity)
-		{
-			this.SendPropertyChanging();
-			entity.rozgrywki = null;
-		}
-		
-		private void attach_ruchy_graczy(ruchy_graczy entity)
-		{
-			this.SendPropertyChanging();
-			entity.rozgrywki = this;
-		}
-		
-		private void detach_ruchy_graczy(ruchy_graczy entity)
-		{
-			this.SendPropertyChanging();
-			entity.rozgrywki = null;
 		}
 	}
 	
@@ -1129,6 +610,549 @@ namespace Server
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.plansze")]
+	public partial class plansze : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _id_planszy;
+		
+		private int _wiersz;
+		
+		private int _kolumna;
+		
+		private string _sciezka_do_zdjecia;
+		
+		private int _id_gry;
+		
+		private EntityRef<rozgrywki> _rozgrywki;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Onid_planszyChanging(int value);
+    partial void Onid_planszyChanged();
+    partial void OnwierszChanging(int value);
+    partial void OnwierszChanged();
+    partial void OnkolumnaChanging(int value);
+    partial void OnkolumnaChanged();
+    partial void Onsciezka_do_zdjeciaChanging(string value);
+    partial void Onsciezka_do_zdjeciaChanged();
+    partial void Onid_gryChanging(int value);
+    partial void Onid_gryChanged();
+    #endregion
+		
+		public plansze()
+		{
+			this._rozgrywki = default(EntityRef<rozgrywki>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_planszy", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int id_planszy
+		{
+			get
+			{
+				return this._id_planszy;
+			}
+			set
+			{
+				if ((this._id_planszy != value))
+				{
+					this.Onid_planszyChanging(value);
+					this.SendPropertyChanging();
+					this._id_planszy = value;
+					this.SendPropertyChanged("id_planszy");
+					this.Onid_planszyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_wiersz", DbType="Int NOT NULL")]
+		public int wiersz
+		{
+			get
+			{
+				return this._wiersz;
+			}
+			set
+			{
+				if ((this._wiersz != value))
+				{
+					this.OnwierszChanging(value);
+					this.SendPropertyChanging();
+					this._wiersz = value;
+					this.SendPropertyChanged("wiersz");
+					this.OnwierszChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_kolumna", DbType="Int NOT NULL")]
+		public int kolumna
+		{
+			get
+			{
+				return this._kolumna;
+			}
+			set
+			{
+				if ((this._kolumna != value))
+				{
+					this.OnkolumnaChanging(value);
+					this.SendPropertyChanging();
+					this._kolumna = value;
+					this.SendPropertyChanged("kolumna");
+					this.OnkolumnaChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_sciezka_do_zdjecia", DbType="VarChar(500) NOT NULL", CanBeNull=false)]
+		public string sciezka_do_zdjecia
+		{
+			get
+			{
+				return this._sciezka_do_zdjecia;
+			}
+			set
+			{
+				if ((this._sciezka_do_zdjecia != value))
+				{
+					this.Onsciezka_do_zdjeciaChanging(value);
+					this.SendPropertyChanging();
+					this._sciezka_do_zdjecia = value;
+					this.SendPropertyChanged("sciezka_do_zdjecia");
+					this.Onsciezka_do_zdjeciaChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_gry", DbType="Int NOT NULL")]
+		public int id_gry
+		{
+			get
+			{
+				return this._id_gry;
+			}
+			set
+			{
+				if ((this._id_gry != value))
+				{
+					if (this._rozgrywki.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.Onid_gryChanging(value);
+					this.SendPropertyChanging();
+					this._id_gry = value;
+					this.SendPropertyChanged("id_gry");
+					this.Onid_gryChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="rozgrywki_plansze", Storage="_rozgrywki", ThisKey="id_gry", OtherKey="id_gry", IsForeignKey=true)]
+		public rozgrywki rozgrywki
+		{
+			get
+			{
+				return this._rozgrywki.Entity;
+			}
+			set
+			{
+				rozgrywki previousValue = this._rozgrywki.Entity;
+				if (((previousValue != value) 
+							|| (this._rozgrywki.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._rozgrywki.Entity = null;
+						previousValue.plansze.Remove(this);
+					}
+					this._rozgrywki.Entity = value;
+					if ((value != null))
+					{
+						value.plansze.Add(this);
+						this._id_gry = value.id_gry;
+					}
+					else
+					{
+						this._id_gry = default(int);
+					}
+					this.SendPropertyChanged("rozgrywki");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.rozgrywki")]
+	public partial class rozgrywki : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _id_gry;
+		
+		private System.DateTime _data;
+		
+		private string _status;
+		
+		private string _wynik;
+		
+		private int _id_gracza_nr_jeden;
+		
+		private int _id_gracza_nr_dwa;
+		
+		private string _plansza;
+		
+		private EntitySet<ruchy_graczy> _ruchy_graczy;
+		
+		private EntitySet<plansze> _plansze;
+		
+		private EntityRef<uzytkownicy> _uzytkownicy;
+		
+		private EntityRef<uzytkownicy> _uzytkownicy1;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Onid_gryChanging(int value);
+    partial void Onid_gryChanged();
+    partial void OndataChanging(System.DateTime value);
+    partial void OndataChanged();
+    partial void OnstatusChanging(string value);
+    partial void OnstatusChanged();
+    partial void OnwynikChanging(string value);
+    partial void OnwynikChanged();
+    partial void Onid_gracza_nr_jedenChanging(int value);
+    partial void Onid_gracza_nr_jedenChanged();
+    partial void Onid_gracza_nr_dwaChanging(int value);
+    partial void Onid_gracza_nr_dwaChanged();
+    partial void OnplanszaChanging(string value);
+    partial void OnplanszaChanged();
+    #endregion
+		
+		public rozgrywki()
+		{
+			this._ruchy_graczy = new EntitySet<ruchy_graczy>(new Action<ruchy_graczy>(this.attach_ruchy_graczy), new Action<ruchy_graczy>(this.detach_ruchy_graczy));
+			this._plansze = new EntitySet<plansze>(new Action<plansze>(this.attach_plansze), new Action<plansze>(this.detach_plansze));
+			this._uzytkownicy = default(EntityRef<uzytkownicy>);
+			this._uzytkownicy1 = default(EntityRef<uzytkownicy>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_gry", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int id_gry
+		{
+			get
+			{
+				return this._id_gry;
+			}
+			set
+			{
+				if ((this._id_gry != value))
+				{
+					this.Onid_gryChanging(value);
+					this.SendPropertyChanging();
+					this._id_gry = value;
+					this.SendPropertyChanged("id_gry");
+					this.Onid_gryChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_data", DbType="DateTime NOT NULL")]
+		public System.DateTime data
+		{
+			get
+			{
+				return this._data;
+			}
+			set
+			{
+				if ((this._data != value))
+				{
+					this.OndataChanging(value);
+					this.SendPropertyChanging();
+					this._data = value;
+					this.SendPropertyChanged("data");
+					this.OndataChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_status", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		public string status
+		{
+			get
+			{
+				return this._status;
+			}
+			set
+			{
+				if ((this._status != value))
+				{
+					this.OnstatusChanging(value);
+					this.SendPropertyChanging();
+					this._status = value;
+					this.SendPropertyChanged("status");
+					this.OnstatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_wynik", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		public string wynik
+		{
+			get
+			{
+				return this._wynik;
+			}
+			set
+			{
+				if ((this._wynik != value))
+				{
+					this.OnwynikChanging(value);
+					this.SendPropertyChanging();
+					this._wynik = value;
+					this.SendPropertyChanged("wynik");
+					this.OnwynikChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_gracza_nr_jeden", DbType="Int NOT NULL")]
+		public int id_gracza_nr_jeden
+		{
+			get
+			{
+				return this._id_gracza_nr_jeden;
+			}
+			set
+			{
+				if ((this._id_gracza_nr_jeden != value))
+				{
+					if (this._uzytkownicy1.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.Onid_gracza_nr_jedenChanging(value);
+					this.SendPropertyChanging();
+					this._id_gracza_nr_jeden = value;
+					this.SendPropertyChanged("id_gracza_nr_jeden");
+					this.Onid_gracza_nr_jedenChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_gracza_nr_dwa", DbType="Int NOT NULL")]
+		public int id_gracza_nr_dwa
+		{
+			get
+			{
+				return this._id_gracza_nr_dwa;
+			}
+			set
+			{
+				if ((this._id_gracza_nr_dwa != value))
+				{
+					if (this._uzytkownicy.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.Onid_gracza_nr_dwaChanging(value);
+					this.SendPropertyChanging();
+					this._id_gracza_nr_dwa = value;
+					this.SendPropertyChanged("id_gracza_nr_dwa");
+					this.Onid_gracza_nr_dwaChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_plansza", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
+		public string plansza
+		{
+			get
+			{
+				return this._plansza;
+			}
+			set
+			{
+				if ((this._plansza != value))
+				{
+					this.OnplanszaChanging(value);
+					this.SendPropertyChanging();
+					this._plansza = value;
+					this.SendPropertyChanged("plansza");
+					this.OnplanszaChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="rozgrywki_ruchy_graczy", Storage="_ruchy_graczy", ThisKey="id_gry", OtherKey="id_gry")]
+		public EntitySet<ruchy_graczy> ruchy_graczy
+		{
+			get
+			{
+				return this._ruchy_graczy;
+			}
+			set
+			{
+				this._ruchy_graczy.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="rozgrywki_plansze", Storage="_plansze", ThisKey="id_gry", OtherKey="id_gry")]
+		public EntitySet<plansze> plansze
+		{
+			get
+			{
+				return this._plansze;
+			}
+			set
+			{
+				this._plansze.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="uzytkownicy_rozgrywki", Storage="_uzytkownicy", ThisKey="id_gracza_nr_dwa", OtherKey="id_uzytkownika", IsForeignKey=true)]
+		public uzytkownicy uzytkownicy
+		{
+			get
+			{
+				return this._uzytkownicy.Entity;
+			}
+			set
+			{
+				uzytkownicy previousValue = this._uzytkownicy.Entity;
+				if (((previousValue != value) 
+							|| (this._uzytkownicy.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._uzytkownicy.Entity = null;
+						previousValue.rozgrywki.Remove(this);
+					}
+					this._uzytkownicy.Entity = value;
+					if ((value != null))
+					{
+						value.rozgrywki.Add(this);
+						this._id_gracza_nr_dwa = value.id_uzytkownika;
+					}
+					else
+					{
+						this._id_gracza_nr_dwa = default(int);
+					}
+					this.SendPropertyChanged("uzytkownicy");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="uzytkownicy_rozgrywki1", Storage="_uzytkownicy1", ThisKey="id_gracza_nr_jeden", OtherKey="id_uzytkownika", IsForeignKey=true)]
+		public uzytkownicy uzytkownicy1
+		{
+			get
+			{
+				return this._uzytkownicy1.Entity;
+			}
+			set
+			{
+				uzytkownicy previousValue = this._uzytkownicy1.Entity;
+				if (((previousValue != value) 
+							|| (this._uzytkownicy1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._uzytkownicy1.Entity = null;
+						previousValue.rozgrywki1.Remove(this);
+					}
+					this._uzytkownicy1.Entity = value;
+					if ((value != null))
+					{
+						value.rozgrywki1.Add(this);
+						this._id_gracza_nr_jeden = value.id_uzytkownika;
+					}
+					else
+					{
+						this._id_gracza_nr_jeden = default(int);
+					}
+					this.SendPropertyChanged("uzytkownicy1");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_ruchy_graczy(ruchy_graczy entity)
+		{
+			this.SendPropertyChanging();
+			entity.rozgrywki = this;
+		}
+		
+		private void detach_ruchy_graczy(ruchy_graczy entity)
+		{
+			this.SendPropertyChanging();
+			entity.rozgrywki = null;
+		}
+		
+		private void attach_plansze(plansze entity)
+		{
+			this.SendPropertyChanging();
+			entity.rozgrywki = this;
+		}
+		
+		private void detach_plansze(plansze entity)
+		{
+			this.SendPropertyChanging();
+			entity.rozgrywki = null;
 		}
 	}
 }

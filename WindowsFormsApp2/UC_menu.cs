@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
 namespace WindowsFormsApp2
 {
     public partial class UC_menu : UserControl
@@ -16,9 +16,9 @@ namespace WindowsFormsApp2
         }
         public void wczytaj_dane()
         {
-            l_imie.Text = Uzytkownik.Imie;
-            l_nazwisko.Text = Uzytkownik.Nazwisko;
-            l_login.Text = Uzytkownik.Login;
+            l_imie.Text = Uzytkownik.Instance.Imie;
+            l_nazwisko.Text = Uzytkownik.Instance.Nazwisko;
+            l_login.Text = Uzytkownik.Instance.Login;
         }
 
 
@@ -67,6 +67,7 @@ namespace WindowsFormsApp2
 
         private void timer_zalogowany_Tick(object sender, EventArgs e)
         {
+
             timer_zalogowany.Stop();
             if (!backgroundWorker1.IsBusy)
             {
@@ -80,7 +81,8 @@ namespace WindowsFormsApp2
 
         private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            e.Result = AsynchronicznyKlient.zapytaj("sesja: " + Uzytkownik.Login);
+            e.Result = AsynchronicznyKlient.zapytaj(Pytanie.komendy.sesja, 
+                new object[] { Uzytkownik.Instance.Login, Uzytkownik.Instance.Sesja});
         }
 
         private void backgroundWorker1_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
@@ -102,16 +104,20 @@ namespace WindowsFormsApp2
                 // Zwrocono cos
                 String odp = e.Result.ToString();
                 // Jakiś serwer nie odpowiedzial w ciagu 5 sekund albo zrwocil error;
-                if (odp == "CzasUplynal" || odp =="error")
+                if (odp.Equals("CzasUplynal") || odp.Equals("error"))
                 {
                     MessageBox.Show("Brak dostępu do serwera");
-                }else if (odp !=Uzytkownik.Sesja)
+                    Aplikacja.clear();
+                    Uzytkownik.clear();
+                    menu.tryb_logowanie();
+                }else if(odp.Equals("False"))
                 {
+                    MessageBox.Show("Podane konto zostało wylogowane, gdyż sesja wygasła");
                     Aplikacja.clear();
                     Uzytkownik.clear();
                     menu.tryb_logowanie();
                 }
-                else
+                else if(odp.Equals("True"))
                 {
                     timer_zalogowany.Start();
                 }
@@ -128,31 +134,28 @@ namespace WindowsFormsApp2
         }
         private void bg_logout_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            e.Result = AsynchronicznyKlient.zapytaj("wyloguj: " + Uzytkownik.Login);
+            e.Result = AsynchronicznyKlient.zapytaj(Pytanie.komendy.wyloguj,
+                new object[] { Uzytkownik.Instance.Login});
         }
         private void bg_logout_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
-            if (e.Error != null)
+            if(Walidacja.czy_bledy(e))
             {
-                MessageBox.Show(e.Error.ToString(), "Problem");
-            }
-            else if (e.Cancelled)
-            {
-                MessageBox.Show(e.Error.ToString(), "Problem");
-            }
-            else if (e.Result != null)
-            {
-                if (e.Result.Equals("True"))
+                Odpowiedz odp = (Odpowiedz)e.Result;
+                if(odp.czy_wzrocono_error())
                 {
-                    Aplikacja.clear();
-                    Uzytkownik.clear();
-                    menu.tryb_logowanie();
+                    if(((JsonElement)odp.Argumenty[0]).GetBoolean())
+                    {
+                        Aplikacja.clear();
+                        Uzytkownik.clear();
+                        menu.tryb_logowanie();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Nie udana próba wylogowania!", "Problem");
+                    }
                 }
-                else
-                {
-                    MessageBox.Show("Nie udana próba wylogowania!", "Problem");
-                }
-            }   
+            }
         }
     }
 }

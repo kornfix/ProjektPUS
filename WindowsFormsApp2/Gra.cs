@@ -26,8 +26,8 @@ namespace WindowsFormsApp2
 
         private void Gra_FormClosing(object sender, FormClosingEventArgs e)
         {
-            String odp = AsynchronicznyKlient.zapytaj("zakonczGre: " + Rozgrywka.Nr_lobby);
-            if (odp == "CzasUplynal" || odp == "error")
+            Odpowiedz odp = AsynchronicznyKlient.zapytaj(Pytanie.komendy.zakoncz_gre, new object[] { Rozgrywka.Nr_lobby});
+            if (odp == null || odp.czy_wzrocono_error())
             {
                 e.Cancel = true;
                 MessageBox.Show("Nie udane wyjscie z gry");

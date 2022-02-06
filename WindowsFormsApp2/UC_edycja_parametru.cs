@@ -57,18 +57,19 @@ namespace WindowsFormsApp2
         }
         private void wczytajWartoscParametru()
         {
-            if (tryb != wyk_tryb.haslo)
-            {
-                String odp = AsynchronicznyKlient.zapytaj("uzyt_wartosc_parametru: " + Uzytkownik.Login + " " + nazwa_parametru);
-                if (odp == "CzasUplynal" || odp == "error")
-                {
-                    MessageBox.Show("Nie udane komunikacja z serwerem!");
-                }
-                else
-                {
-                    txt_edytowany.Text = odp;
-                }
-            }
+            //TODO
+            //if (tryb != wyk_tryb.haslo)
+            //{
+            //    String odp = AsynchronicznyKlient.zapytaj(Pytanie.komendy.uzyt_wartosc_parametru, new object[] { Uzytkownik.Login, nazwa_parametru });
+            //    if (odp == "CzasUplynal" || odp == "error")
+            //    {
+            //        MessageBox.Show("Nie udane komunikacja z serwerem!");
+            //    }
+            //    else
+            //    {
+            //        txt_edytowany.Text = odp;
+            //    }
+            //}
         }
 
         private void btn_edycja_Click(object sender, EventArgs e)
@@ -137,32 +138,33 @@ namespace WindowsFormsApp2
         //}
         public async Task<Boolean> ZakonczEdycje()
         {
+            //TODO
             Boolean wynik_edycji = true;
-            if (wynik_walidacji == null)
-            {
-                String odp = AsynchronicznyKlient.zapytaj("uzyt_zm_par: " + Uzytkownik.Login + " " + nazwa_parametru + " " + txt_edytowany.Text);
-                //MessageBox.Show(odp, nazwa_parametru);
-                if (odp == "True")
-                {
-                    switch (tryb)
-                    {
-                        case wyk_tryb.email:
-                            Uzytkownik.Email = txt_edytowany.Text;
-                            break;
-                        case wyk_tryb.imie:
-                            Uzytkownik.Imie = txt_edytowany.Text;
-                            break;
-                        case wyk_tryb.nazwisko:
-                            Uzytkownik.Nazwisko = txt_edytowany.Text;
-                            break;
-                    }
-                }
-                else
-                {
-                    wynik_edycji = false;
-                    MessageBox.Show("Wystapił błąd podczas edycji pola" + nazwa_parametru);
-                }
-            }
+            //if (wynik_walidacji == null)
+            //{
+            //    String odp = AsynchronicznyKlient.zapytaj(Pytanie.komendy.uzyt_zm_par,new object[] { Uzytkownik.Login, nazwa_parametru, txt_edytowany.Text });
+            //    //MessageBox.Show(odp, nazwa_parametru);
+            //    if (odp == "True")
+            //    {
+            //        switch (tryb)
+            //        {
+            //            case wyk_tryb.email:
+            //                Uzytkownik.Email = txt_edytowany.Text;
+            //                break;
+            //            case wyk_tryb.imie:
+            //                Uzytkownik.Imie = txt_edytowany.Text;
+            //                break;
+            //            case wyk_tryb.nazwisko:
+            //                Uzytkownik.Nazwisko = txt_edytowany.Text;
+            //                break;
+            //        }
+            //    }
+            //    else
+            //    {
+            //        wynik_edycji = false;
+            //        MessageBox.Show("Wystapił błąd podczas edycji pola" + nazwa_parametru);
+            //    }
+            //}
             return wynik_edycji;
         }
 
